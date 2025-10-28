@@ -90,7 +90,8 @@ async function fetchProjectTickets(
   projectGid: string
 ): Promise<EnhancedParsedTicket[]> {
   const response = await fetchAsanaTicketsWithRetry(projectGid);
-  return parseEnhancedAsanaJSON(response);
+  // The response is already validated by the schema, so it's safe to pass
+  return parseEnhancedAsanaJSON(response as any);
 }
 
 /**
