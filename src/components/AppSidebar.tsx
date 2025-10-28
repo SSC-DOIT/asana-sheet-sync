@@ -1,4 +1,4 @@
-import { LayoutDashboard, GitCompare, BarChart3 } from "lucide-react";
+import { Home, Server, Database, GitCompare } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -14,14 +14,19 @@ import {
 
 const items = [
   {
-    title: "TIE Board",
+    title: "Master Dashboard",
     url: "/",
-    icon: BarChart3,
+    icon: Home,
+  },
+  {
+    title: "TIE Board",
+    url: "/tie",
+    icon: Server,
   },
   {
     title: "SFDC Board",
     url: "/sfdc",
-    icon: LayoutDashboard,
+    icon: Database,
   },
   {
     title: "Comparison",

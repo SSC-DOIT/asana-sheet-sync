@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import MasterDashboard from "./pages/MasterDashboard";
 import TIEBoard from "./pages/TIEBoard";
 import SFDCBoard from "./pages/SFDCBoard";
 import Comparison from "./pages/Comparison";
@@ -27,7 +28,8 @@ const App = () => (
                 <h2 className="ml-4 font-semibold text-foreground">Ticket Response Analytics</h2>
               </header>
               <Routes>
-                <Route path="/" element={<TIEBoard />} />
+                <Route path="/" element={<MasterDashboard />} />
+                <Route path="/tie" element={<TIEBoard />} />
                 <Route path="/sfdc" element={<SFDCBoard />} />
                 <Route path="/comparison" element={<Comparison />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

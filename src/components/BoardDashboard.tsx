@@ -20,6 +20,8 @@ import {
 import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { CategoryBreakdownCard } from "./CategoryBreakdownCard";
+import { analyzeCategoryCounts } from "@/utils/categoryAnalytics";
 
 interface BoardDashboardProps {
   board: "TIE" | "SFDC";
@@ -33,6 +35,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     responseTrends: any[];
     automationSavings: any[];
     openTrends: any[];
+    categories: any[];
   } | null>(null);
   const [tickets, setTickets] = useState<EnhancedParsedTicket[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,9 +65,12 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
         });
         const automationSavings = analyzeAutomationSavings(automationStages);
         
+        // Category analysis
+        const categories = analyzeCategoryCounts(loadedTickets);
+        
         setTickets(loadedTickets);
         setAnalytics(analyzed);
-        setEnhancedData({ ageTrends, responseTrends, automationSavings, openTrends });
+        setEnhancedData({ ageTrends, responseTrends, automationSavings, openTrends, categories });
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -145,10 +151,11 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="trends">Long-Term Trends</TabsTrigger>
             <TabsTrigger value="automation">Automation Savings</TabsTrigger>
+            <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="current">Current State</TabsTrigger>
             <TabsTrigger value="tickets">Recent Tickets</TabsTrigger>
           </TabsList>
@@ -176,6 +183,12 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           <TabsContent value="automation" className="space-y-6">
             {enhancedData && (
               <AutomationSavingsCard data={enhancedData.automationSavings} />
+            )}
+          </TabsContent>
+
+          <TabsContent value="categories" className="space-y-6">
+            {enhancedData && (
+              <CategoryBreakdownCard data={enhancedData.categories} />
             )}
           </TabsContent>
 

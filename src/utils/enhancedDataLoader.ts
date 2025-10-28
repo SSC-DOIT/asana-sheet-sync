@@ -21,20 +21,20 @@ export interface EnhancedParsedTicket extends ParsedTicket {
   automationStage: string | null;
   ticketAge: number;
   isOpen: boolean;
+  customFields?: {
+    Priority?: string;
+    Status?: string;
+    Effort?: number;
+    Category?: string;
+  };
 }
 
 const calculateResponseTime = (createdAt: string, modifiedAt?: string): number | null => {
   if (!createdAt || !modifiedAt) return null;
   
-  const created = new Date(createdAt);
-  const modified = new Date(modifiedAt);
-  
-  if (isNaN(created.getTime()) || isNaN(modified.getTime())) return null;
-  
-  const diffMs = modified.getTime() - created.getTime();
-  const diffHours = diffMs / (1000 * 60 * 60);
-  
-  return diffHours >= 0 ? diffHours : null;
+  // Use business hours calculation
+  const { calculateBusinessHours } = require("./businessHours");
+  return calculateBusinessHours(createdAt, modifiedAt);
 };
 
 const calculateTicketAge = (createdAt: string, completedAt?: string | null): number => {
@@ -55,20 +55,53 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
   jsonData.data.forEach((task) => {
     if (!task.created_at) return;
     
-    // Find automation stage from custom fields
-    let automationStage: string | null = null;
-    if (task.custom_fields) {
-      const virtualAssistant = task.custom_fields.find(
-        (field) => field.name === "Virtual Assistant"
-      );
-      if (virtualAssistant && virtualAssistant.enum_value) {
-        automationStage = virtualAssistant.enum_value.name;
-      }
-    }
-    
     const responseTime = calculateResponseTime(task.created_at, task.modified_at);
     const ticketAge = calculateTicketAge(task.created_at, task.completed_at);
     const isOpen = !task.completed_at;
+    
+    // Extract fields from custom fields
+    let automationStage: string | null = null;
+    let priority: string | undefined;
+    let status: string | undefined;
+    let effort: number | undefined;
+    let category: string | undefined;
+    
+    if (task.custom_fields) {
+      const virtualAssistantField = task.custom_fields.find(
+        (field: any) => field.name === "Virtual Assistant"
+      );
+      if (virtualAssistantField?.enum_value?.name) {
+        automationStage = virtualAssistantField.enum_value.name;
+      }
+      
+      const priorityField = task.custom_fields.find(
+        (field: any) => field.name === "Priority (Auto Fills)"
+      );
+      if (priorityField?.enum_value?.name) {
+        priority = priorityField.enum_value.name;
+      }
+      
+      const statusField = task.custom_fields.find(
+        (field: any) => field.name === "Status"
+      );
+      if (statusField?.enum_value?.name) {
+        status = statusField.enum_value.name;
+      }
+      
+      const effortField = task.custom_fields.find(
+        (field: any) => field.name === "Effort"
+      );
+      if (effortField?.number_value) {
+        effort = effortField.number_value;
+      }
+      
+      const categoryField = task.custom_fields.find(
+        (field: any) => field.name === "Category"
+      );
+      if (categoryField?.enum_value?.name) {
+        category = categoryField.enum_value.name;
+      }
+    }
     
     tickets.push({
       id: task.gid,
@@ -81,6 +114,12 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       automationStage,
       ticketAge,
       isOpen,
+      customFields: {
+        Priority: priority,
+        Status: status,
+        Effort: effort,
+        Category: category,
+      },
     });
   });
   

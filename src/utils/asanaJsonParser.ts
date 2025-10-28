@@ -50,15 +50,9 @@ export const parseAsanaJSON = (jsonData: AsanaResponse): ParsedTicket[] => {
 export const calculateResponseTime = (createdAt: string, modifiedAt?: string): number | null => {
   if (!createdAt || !modifiedAt) return null;
   
-  const created = new Date(createdAt);
-  const modified = new Date(modifiedAt);
-  
-  if (isNaN(created.getTime()) || isNaN(modified.getTime())) return null;
-  
-  const diffMs = modified.getTime() - created.getTime();
-  const diffHours = diffMs / (1000 * 60 * 60);
-  
-  return diffHours >= 0 ? diffHours : null;
+  // Use business hours calculation instead of raw time
+  const { calculateBusinessHours } = require("./businessHours");
+  return calculateBusinessHours(createdAt, modifiedAt);
 };
 
 export const analyzeResponseTimes = (tickets: ParsedTicket[], rolloutDate: Date, lastThursday?: Date, julyFirst?: Date) => {
