@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -8,18 +9,38 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
-import { AlertCircle, Clock } from "lucide-react";
+import { exportTicketsToCSV } from "@/utils/csvExport";
+import { AlertCircle, Clock, Download, Search } from "lucide-react";
 
 interface CurrentStateTicketsTableProps {
   tickets: EnhancedParsedTicket[];
 }
 
 export const CurrentStateTicketsTable = ({ tickets }: CurrentStateTicketsTableProps) => {
-  // Filter only open tickets and sort by age (oldest first)
-  const openTickets = tickets
-    .filter((t) => t.isOpen)
-    .sort((a, b) => b.ticketAge - a.ticketAge);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter and sort tickets
+  const openTickets = useMemo(() => {
+    return tickets
+      .filter((t) => t.isOpen)
+      .filter((t) => {
+        if (!searchQuery) return true;
+        const query = searchQuery.toLowerCase();
+        return (
+          t.name.toLowerCase().includes(query) ||
+          t.assignee.toLowerCase().includes(query) ||
+          t.automationStage?.toLowerCase().includes(query)
+        );
+      })
+      .sort((a, b) => b.ticketAge - a.ticketAge);
+  }, [tickets, searchQuery]);
+
+  const handleExport = () => {
+    exportTicketsToCSV(openTickets, "open-tickets.csv");
+  };
 
   const getAgeBadge = (age: number) => {
     if (age > 30) return { variant: "destructive" as const, label: `${Math.round(age)}d - Critical` };
@@ -35,8 +56,30 @@ export const CurrentStateTicketsTable = ({ tickets }: CurrentStateTicketsTablePr
     <Card className="p-6">
       <div className="space-y-4">
         <div>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-foreground">Current Open Tickets</h3>
+            <div className="flex gap-2">
+              <div className="relative w-64">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search tickets..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8"
+                />
+              </div>
+              <Button
+                onClick={handleExport}
+                variant="outline"
+                size="sm"
+                disabled={openTickets.length === 0}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mb-2">
             <div className="flex gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-muted-foreground" />

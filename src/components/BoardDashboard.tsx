@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { motion } from "motion/react";
 import { MetricCard } from "./MetricCard";
 import { ResponseTimeChart } from "./ResponseTimeChart";
 import { TicketTable } from "./TicketTable";
@@ -7,25 +8,14 @@ import { FirstResponseTrendChart } from "./FirstResponseTrendChart";
 import { AutomationSavingsCard } from "./AutomationSavingsCard";
 import { OpenTicketTrendChart } from "./OpenTicketTrendChart";
 import { CurrentStateTicketsTable } from "./CurrentStateTicketsTable";
-import { loadLiveData } from "@/utils/liveDataLoader";
-import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
+import { useTicketAnalytics } from "@/hooks/useTicketAnalytics";
 import { useToast } from "@/hooks/use-toast";
 import { RefreshCw } from "lucide-react";
 import { Button } from "./ui/button";
-import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
-import {
-  analyzeTicketAgeTrends,
-  analyzeFirstResponseTrends,
-  analyzeAutomationSavings,
-  analyzeOpenTicketTrends,
-  getLastThursday,
-  getJulyFirst,
-} from "@/utils/enhancedAnalytics";
 import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { CategoryBreakdownCard } from "./CategoryBreakdownCard";
-import { analyzeCategoryCounts } from "@/utils/categoryAnalytics";
 
 interface BoardDashboardProps {
   board: "TIE" | "SFDC";
@@ -33,86 +23,37 @@ interface BoardDashboardProps {
 }
 
 export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
-  const [analytics, setAnalytics] = useState<any>(null);
-  const [enhancedData, setEnhancedData] = useState<{
-    ageTrends: any[];
-    responseTrends: any[];
-    automationSavings: any[];
-    openTrends: any[];
-    categories: any[];
-  } | null>(null);
-  const [tickets, setTickets] = useState<EnhancedParsedTicket[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const { toast } = useToast();
 
-  const loadData = async (isRefresh = false) => {
-    if (isRefresh) {
-      setIsRefreshing(true);
-    } else {
-      setLoading(true);
-    }
+  // Use the custom hook for all data loading and analytics
+  const {
+    analytics,
+    enhancedData,
+    tickets,
+    loading,
+    error,
+    lastUpdated,
+    isRefreshing,
+    refresh,
+  } = useTicketAnalytics(board);
 
-    try {
-      const loadedTickets = await loadLiveData(board);
-        const rolloutDate = new Date("2025-10-21");
-        const lastThursday = getLastThursday();
-        const julyFirst = getJulyFirst();
-        
-        const analyzed = analyzeResponseTimes(loadedTickets, rolloutDate, lastThursday, julyFirst);
-        
-        // Enhanced analytics
-        const ageTrends = analyzeTicketAgeTrends(loadedTickets);
-        const responseTrends = analyzeFirstResponseTrends(loadedTickets);
-        const openTrends = analyzeOpenTicketTrends(loadedTickets);
-        
-        // Extract automation stages
-        const automationStages: { [key: string]: string } = {};
-        loadedTickets.forEach((ticket: EnhancedParsedTicket) => {
-          if (ticket.automationStage) {
-            automationStages[ticket.id] = ticket.automationStage;
-          }
-        });
-        const automationSavings = analyzeAutomationSavings(automationStages);
-        
-        // Category analysis
-        const categories = analyzeCategoryCounts(loadedTickets);
-        
-        setTickets(loadedTickets);
-        setAnalytics(analyzed);
-        setEnhancedData({ ageTrends, responseTrends, automationSavings, openTrends, categories });
-        setLastUpdated(new Date());
+  // Handle refresh with toast notification
+  const handleRefresh = async () => {
+    await refresh();
+    toast({
+      title: "Data refreshed",
+      description: "Dashboard updated with latest Asana data",
+    });
+  };
 
-        if (isRefresh) {
-          toast({
-            title: "Data refreshed",
-            description: "Dashboard updated with latest Asana data",
-          });
-        }
-      } catch (error) {
-        console.error("Error loading data:", error);
-        toast({
-          title: "Error loading data",
-          description: error instanceof Error ? error.message : "Failed to load data",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-        setIsRefreshing(false);
-      }
-    };
-
-  useEffect(() => {
-    loadData();
-
-    // Auto-refresh every 5 minutes
-    const interval = setInterval(() => {
-      loadData(true);
-    }, 5 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [board]);
+  // Show error toast if there's an error
+  if (error) {
+    toast({
+      title: "Error loading data",
+      description: error.message,
+      variant: "destructive",
+    });
+  }
 
   const formatHours = (hours: number): string => {
     if (hours < 1) return `${Math.round(hours * 60)}m`;
@@ -162,7 +103,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             )}
           </div>
           <Button
-            onClick={() => loadData(true)}
+            onClick={handleRefresh}
             disabled={isRefreshing}
             variant="outline"
             size="sm"
@@ -235,7 +176,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
 
           <TabsContent value="automation" className="space-y-6">
             {enhancedData && (
-              <AutomationSavingsCard data={enhancedData.automationSavings} />
+              <AutomationSavingsCard data={enhancedData.automationAnalytics} />
             )}
           </TabsContent>
 

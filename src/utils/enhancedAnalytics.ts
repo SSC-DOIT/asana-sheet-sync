@@ -1,4 +1,6 @@
 import { ParsedTicket } from "./asanaJsonParser";
+import { EnhancedParsedTicket } from "./enhancedDataLoader";
+import { AutomationSavingsData, AutomationAnalytics } from "@/types/analytics";
 
 export interface TicketAgeData {
   date: string;
@@ -17,21 +19,17 @@ export interface OpenTicketTrendData {
   openCount: number;
 }
 
-export interface AutomationSavingsData {
-  stage: string;
-  ticketCount: number;
-  estimatedMinutesSaved: number;
-  estimatedHoursSaved: number;
-}
-
-// Automation time estimates (in minutes) based on typical manual effort
+/**
+ * Automation time estimates (in minutes) based on realistic manual effort
+ * These represent the time saved PER TICKET when each automation rule runs
+ */
 const AUTOMATION_TIME_ESTIMATES = {
-  "R1 - Triage +": 5, // Manual triage and categorization
-  "R2 - Classification +": 3, // Manual classification
-  "R3 - Description +": 8, // Writing detailed descriptions
-  "R4 - Prioritization +": 4, // Manual priority assessment
-  "R5 - Validation +": 6, // Manual validation checks
-  "R6 - Communication +": 10, // Drafting and sending communication
+  "R1 - Triage +": 5, // Manual triage: reading, categorizing, initial assessment
+  "R2 - Classification +": 3, // Manual classification: determining ticket type
+  "R3 - Description +": 8, // Writing detailed descriptions: formatting, clarifying
+  "R4 - Prioritization +": 4, // Manual priority assessment: evaluating urgency/impact
+  "R5 - Validation +": 6, // Manual validation: checking requirements, verifying data
+  "R6 - Communication +": 10, // Drafting and sending communication: writing, reviewing, sending
 };
 
 export const calculateTicketAge = (createdAt: string, referenceDate?: string): number => {
@@ -173,44 +171,179 @@ export const getJulyFirst = (): Date => {
   return new Date("2025-07-01T00:00:00");
 };
 
+/**
+ * Comprehensive automation analytics with per-ticket savings and forecasting
+ * Calculates time saved per ticket based on automation rules that ran on it
+ */
+export const analyzeAutomationAnalytics = (
+  tickets: EnhancedParsedTicket[]
+): AutomationAnalytics => {
+  // Separate automated vs manual tickets
+  const automatedTickets = tickets.filter((t) => t.automationStage);
+  const manualTickets = tickets.filter((t) => !t.automationStage);
+
+  // Count tickets by automation stage
+  const stageCounts: { [stage: string]: number } = {};
+  let totalMinutesSaved = 0;
+
+  automatedTickets.forEach((ticket) => {
+    const stage = ticket.automationStage!;
+    stageCounts[stage] = (stageCounts[stage] || 0) + 1;
+
+    // Add time saved for this ticket based on its automation stage
+    const minutesPerTicket =
+      AUTOMATION_TIME_ESTIMATES[stage as keyof typeof AUTOMATION_TIME_ESTIMATES] || 0;
+    totalMinutesSaved += minutesPerTicket;
+  });
+
+  // Build breakdown by stage
+  const byStage: AutomationSavingsData[] = Object.entries(stageCounts).map(
+    ([stage, count]) => {
+      const minutesPerTicket =
+        AUTOMATION_TIME_ESTIMATES[stage as keyof typeof AUTOMATION_TIME_ESTIMATES] || 0;
+      const totalMinutes = count * minutesPerTicket;
+
+      return {
+        stage,
+        count,
+        minutesPerTicket,
+        totalMinutesSaved: totalMinutes,
+        totalHoursSaved: Number((totalMinutes / 60).toFixed(2)),
+      };
+    }
+  );
+
+  byStage.sort((a, b) => b.totalMinutesSaved - a.totalMinutesSaved);
+
+  // Calculate per-ticket averages
+  const averageTimeSavedPerTicket =
+    automatedTickets.length > 0
+      ? Number((totalMinutesSaved / automatedTickets.length).toFixed(2))
+      : 0;
+
+  const averageAutomationRulesPerTicket =
+    automatedTickets.length > 0 ? Number((automatedTickets.length / automatedTickets.length).toFixed(2)) : 0;
+
+  // Response time comparison (business hours)
+  const automatedWithResponse = automatedTickets.filter((t) => t.responseTimeHours && t.responseTimeHours > 0);
+  const manualWithResponse = manualTickets.filter((t) => t.responseTimeHours && t.responseTimeHours > 0);
+
+  const automatedTicketsAvgResponse =
+    automatedWithResponse.length > 0
+      ? Number(
+          (
+            automatedWithResponse.reduce((sum, t) => sum + t.responseTimeHours!, 0) /
+            automatedWithResponse.length
+          ).toFixed(2)
+        )
+      : 0;
+
+  const manualTicketsAvgResponse =
+    manualWithResponse.length > 0
+      ? Number(
+          (
+            manualWithResponse.reduce((sum, t) => sum + t.responseTimeHours!, 0) /
+            manualWithResponse.length
+          ).toFixed(2)
+        )
+      : 0;
+
+  const responseTimeImprovement =
+    manualTicketsAvgResponse > 0
+      ? Number(
+          (((manualTicketsAvgResponse - automatedTicketsAvgResponse) / manualTicketsAvgResponse) * 100).toFixed(1)
+        )
+      : 0;
+
+  // Calculate ticket rate (using last 90 days)
+  const now = new Date();
+  const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+  const recentTickets = tickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
+
+  const daysInPeriod = 90;
+  const ticketsPerDay = recentTickets.length / daysInPeriod;
+  const ticketsPerWeek = ticketsPerDay * 7;
+  const ticketsPerMonth = ticketsPerDay * 30;
+
+  // Calculate automation rate (percentage of tickets that are automated)
+  const automationRate = tickets.length > 0 ? automatedTickets.length / tickets.length : 0;
+
+  // Forecast savings based on current ticket rate and automation rate
+  const automatedTicketsPerDay = ticketsPerDay * automationRate;
+  const automatedTicketsPerMonth = ticketsPerMonth * automationRate;
+  const automatedTicketsPerYear = automatedTicketsPerMonth * 12;
+
+  const minutesSavedPerDay = automatedTicketsPerDay * averageTimeSavedPerTicket;
+  const monthlyForecastMinutes = automatedTicketsPerMonth * averageTimeSavedPerTicket;
+  const yearlyForecastMinutes = automatedTicketsPerYear * averageTimeSavedPerTicket;
+
+  // Current month savings (from start of month to now)
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const currentMonthTickets = automatedTickets.filter((t) => new Date(t.createdAt) >= startOfMonth);
+  const currentMonthMinutes = currentMonthTickets.reduce((sum, ticket) => {
+    const stage = ticket.automationStage!;
+    const minutes = AUTOMATION_TIME_ESTIMATES[stage as keyof typeof AUTOMATION_TIME_ESTIMATES] || 0;
+    return sum + minutes;
+  }, 0);
+
+  const projections = {
+    currentMonthSavings: Number((currentMonthMinutes / 60).toFixed(2)),
+    monthlyForecast: Number((monthlyForecastMinutes / 60).toFixed(2)),
+    yearlyForecast: Number((yearlyForecastMinutes / 60).toFixed(2)),
+    monthlyForecastDays: Number((monthlyForecastMinutes / 60 / 8).toFixed(2)),
+    yearlyForecastDays: Number((yearlyForecastMinutes / 60 / 8).toFixed(2)),
+  };
+
+  const totalTimeSavedHours = Number((totalMinutesSaved / 60).toFixed(2));
+  const totalTimeSavedDays = Number((totalTimeSavedHours / 8).toFixed(2));
+
+  return {
+    averageTimeSavedPerTicket,
+    averageAutomationRulesPerTicket,
+    automatedTicketsAvgResponse,
+    manualTicketsAvgResponse,
+    responseTimeImprovement,
+    ticketRate: {
+      perDay: Number(ticketsPerDay.toFixed(2)),
+      perWeek: Number(ticketsPerWeek.toFixed(2)),
+      perMonth: Number(ticketsPerMonth.toFixed(2)),
+    },
+    projections,
+    byStage,
+    totalAutomatedTickets: automatedTickets.length,
+    totalManualTickets: manualTickets.length,
+    totalTimeSavedHours,
+    totalTimeSavedDays,
+  };
+};
+
+// Legacy function for backward compatibility
 export const analyzeAutomationSavings = (
   automationStages: { [ticketId: string]: string }
 ): AutomationSavingsData[] => {
   const stageCounts: { [stage: string]: number } = {};
-  
+
   Object.values(automationStages).forEach((stage) => {
     if (stage && stage.startsWith("R")) {
       stageCounts[stage] = (stageCounts[stage] || 0) + 1;
     }
   });
-  
+
   const results: AutomationSavingsData[] = [];
-  
+
   Object.entries(stageCounts).forEach(([stage, count]) => {
-    const minutesPerTicket = AUTOMATION_TIME_ESTIMATES[stage as keyof typeof AUTOMATION_TIME_ESTIMATES] || 0;
+    const minutesPerTicket =
+      AUTOMATION_TIME_ESTIMATES[stage as keyof typeof AUTOMATION_TIME_ESTIMATES] || 0;
     const totalMinutes = count * minutesPerTicket;
-    
+
     results.push({
       stage,
-      ticketCount: count,
-      estimatedMinutesSaved: totalMinutes,
-      estimatedHoursSaved: Number((totalMinutes / 60).toFixed(2)),
+      count,
+      minutesPerTicket,
+      totalMinutesSaved: totalMinutes,
+      totalHoursSaved: Number((totalMinutes / 60).toFixed(2)),
     });
   });
-  
-  return results.sort((a, b) => b.estimatedMinutesSaved - a.estimatedMinutesSaved);
-};
 
-export const calculateTotalAutomationSavings = (savings: AutomationSavingsData[]) => {
-  const totalTickets = savings.reduce((sum, s) => sum + s.ticketCount, 0);
-  const totalMinutes = savings.reduce((sum, s) => sum + s.estimatedMinutesSaved, 0);
-  const totalHours = totalMinutes / 60;
-  const totalDays = totalHours / 8; // 8-hour workday
-  
-  return {
-    totalTickets,
-    totalMinutes,
-    totalHours: Number(totalHours.toFixed(2)),
-    totalDays: Number(totalDays.toFixed(2)),
-  };
+  return results.sort((a, b) => b.totalMinutesSaved - a.totalMinutesSaved);
 };

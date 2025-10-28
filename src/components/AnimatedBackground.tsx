@@ -56,9 +56,10 @@ export function AnimatedBackground() {
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0" />
             <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
-            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+            <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0" />
           </linearGradient>
         </defs>
+
         {lines.map((line) => (
           <motion.line
             key={line.id}
@@ -69,12 +70,15 @@ export function AnimatedBackground() {
             stroke="url(#lineGradient)"
             strokeWidth="2"
             initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
+            animate={{
+              pathLength: [0, 1, 0],
+              opacity: [0, 1, 0],
+            }}
             transition={{
               duration: line.duration,
               repeat: Infinity,
-              repeatType: "reverse",
               ease: "easeInOut",
+              delay: Math.random() * 2,
             }}
           />
         ))}
