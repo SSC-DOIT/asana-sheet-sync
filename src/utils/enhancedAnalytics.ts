@@ -271,7 +271,7 @@ export const analyzeAutomationAnalytics = (
   // Forecast savings based on current ticket rate and automation rate
   const automatedTicketsPerDay = ticketsPerDay * automationRate;
   const automatedTicketsPerMonth = ticketsPerMonth * automationRate;
-  const automatedTicketsPerYear = automatedTicketsPerMonth * 12;
+  const automatedTicketsPerYear = automatedTicketsPerDay * 365; // Use 365 days for accurate yearly calculation
 
   const minutesSavedPerDay = automatedTicketsPerDay * averageTimeSavedPerTicket;
   const monthlyForecastMinutes = automatedTicketsPerMonth * averageTimeSavedPerTicket;
