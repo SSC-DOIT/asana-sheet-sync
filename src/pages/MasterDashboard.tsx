@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { loadLiveData } from "@/utils/liveDataLoader";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -95,9 +95,9 @@ export default function MasterDashboard() {
     );
   }
 
-  const tieCritical = getCriticalTickets(tieTickets);
-  const sfdcCritical = getCriticalTickets(sfdcTickets);
-  const allNewest = getNewestTickets([...tieTickets, ...sfdcTickets]);
+  const tieCritical = useMemo(() => getCriticalTickets(tieTickets), [tieTickets]);
+  const sfdcCritical = useMemo(() => getCriticalTickets(sfdcTickets), [sfdcTickets]);
+  const allNewest = useMemo(() => getNewestTickets([...tieTickets, ...sfdcTickets]), [tieTickets, sfdcTickets]);
 
   return (
     <div className="min-h-screen bg-background p-8">

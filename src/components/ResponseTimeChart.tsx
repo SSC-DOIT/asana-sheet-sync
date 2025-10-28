@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo } from "react";
 import {
   LineChart,
   Line,
@@ -20,7 +21,7 @@ interface ResponseTimeChartProps {
   rolloutDate: string;
 }
 
-export const ResponseTimeChart = ({ data, rolloutDate }: ResponseTimeChartProps) => {
+const ResponseTimeChartComponent = ({ data, rolloutDate }: ResponseTimeChartProps) => {
   return (
     <Card className="p-6">
       <div className="space-y-4">
@@ -78,3 +79,5 @@ export const ResponseTimeChart = ({ data, rolloutDate }: ResponseTimeChartProps)
     </Card>
   );
 };
+
+export const ResponseTimeChart = memo(ResponseTimeChartComponent);

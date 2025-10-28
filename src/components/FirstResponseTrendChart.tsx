@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo } from "react";
 import {
   LineChart,
   Line,
@@ -16,7 +17,7 @@ interface FirstResponseTrendChartProps {
   rolloutDate?: string;
 }
 
-export const FirstResponseTrendChart = ({ data, rolloutDate }: FirstResponseTrendChartProps) => {
+const FirstResponseTrendChartComponent = ({ data, rolloutDate }: FirstResponseTrendChartProps) => {
   return (
     <Card className="p-6">
       <div className="space-y-4">
@@ -77,3 +78,5 @@ export const FirstResponseTrendChart = ({ data, rolloutDate }: FirstResponseTren
     </Card>
   );
 };
+
+export const FirstResponseTrendChart = memo(FirstResponseTrendChartComponent);

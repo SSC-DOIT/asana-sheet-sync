@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo } from "react";
 import {
   Table,
   TableBody,
@@ -22,7 +23,7 @@ interface TicketTableProps {
   title?: string;
 }
 
-export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTableProps) => {
+const TicketTableComponent = ({ tickets, title = "Recent Tickets" }: TicketTableProps) => {
   const getResponseTimeBadge = (hours: number) => {
     if (hours < 2) return <Badge className="bg-accent">Fast</Badge>;
     if (hours < 8) return <Badge variant="secondary">Moderate</Badge>;
@@ -74,3 +75,5 @@ export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTablePr
     </Card>
   );
 };
+
+export const TicketTable = memo(TicketTableComponent);

@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { memo } from "react";
 import { Badge } from "./ui/badge";
 import { CategoryData } from "@/utils/categoryAnalytics";
 
@@ -6,7 +7,7 @@ interface CategoryBreakdownCardProps {
   data: CategoryData[];
 }
 
-export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
+const CategoryBreakdownCardComponent = ({ data }: CategoryBreakdownCardProps) => {
   const maxCount = Math.max(...data.map((c) => c.totalCount), 1);
 
   return (
@@ -49,3 +50,5 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
     </Card>
   );
 };
+
+export const CategoryBreakdownCard = memo(CategoryBreakdownCardComponent);

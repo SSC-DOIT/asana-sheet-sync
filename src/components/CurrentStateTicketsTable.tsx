@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -15,11 +16,13 @@ interface CurrentStateTicketsTableProps {
   tickets: EnhancedParsedTicket[];
 }
 
-export const CurrentStateTicketsTable = ({ tickets }: CurrentStateTicketsTableProps) => {
+const CurrentStateTicketsTableComponent = ({ tickets }: CurrentStateTicketsTableProps) => {
   // Filter only open tickets and sort by age (oldest first)
-  const openTickets = tickets
-    .filter((t) => t.isOpen)
-    .sort((a, b) => b.ticketAge - a.ticketAge);
+  const openTickets = useMemo(() => {
+    return tickets
+      .filter((t) => t.isOpen)
+      .sort((a, b) => b.ticketAge - a.ticketAge);
+  }, [tickets]);
 
   const getAgeBadge = (age: number) => {
     if (age > 30) return { variant: "destructive" as const, label: `${Math.round(age)}d - Critical` };
@@ -121,3 +124,5 @@ export const CurrentStateTicketsTable = ({ tickets }: CurrentStateTicketsTablePr
     </Card>
   );
 };
+
+export const CurrentStateTicketsTable = memo(CurrentStateTicketsTableComponent);

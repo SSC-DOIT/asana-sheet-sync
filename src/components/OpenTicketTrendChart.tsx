@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo } from "react";
 import {
   LineChart,
   Line,
@@ -14,7 +15,7 @@ interface OpenTicketTrendChartProps {
   data: OpenTicketTrendData[];
 }
 
-export const OpenTicketTrendChart = ({ data }: OpenTicketTrendChartProps) => {
+const OpenTicketTrendChartComponent = ({ data }: OpenTicketTrendChartProps) => {
   return (
     <Card className="p-6">
       <div className="space-y-4">
@@ -63,3 +64,5 @@ export const OpenTicketTrendChart = ({ data }: OpenTicketTrendChartProps) => {
     </Card>
   );
 };
+
+export const OpenTicketTrendChart = memo(OpenTicketTrendChartComponent);

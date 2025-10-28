@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo } from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +15,7 @@ interface AutomationSavingsCardProps {
   data: AutomationSavingsData[];
 }
 
-export const AutomationSavingsCard = ({ data }: AutomationSavingsCardProps) => {
+const AutomationSavingsCardComponent = ({ data }: AutomationSavingsCardProps) => {
   const totals = calculateTotalAutomationSavings(data);
 
   return (
@@ -113,3 +114,5 @@ export const AutomationSavingsCard = ({ data }: AutomationSavingsCardProps) => {
     </div>
   );
 };
+
+export const AutomationSavingsCard = memo(AutomationSavingsCardComponent);

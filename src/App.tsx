@@ -5,11 +5,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import MasterDashboard from "./pages/MasterDashboard";
-import TIEBoard from "./pages/TIEBoard";
-import SFDCBoard from "./pages/SFDCBoard";
-import Comparison from "./pages/Comparison";
-import NotFound from "./pages/NotFound";
+import { Suspense, lazy } from "react";
+
+// Route-based code splitting for major pages
+const MasterDashboard = lazy(() => import("./pages/MasterDashboard"));
+const TIEBoard = lazy(() => import("./pages/TIEBoard"));
+const SFDCBoard = lazy(() => import("./pages/SFDCBoard"));
+const Comparison = lazy(() => import("./pages/Comparison"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -27,14 +30,23 @@ const App = () => (
                 <SidebarTrigger />
                 <h2 className="ml-4 font-semibold text-foreground">Ticket Response Analytics</h2>
               </header>
-              <Routes>
-                <Route path="/" element={<MasterDashboard />} />
-                <Route path="/tie" element={<TIEBoard />} />
-                <Route path="/sfdc" element={<SFDCBoard />} />
-                <Route path="/comparison" element={<Comparison />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <Suspense
+                fallback={
+                  <div className="p-8 space-y-4">
+                    <div className="h-6 w-64 bg-muted rounded" />
+                    <div className="h-96 w-full bg-muted rounded" />
+                  </div>
+                }
+              >
+                <Routes>
+                  <Route path="/" element={<MasterDashboard />} />
+                  <Route path="/tie" element={<TIEBoard />} />
+                  <Route path="/sfdc" element={<SFDCBoard />} />
+                  <Route path="/comparison" element={<Comparison />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </main>
           </div>
         </SidebarProvider>

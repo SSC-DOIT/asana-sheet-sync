@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { memo } from "react";
 import {
   LineChart,
   Line,
@@ -15,7 +16,7 @@ interface TicketAgeTrendChartProps {
   data: TicketAgeData[];
 }
 
-export const TicketAgeTrendChart = ({ data }: TicketAgeTrendChartProps) => {
+const TicketAgeTrendChartComponent = ({ data }: TicketAgeTrendChartProps) => {
   return (
     <Card className="p-6">
       <div className="space-y-4">
@@ -73,3 +74,5 @@ export const TicketAgeTrendChart = ({ data }: TicketAgeTrendChartProps) => {
     </Card>
   );
 };
+
+export const TicketAgeTrendChart = memo(TicketAgeTrendChartComponent);
