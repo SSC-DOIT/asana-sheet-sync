@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { loadEnhancedData } from "@/utils/enhancedDataLoader";
+import { loadLiveData } from "@/utils/liveDataLoader";
+import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
 import { calculateTotalAutomationSavings, analyzeAutomationSavings, getLastThursday, getJulyFirst } from "@/utils/enhancedAnalytics";
 import { MetricCard } from "@/components/MetricCard";
@@ -23,8 +24,8 @@ const Comparison = () => {
         const julyFirst = getJulyFirst();
         
         const [tieTickets, sfdcTickets] = await Promise.all([
-          loadEnhancedData("TIE"),
-          loadEnhancedData("SFDC"),
+          loadLiveData("TIE"),
+          loadLiveData("SFDC"),
         ]);
 
         const tieAnalyzed = analyzeResponseTimes(tieTickets, rolloutDate, lastThursday, julyFirst);

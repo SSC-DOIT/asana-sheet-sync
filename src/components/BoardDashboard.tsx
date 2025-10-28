@@ -7,7 +7,11 @@ import { FirstResponseTrendChart } from "./FirstResponseTrendChart";
 import { AutomationSavingsCard } from "./AutomationSavingsCard";
 import { OpenTicketTrendChart } from "./OpenTicketTrendChart";
 import { CurrentStateTicketsTable } from "./CurrentStateTicketsTable";
-import { loadEnhancedData, EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
+import { loadLiveData } from "@/utils/liveDataLoader";
+import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
+import { useToast } from "@/hooks/use-toast";
+import { RefreshCw } from "lucide-react";
+import { Button } from "./ui/button";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
 import {
   analyzeTicketAgeTrends,
@@ -39,12 +43,19 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   } | null>(null);
   const [tickets, setTickets] = useState<EnhancedParsedTicket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { toast } = useToast();
 
-  useEffect(() => {
-    const loadData = async () => {
+  const loadData = async (isRefresh = false) => {
+    if (isRefresh) {
+      setIsRefreshing(true);
+    } else {
       setLoading(true);
-      try {
-        const loadedTickets = await loadEnhancedData(board);
+    }
+
+    try {
+      const loadedTickets = await loadLiveData(board);
         const rolloutDate = new Date("2025-10-21");
         const lastThursday = getLastThursday();
         const julyFirst = getJulyFirst();
@@ -71,14 +82,36 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
         setTickets(loadedTickets);
         setAnalytics(analyzed);
         setEnhancedData({ ageTrends, responseTrends, automationSavings, openTrends, categories });
+        setLastUpdated(new Date());
+
+        if (isRefresh) {
+          toast({
+            title: "Data refreshed",
+            description: "Dashboard updated with latest Asana data",
+          });
+        }
       } catch (error) {
         console.error("Error loading data:", error);
+        toast({
+          title: "Error loading data",
+          description: error instanceof Error ? error.message : "Failed to load data",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
+        setIsRefreshing(false);
       }
     };
 
+  useEffect(() => {
     loadData();
+
+    // Auto-refresh every 5 minutes
+    const interval = setInterval(() => {
+      loadData(true);
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, [board]);
 
   const formatHours = (hours: number): string => {
@@ -114,13 +147,29 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            {boardName} Board Analytics
-          </h1>
-          <p className="text-muted-foreground">
-            Recent period: Since last Thursday | Historical: July 1 - Last Thursday
-          </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-foreground mb-2">
+              {boardName} Board Analytics
+            </h1>
+            <p className="text-muted-foreground">
+              Recent period: Since last Thursday | Historical: July 1 - Last Thursday
+            </p>
+            {lastUpdated && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Last updated: {lastUpdated.toLocaleTimeString()}
+              </p>
+            )}
+          </div>
+          <Button
+            onClick={() => loadData(true)}
+            disabled={isRefreshing}
+            variant="outline"
+            size="sm"
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+            {isRefreshing ? "Refreshing..." : "Refresh Data"}
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

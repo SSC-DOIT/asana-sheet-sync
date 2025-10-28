@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { loadEnhancedData, EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
+import { loadLiveData } from "@/utils/liveDataLoader";
+import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Clock, User } from "lucide-react";
@@ -23,8 +24,8 @@ export default function MasterDashboard() {
       setLoading(true);
       try {
         const [tie, sfdc] = await Promise.all([
-          loadEnhancedData("TIE"),
-          loadEnhancedData("SFDC"),
+          loadLiveData("TIE"),
+          loadLiveData("SFDC"),
         ]);
         setTieTickets(tie);
         setSfdcTickets(sfdc);
