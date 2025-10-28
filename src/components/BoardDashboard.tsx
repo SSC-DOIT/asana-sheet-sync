@@ -94,9 +94,6 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             <h1 className="text-4xl font-bold text-foreground mb-2">
               {boardName} Board Analytics
             </h1>
-            <p className="text-muted-foreground">
-              Recent period: Since last Thursday | Historical: July 1 - Last Thursday
-            </p>
             {lastUpdated && (
               <p className="text-sm text-muted-foreground mt-1">
                 Last updated: {lastUpdated.toLocaleTimeString()}

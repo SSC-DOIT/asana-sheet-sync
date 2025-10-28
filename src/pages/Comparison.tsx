@@ -88,9 +88,6 @@ const Comparison = () => {
           <h1 className="text-4xl font-bold text-foreground mb-2">
             Board Comparison
           </h1>
-          <p className="text-muted-foreground">
-            Recent period: Since last Thursday | Historical: July 1 - Last Thursday
-          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

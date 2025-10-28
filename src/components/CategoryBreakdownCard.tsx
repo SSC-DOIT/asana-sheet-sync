@@ -15,7 +15,7 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
         <CardTitle>Top 10 Ticket Categories</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-6">
           {data.map((category) => (
             <div key={category.category} className="space-y-2">
               <div className="flex items-center justify-between">
@@ -34,6 +34,11 @@ export const CategoryBreakdownCard = ({ data }: CategoryBreakdownCardProps) => {
                   </span>
                 </div>
               </div>
+              {category.description && (
+                <p className="text-sm text-muted-foreground">
+                  {category.description}
+                </p>
+              )}
               <div className="w-full bg-muted rounded-full h-2">
                 <div
                   className="bg-primary h-2 rounded-full transition-all"
