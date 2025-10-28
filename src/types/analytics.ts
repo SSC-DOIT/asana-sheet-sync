@@ -75,12 +75,6 @@ export interface AutomationAnalytics {
     perWeek: number;
     perMonth: number;
   };
-  
-  automatedTicketRate: {
-    perDay: number;
-    perWeek: number;
-    perMonth: number;
-  };
 
   // Time savings projections
   projections: {

@@ -255,25 +255,29 @@ export const analyzeAutomationAnalytics = (
         )
       : 0;
 
-  // Calculate ticket rate (using last 90 days)
+  // Calculate ticket rate (using last 90 days, business days only)
   const now = new Date();
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
   const recentTickets = tickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
-  const recentAutomatedTickets = automatedTickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
 
-  const daysInPeriod = 90;
-  const totalTicketsPerDay = recentTickets.length / daysInPeriod;
-  const totalTicketsPerWeek = totalTicketsPerDay * 7;
-  const totalTicketsPerMonth = totalTicketsPerDay * 30;
+  // Count business days in the period (exclude weekends)
+  let businessDays = 0;
+  for (let d = new Date(ninetyDaysAgo); d <= now; d.setDate(d.getDate() + 1)) {
+    const dayOfWeek = d.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not Sunday (0) or Saturday (6)
+      businessDays++;
+    }
+  }
   
-  const automatedTicketsPerDay = recentAutomatedTickets.length / daysInPeriod;
-  const automatedTicketsPerMonth = automatedTicketsPerDay * 30;
-  const automatedTicketsPerYear = automatedTicketsPerDay * 365;
+  const ticketsPerBusinessDay = recentTickets.length / businessDays;
+  const ticketsPerWeek = ticketsPerBusinessDay * 5; // 5 business days per week
+  const ticketsPerMonth = ticketsPerBusinessDay * 22; // ~22 business days per month
+  const ticketsPerYear = ticketsPerBusinessDay * 260; // ~260 business days per year
 
-  // Forecast savings based on actual automated ticket rate
-  const minutesSavedPerDay = automatedTicketsPerDay * averageTimeSavedPerTicket;
-  const monthlyForecastMinutes = automatedTicketsPerMonth * averageTimeSavedPerTicket;
-  const yearlyForecastMinutes = automatedTicketsPerYear * averageTimeSavedPerTicket;
+  // Forecast savings assuming all tickets are automated going forward
+  const minutesSavedPerDay = ticketsPerBusinessDay * averageTimeSavedPerTicket;
+  const monthlyForecastMinutes = ticketsPerMonth * averageTimeSavedPerTicket;
+  const yearlyForecastMinutes = ticketsPerYear * averageTimeSavedPerTicket;
 
   // Current month savings (from start of month to now)
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -302,14 +306,9 @@ export const analyzeAutomationAnalytics = (
     manualTicketsAvgResponse,
     responseTimeImprovement,
     ticketRate: {
-      perDay: Number(totalTicketsPerDay.toFixed(2)),
-      perWeek: Number(totalTicketsPerWeek.toFixed(2)),
-      perMonth: Number(totalTicketsPerMonth.toFixed(2)),
-    },
-    automatedTicketRate: {
-      perDay: Number(automatedTicketsPerDay.toFixed(2)),
-      perWeek: Number((automatedTicketsPerDay * 7).toFixed(2)),
-      perMonth: Number(automatedTicketsPerMonth.toFixed(2)),
+      perDay: Number(ticketsPerBusinessDay.toFixed(2)),
+      perWeek: Number(ticketsPerWeek.toFixed(2)),
+      perMonth: Number(ticketsPerMonth.toFixed(2)),
     },
     projections,
     byStage,
