@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { loadLiveData } from "@/utils/liveDataLoader";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Clock, User, ExternalLink, Calendar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { FlowingConnection } from "@/components/FlowingConnection";
+import { MetricCard } from "@/components/MetricCard";
 import {
   Table,
   TableBody,
@@ -102,19 +105,82 @@ export default function MasterDashboard() {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="animate-fade-in">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <h1 className="text-4xl font-bold text-foreground mb-2">
             Technology Solutions Open Tickets
           </h1>
           <p className="text-muted-foreground">
             High priority tickets and recent activity across all boards
           </p>
-        </div>
+        </motion.div>
+
+        {/* Integration Flow Visualization */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <Card className="bg-gradient-to-r from-card/50 to-card backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-center">Asana ↔ Google Sheets Integration</CardTitle>
+              <p className="text-center text-muted-foreground">Real-time ticket synchronization</p>
+            </CardHeader>
+            <CardContent>
+              <FlowingConnection />
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Summary Metrics */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          <MetricCard
+            title="Total Open Tickets"
+            value={tieTickets.filter(t => t.isOpen).length + sfdcTickets.filter(t => t.isOpen).length}
+            icon={<AlertCircle className="w-6 h-6" />}
+            trend="neutral"
+            delay={0.1}
+          />
+          <MetricCard
+            title="TIE Open Tickets"
+            value={tieTickets.filter(t => t.isOpen).length}
+            icon={<Clock className="w-6 h-6" />}
+            trend="up"
+            delay={0.2}
+          />
+          <MetricCard
+            title="SFDC Open Tickets"
+            value={sfdcTickets.filter(t => t.isOpen).length}
+            icon={<User className="w-6 h-6" />}
+            trend="down"
+            delay={0.3}
+          />
+          <MetricCard
+            title="Critical Tickets"
+            value={tieCritical.length + sfdcCritical.length}
+            icon={<AlertCircle className="w-6 h-6" />}
+            trend="neutral"
+            delay={0.4}
+          />
+        </motion.div>
 
         {/* Critical Tickets Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        >
           {/* TIE Critical */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
@@ -182,7 +248,7 @@ export default function MasterDashboard() {
           </Card>
 
           {/* SFDC Critical */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
@@ -248,10 +314,15 @@ export default function MasterDashboard() {
               )}
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
 
         {/* 10 Newest Open Tickets */}
-        <Card className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          <Card className="hover:shadow-lg transition-shadow duration-300">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
@@ -307,7 +378,8 @@ export default function MasterDashboard() {
               </TableBody>
             </Table>
           </CardContent>
-        </Card>
+          </Card>
+        </motion.div>
       </div>
     </div>
   );
