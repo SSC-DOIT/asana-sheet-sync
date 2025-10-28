@@ -55,7 +55,8 @@ export default function MasterDashboard() {
 
   const getPriorityBadge = (priority?: string) => {
     if (!priority) return <Badge variant="secondary">No Priority</Badge>;
-    if (priority === "Highest" || priority === "Level 11") return <Badge variant="destructive">Highest</Badge>;
+    if (priority === "Level 11") return <Badge variant="destructive">Level 11</Badge>;
+    if (priority === "Highest") return <Badge variant="destructive">Highest</Badge>;
     if (priority === "High") return <Badge className="bg-orange-500">High</Badge>;
     if (priority === "Medium") return <Badge className="bg-yellow-500">Medium</Badge>;
     if (priority === "Low") return <Badge variant="secondary">Low</Badge>;
@@ -278,8 +279,8 @@ export default function MasterDashboard() {
                       </TableCell>
                       <TableCell>{getPriorityBadge(ticket.customFields?.Priority)}</TableCell>
                       <TableCell>
-                        {ticket.customFields?.Category ? (
-                          <Badge variant="secondary">{ticket.customFields.Category}</Badge>
+                        {ticket.customFields?.Department ? (
+                          <Badge variant="secondary">{ticket.customFields.Department}</Badge>
                         ) : (
                           <span className="text-muted-foreground text-sm">-</span>
                         )}

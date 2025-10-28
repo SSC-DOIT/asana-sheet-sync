@@ -29,6 +29,7 @@ export interface EnhancedParsedTicket extends ParsedTicket {
     Category?: string;
     "TIE Request Detail"?: string;
     "Work Type"?: string;
+    Department?: string;
   };
 }
 
@@ -69,6 +70,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
     let category: string | undefined;
     let tieRequestDetail: string | undefined;
     let workType: string | undefined;
+    let department: string | undefined;
     
     if (task.custom_fields) {
       const virtualAssistantField = task.custom_fields.find(
@@ -119,6 +121,13 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       if (workTypeField?.enum_value?.name) {
         workType = workTypeField.enum_value.name;
       }
+      
+      const departmentField = task.custom_fields.find(
+        (field: any) => field.name === "Department"
+      );
+      if (departmentField?.enum_value?.name) {
+        department = departmentField.enum_value.name;
+      }
     }
     
     tickets.push({
@@ -139,6 +148,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
         Category: category,
         "TIE Request Detail": tieRequestDetail,
         "Work Type": workType,
+        Department: department,
       },
     });
   });
