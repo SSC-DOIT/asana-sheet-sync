@@ -38,14 +38,14 @@ export interface EnhancedAnalyticsData {
 // Ticket age trend data point
 export interface TicketAgeTrendPoint {
   date: string;
-  openAvg: number;
-  closedAvg: number;
+  avgAge: number;
+  count: number;
 }
 
 // Response time trend data point
 export interface ResponseTrendPoint {
   date: string;
-  avgResponseHours: number;
+  avgResponseTime: number;
   count: number;
 }
 
@@ -99,12 +99,13 @@ export interface AutomationAnalytics {
 export interface OpenTicketTrendPoint {
   date: string;
   openCount: number;
+  closedCount: number;
 }
 
 // Category analytics data
 export interface CategoryData {
   category: string;
-  totalCount: number;
+  count: number;
   openCount: number;
   closedCount: number;
 }

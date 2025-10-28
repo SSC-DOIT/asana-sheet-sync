@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { motion } from "motion/react";
 import { MetricCard } from "./MetricCard";
 import { ResponseTimeChart } from "./ResponseTimeChart";
 import { TicketTable } from "./TicketTable";
@@ -12,7 +11,6 @@ import { useTicketAnalytics } from "@/hooks/useTicketAnalytics";
 import { useToast } from "@/hooks/use-toast";
 import { RefreshCw } from "lucide-react";
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
@@ -66,13 +64,13 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          <Skeleton className="h-12 w-64 shimmer" />
+          <Skeleton className="h-12 w-64" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="h-32 shimmer" />
+              <Skeleton key={i} className="h-32" />
             ))}
           </div>
-          <Skeleton className="h-96 shimmer" />
+          <Skeleton className="h-96" />
         </div>
       </div>
     );
@@ -86,22 +84,19 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     );
   }
 
-  const boardBadgeClass = board === "TIE" 
-    ? "border-blue-500 text-blue-600 dark:text-blue-400" 
-    : "border-purple-500 text-purple-600 dark:text-purple-400";
-
   return (
-    <div className="bg-background">
-      <div className="max-w-[1400px] mx-auto px-6 py-8 space-y-6">
-        {/* Platform Badge + Title */}
-        <div className="flex items-start justify-between animate-fade-in">
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex items-start justify-between">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Badge variant="outline" className={`${boardBadgeClass} text-xs px-2 py-0.5`}>{board} Platform</Badge>
-              <h2 className="text-lg font-semibold text-foreground">Deep Dive Analytics</h2>
-            </div>
+            <h1 className="text-4xl font-bold text-foreground mb-2">
+              {boardName} Board Analytics
+            </h1>
+            <p className="text-muted-foreground">
+              Recent period: Since last Thursday | Historical: July 1 - Last Thursday
+            </p>
             {lastUpdated && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground mt-1">
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             )}
@@ -117,64 +112,32 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           </Button>
         </div>
 
-        {/* Metric Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
-            title="Avg Response Time"
+            title="Recent Avg Response"
             value={formatHours(analytics.recentAvg)}
             icon={<Clock className="w-5 h-5" />}
             change={analytics.improvement}
             changeLabel="improvement"
-            trend={analytics.improvement > 0 ? "down" : analytics.improvement < 0 ? "up" : "neutral"}
-            delay={0}
+            trend={analytics.improvement > 0 ? "up" : analytics.improvement < 0 ? "down" : "neutral"}
           />
           <MetricCard
-            title="Total Tickets"
-            value={analytics.recentCount.toString()}
-            icon={<Ticket className="w-5 h-5" />}
-            trend="neutral"
-            delay={0.1}
-          />
-          <MetricCard
-            title="Resolved Tickets"
-            value={Math.round(analytics.recentCount * 0.88).toString()}
+            title="Historical Avg"
+            value={formatHours(analytics.previousAvg)}
             icon={<BarChart3 className="w-5 h-5" />}
-            trend="up"
-            delay={0.2}
           />
           <MetricCard
-            title="Automation Savings"
-            value={`${Math.round(analytics.recentCount * 1.27)} hrs`}
+            title="Time Saved"
+            value={formatHours(analytics.previousAvg - analytics.recentAvg)}
             icon={<TrendingDown className="w-5 h-5" />}
             trend="up"
-            delay={0.3}
+          />
+          <MetricCard
+            title="Recent Tickets"
+            value={analytics.recentCount.toString()}
+            icon={<Ticket className="w-5 h-5" />}
           />
         </div>
-
-        {/* Automation Impact Banner */}
-        {enhancedData && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className={board === "TIE" 
-              ? "bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-4" 
-              : "bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/50 rounded-lg p-4"}
-          >
-            <div className="flex items-start gap-3">
-              <TrendingDown className={board === "TIE" ? "w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" : "w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5"} />
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-semibold text-foreground text-sm">Automation Impact Analysis</h3>
-                  <Badge variant="outline" className={`${boardBadgeClass} text-xs px-2 py-0.5`}>{board} Platform</Badge>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Real-time automation savings calculated using business hours only (8am-5pm, M-F, excluding holidays)
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
