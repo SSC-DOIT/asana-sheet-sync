@@ -1,0 +1,2631 @@
+{
+  "data": [
+    {
+      "gid": "1209282085540383",
+      "actual_time_minutes": null,
+      "assignee": null,
+      "assignee_status": "inbox",
+      "completed": true,
+      "completed_at": "2025-10-03T15:06:30.817Z",
+      "created_at": "2025-01-30T14:58:28.442Z",
+      "custom_fields": [
+        {
+          "gid": "1209163491122649",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1209163491122653",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "BOPS - Business Operations",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122656",
+              "color": "red",
+              "enabled": true,
+              "name": "CUST - Client Success",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122657",
+              "color": "blue",
+              "enabled": true,
+              "name": "DATA - Data Intelligence",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122652",
+              "color": "green",
+              "enabled": true,
+              "name": "FIN - Finance & Strategy",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209531940920829",
+              "color": "aqua",
+              "enabled": true,
+              "name": "FULF - Fulfillment",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122654",
+              "color": "yellow",
+              "enabled": true,
+              "name": "MKTG - Marketing & Knowledge",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209354287769798",
+              "color": "magenta",
+              "enabled": true,
+              "name": "ADMR- Administrative Resources",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211057534637722",
+              "color": "purple",
+              "enabled": true,
+              "name": "HUMR - Human Resources",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122651",
+              "color": "orange",
+              "enabled": true,
+              "name": "SALE - Sales",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210266490190093",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "OCE - Workforce Management (Call Center)",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211057534637723",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "TEL - Televerde",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209886471986669",
+              "color": "indigo",
+              "enabled": true,
+              "name": "STRG - Strategic Growth",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209170417178953",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "TIE - Technology Integration & Engineering",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209163491122657",
+            "color": "blue",
+            "enabled": true,
+            "name": "DATA - Data Intelligence",
+            "resource_type": "enum_option"
+          },
+          "name": "Department",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "DATA - Data Intelligence",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210018357092222",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210018357092223",
+              "color": "green",
+              "enabled": true,
+              "name": "Firm",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210018357092224",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Likely",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210018357092225",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Tentative",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210018357092226",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "TBD",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210018357092223",
+            "color": "green",
+            "enabled": true,
+            "name": "Firm",
+            "resource_type": "enum_option"
+          },
+          "name": "Due Date Accuracy",
+          "description": "Reflect confidence in the assigned due dates.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Firm",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209413440378150",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210207858208162",
+              "color": "aqua",
+              "enabled": true,
+              "name": "15 Min - Micro ",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209413440378153",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "45 Min - Very Small",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209413440378154",
+              "color": "green",
+              "enabled": true,
+              "name": "90 min - Small",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209413440378155",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "3 hrs - Medium",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209413440378156",
+              "color": "yellow",
+              "enabled": true,
+              "name": "6 hrs - Large",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209413440378157",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "12 hrs - Very Large",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209413440378158",
+              "color": "orange",
+              "enabled": true,
+              "name": "28 hrs - Epic-Level",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210207858208163",
+              "color": "red",
+              "enabled": true,
+              "name": "60 hrs - Project",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209413440378154",
+            "color": "green",
+            "enabled": true,
+            "name": "90 min - Small",
+            "resource_type": "enum_option"
+          },
+          "name": "Lift",
+          "description": "Estimate the complexity of this task from \u201cMicro\u201d (a quick few minutes) up to \u201cProject\u201d (multi-week/month effort). This value drives automated due-date calculation and capacity planning\u2014choose the level that best matches the work from triage through delivery.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "90 min - Small",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209370546335404",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210210346013348",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "Backlog",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335407",
+              "color": "none",
+              "enabled": true,
+              "name": "To Do",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335408",
+              "color": "red",
+              "enabled": true,
+              "name": "Requirement Gathering",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335409",
+              "color": "orange",
+              "enabled": true,
+              "name": "Ready for Development",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335410",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "In Progress",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210210173145750",
+              "color": "yellow",
+              "enabled": true,
+              "name": "QA/Testing",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335411",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Blocked",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335412",
+              "color": "green",
+              "enabled": true,
+              "name": "Development Completed",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209370546335413",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "Ready for UAT/Done",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210208790150935",
+              "color": "aqua",
+              "enabled": true,
+              "name": "Ready for Staging",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210210346013349",
+              "color": "blue",
+              "enabled": true,
+              "name": "Business Acceptance Testing",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210037940282425",
+              "color": "indigo",
+              "enabled": true,
+              "name": "Cancel / Won't Do",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210208787610646",
+              "color": "purple",
+              "enabled": true,
+              "name": "Done",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210212235837241",
+              "color": "magenta",
+              "enabled": true,
+              "name": "PCM",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209370546335408",
+            "color": "red",
+            "enabled": true,
+            "name": "Requirement Gathering",
+            "resource_type": "enum_option"
+          },
+          "name": "Sprint Stage",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Requirement Gathering",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209163491122660",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1209184348910928",
+              "color": "blue",
+              "enabled": true,
+              "name": "Level 11",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122663",
+              "color": "red",
+              "enabled": true,
+              "name": "Highest",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122662",
+              "color": "orange",
+              "enabled": true,
+              "name": "High",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122661",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Medium",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122664",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Low",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209266822863005",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Lowest",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211146923231180",
+              "color": "none",
+              "enabled": true,
+              "name": "Current Sprint",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209163491122662",
+            "color": "orange",
+            "enabled": true,
+            "name": "High",
+            "resource_type": "enum_option"
+          },
+          "name": "TS Prioritization",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "High",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209163491122666",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1209163491122668",
+              "color": "green",
+              "enabled": true,
+              "name": "Profit generating",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122667",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Team Efficiency",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122669",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "Betterment and Growth",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209163491122670",
+              "color": "aqua",
+              "enabled": true,
+              "name": "Standardization",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211093800127980",
+              "color": "none",
+              "enabled": true,
+              "name": "Cost Savings",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209184406605615",
+              "color": "red",
+              "enabled": true,
+              "name": "Core Function",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209184406605615",
+            "color": "red",
+            "enabled": true,
+            "name": "Core Function",
+            "resource_type": "enum_option"
+          },
+          "name": "Value Prop",
+          "description": "What value proposition is there in prioritizing this task?",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Core Function",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210017104837437",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210017104837447",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "BOPS - Business Operations",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837445",
+              "color": "red",
+              "enabled": true,
+              "name": "CUST - Client Success",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837448",
+              "color": "blue",
+              "enabled": true,
+              "name": "DATA - Data Intelligence",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837449",
+              "color": "green",
+              "enabled": true,
+              "name": "FIN - Finance",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837441",
+              "color": "aqua",
+              "enabled": true,
+              "name": "FULF - Fulfillment",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837443",
+              "color": "yellow",
+              "enabled": true,
+              "name": "MKTG - Marketing & Knowledge",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837446",
+              "color": "magenta",
+              "enabled": true,
+              "name": "ADMR-Administrative Resources",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837440",
+              "color": "orange",
+              "enabled": true,
+              "name": "SALE - Sales",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837442",
+              "color": "purple",
+              "enabled": true,
+              "name": "STRG - Strategic Growth",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210017104837444",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "TIE - IT & Engineering",
+              "resource_type": "enum_option"
+            }
+          ],
+          "multi_enum_values": [],
+          "name": "Cross Functional Work",
+          "description": "Select which departments need to coordinate their activity on this task.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "multi_enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "multi_enum"
+        },
+        {
+          "gid": "1210018507299103",
+          "enabled": true,
+          "name": "DATA",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "DATA-46",
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": "DATA-46",
+          "is_formula_field": false,
+          "is_value_read_only": true,
+          "type": "text"
+        },
+        {
+          "gid": "1211293675582292",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211293675582293",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Emergency",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211293675582294",
+              "color": "green",
+              "enabled": true,
+              "name": "High",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211293675582295",
+              "color": "red",
+              "enabled": true,
+              "name": "Medium ",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211293675582296",
+              "color": "orange",
+              "enabled": true,
+              "name": "Low",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211388792380945",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Highest",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Data Team Priority",
+          "description": "",
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211293675582311",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211293675582312",
+              "color": "green",
+              "enabled": true,
+              "name": "In Progress",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211293675582313",
+              "color": "red",
+              "enabled": true,
+              "name": "On-Hold",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211293675582314",
+              "color": "orange",
+              "enabled": true,
+              "name": "Pending",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211293675582319",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Not Started",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211336595470559",
+              "color": "blue",
+              "enabled": true,
+              "name": "Done",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Status",
+          "description": "",
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211294128235222",
+          "enabled": true,
+          "name": "Created By",
+          "description": "",
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": "",
+          "resource_subtype": "people",
+          "resource_type": "custom_field",
+          "people_value": [],
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "people"
+        },
+        {
+          "gid": "1211388792380933",
+          "enabled": true,
+          "name": "Working Hours",
+          "description": "",
+          "number_value": null,
+          "precision": 1,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1211388792380947",
+          "enabled": true,
+          "name": "Request Date",
+          "description": "",
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "date",
+          "resource_type": "custom_field",
+          "date_value": null,
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "date"
+        },
+        {
+          "gid": "1211401223476461",
+          "enabled": true,
+          "name": "Revenue Generation",
+          "description": "Rate expected revenue uplift from 1 (minimal revenue generation) to 5 (highest revenue generation).",
+          "number_value": null,
+          "precision": 1,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1211401223476463",
+          "enabled": true,
+          "name": "Revenue Blocking ",
+          "description": "Rate urgency to unblock revenue from 1 (no immediate revenue blockage) to 5 (critical revenue blockage).",
+          "number_value": null,
+          "precision": 1,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1211401223476465",
+          "enabled": true,
+          "name": "Team Efficiency ",
+          "description": "Rate time savings or efficiency improvement from 1 (small improvement) to 5 (major efficiency gain).",
+          "number_value": null,
+          "precision": 1,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1211401223476467",
+          "enabled": true,
+          "name": "Strategic Alignment",
+          "description": "Rate how well this task aligns with company OKRs and sales strategy from 1 (low alignment) to 5 (high alignment).",
+          "number_value": null,
+          "precision": 1,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1211401223476469",
+          "enabled": true,
+          "name": "Effort",
+          "description": "Estimate the level of effort required from 1 (very low effort) to 5 (very high effort).",
+          "number_value": null,
+          "precision": 1,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1211401223476471",
+          "enabled": true,
+          "name": "Score (Auto Fill)",
+          "description": "",
+          "number_value": null,
+          "precision": 2,
+          "created_by": {
+            "gid": "1209998459158909",
+            "name": "Derrick Taylor",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": true,
+          "is_value_read_only": true,
+          "type": "number"
+        },
+        {
+          "gid": "1210018204608163",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210018204608164",
+              "color": "green",
+              "enabled": true,
+              "name": "Firm",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210018204621412",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Likely",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210018204621413",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Tentative",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210018204621414",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "TBD",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Due Date Accuracy",
+          "description": "Reflect confidence in the assigned due dates.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210018203020680",
+          "enabled": true,
+          "name": "CUST",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "CUST-101",
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": "CUST-101",
+          "is_formula_field": false,
+          "is_value_read_only": true,
+          "type": "text"
+        },
+        {
+          "gid": "1209599209162251",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1209599214997840",
+              "color": "red",
+              "enabled": true,
+              "name": "SFDC - Bug",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210200812406222",
+              "color": "green",
+              "enabled": true,
+              "name": "SFDC - Admin Support",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209599209162254",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "SFDC - Feature Request",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334172815081",
+              "color": "yellow",
+              "enabled": true,
+              "name": "SFDC - Capability Expansion",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209599209162254",
+            "color": "yellow-green",
+            "enabled": true,
+            "name": "SFDC - Feature Request",
+            "resource_type": "enum_option"
+          },
+          "name": "SFDC Request",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "SFDC - Feature Request",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209207838837674",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210690710716327",
+              "color": "red",
+              "enabled": true,
+              "name": "Internal Review",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507561551496",
+              "color": "orange",
+              "enabled": true,
+              "name": "Assigned",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209207838837676",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "In Progress",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209268377323819",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Blocked",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209268530326137",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Waiting For Customer",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345453675448",
+              "color": "green",
+              "enabled": true,
+              "name": "Resolved",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209345453675448",
+            "color": "green",
+            "enabled": true,
+            "name": "Resolved",
+            "resource_type": "enum_option"
+          },
+          "name": "TS-Status",
+          "description": "Use this field in ticketing boards to automate the task through various stages of interaction. Critical for most ticketing based rules.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Resolved",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211728447867529",
+          "enabled": true,
+          "name": "Task summary",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": null,
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "text"
+        },
+        {
+          "gid": "1211713970091938",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211713970091939",
+              "color": "red",
+              "enabled": true,
+              "name": "Yes",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211713970091940",
+              "color": "green",
+              "enabled": true,
+              "name": "No",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Duplicate detected",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210589130687968",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210589130687971",
+              "color": "green",
+              "enabled": true,
+              "name": "Quick Fix",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589130687972",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Routine Work",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589130687973",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Rework or Adjustment",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589130687975",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "New Build or Feature",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589130687974",
+              "color": "orange",
+              "enabled": true,
+              "name": "Multi-System Coordination",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589130687976",
+              "color": "red",
+              "enabled": true,
+              "name": "Unknown (Triage Needed)",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210589130687972",
+            "color": "yellow-green",
+            "enabled": true,
+            "name": "Routine Work",
+            "resource_type": "enum_option"
+          },
+          "name": "Scope of Work",
+          "description": "Selected by the team owning the ticket after intake.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Routine Work",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210507400010753",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210507400010756",
+              "color": "red",
+              "enabled": true,
+              "name": "External Customers",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507400010757",
+              "color": "orange",
+              "enabled": true,
+              "name": "Entire Company",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507400010758",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Entire Department or Team",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507400010759",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Multiple People",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507400010760",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Just Me",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210507400010759",
+            "color": "yellow",
+            "enabled": true,
+            "name": "Multiple People",
+            "resource_type": "enum_option"
+          },
+          "name": "Who is Affected?",
+          "description": "This is a generally quantifiable field that simply reports which group of people is most affected. This will have an impact on he prioritization.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Multiple People",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210507331109677",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210507331109680",
+              "color": "red",
+              "enabled": true,
+              "name": "500+",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507331109681",
+              "color": "orange",
+              "enabled": true,
+              "name": "50-500",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507331109682",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "10-49",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507331109683",
+              "color": "yellow",
+              "enabled": true,
+              "name": "2-9",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507331109684",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "Just Me",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210507331109680",
+            "color": "red",
+            "enabled": true,
+            "name": "500+",
+            "resource_type": "enum_option"
+          },
+          "name": "Number Impacted",
+          "description": "This field is where the user selects the approximate number of people who are impacted by the issue being reported.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "500+",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210507291852647",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210507291852650",
+              "color": "red",
+              "enabled": true,
+              "name": "Critical",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507291852651",
+              "color": "orange",
+              "enabled": true,
+              "name": "High",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507291852652",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Medium",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210507291852653",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Low",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210507291852651",
+            "color": "orange",
+            "enabled": true,
+            "name": "High",
+            "resource_type": "enum_option"
+          },
+          "name": "Personal Priority",
+          "description": "Personal Priority is a measurement of how important this task is to the person who is submitting the task.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "High",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209203921172396",
+          "enabled": true,
+          "name": "Estimated time",
+          "description": "Asana-created. Estimate time to complete a task.",
+          "number_value": 90,
+          "precision": 0,
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "1h 30m",
+          "resource_subtype": "number",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "number"
+        },
+        {
+          "gid": "1210589244907514",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210589244907517",
+              "color": "green",
+              "enabled": true,
+              "name": "Firm",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589244907518",
+              "color": "orange",
+              "enabled": true,
+              "name": "Likely",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589244907519",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Tentative",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210589244907520",
+              "color": "yellow",
+              "enabled": true,
+              "name": "TBD",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210589244907518",
+            "color": "orange",
+            "enabled": true,
+            "name": "Likely",
+            "resource_type": "enum_option"
+          },
+          "name": "Date Accuracy",
+          "description": "This field lets the receiving team clarify scheduling confidence even if Lift and Due Date are automated.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Likely",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210529409662904",
+          "enabled": true,
+          "name": "Task Title",
+          "description": "The quintessential \"What Should We Call This\" field. Separated out for the purpose of consistent naming automation.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": null,
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "text"
+        },
+        {
+          "gid": "1210698537156926",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210698537156929",
+              "color": "green",
+              "enabled": true,
+              "name": "Feature",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210698537156930",
+              "color": "red",
+              "enabled": true,
+              "name": "Bug",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210698537156931",
+              "color": "orange",
+              "enabled": true,
+              "name": "Support",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211377431667189",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Capability",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210698537156931",
+            "color": "orange",
+            "enabled": true,
+            "name": "Support",
+            "resource_type": "enum_option"
+          },
+          "name": "TS Ticket Type",
+          "description": "For Salesforce, Cloud and Web tickets, this field is used to assign ownership and determine questions in the ticketing form.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Support",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210570544546054",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1210570544546055",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "IT Core",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210570544546056",
+              "color": "blue",
+              "enabled": true,
+              "name": "Salesforce",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1210570544546057",
+              "color": "green",
+              "enabled": true,
+              "name": "Cloud",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1210570544546056",
+            "color": "blue",
+            "enabled": true,
+            "name": "Salesforce",
+            "resource_type": "enum_option"
+          },
+          "name": "TS Product",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Salesforce",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209370520354766",
+          "enabled": true,
+          "name": "SFDC",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "SFDC-341",
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": "SFDC-341",
+          "is_formula_field": false,
+          "is_value_read_only": true,
+          "type": "text"
+        },
+        {
+          "gid": "1211334807774283",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211334807774286",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "E - Experience",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334807774287",
+              "color": "green",
+              "enabled": true,
+              "name": "S - Simplify",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334807774288",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "C - Centralize",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334807774289",
+              "color": "yellow",
+              "enabled": true,
+              "name": "A - Automate",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334807774290",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "P - Personalize",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334807774291",
+              "color": "orange",
+              "enabled": true,
+              "name": "E - Ecosystem",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334807774292",
+              "color": "red",
+              "enabled": true,
+              "name": "NOT APPLICABLE",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "ESCAPE",
+          "description": "E \u2013 Experience-First: Ensure every decision enhances usability and builds contractor trust. S \u2013 Simplify: Ruthlessly remove complexity by confirming only features that reduce friction. C \u2013 Centralize: Align on how updates unify compliance data under one secure system. A \u2013 Automate & Anticipate: Prioritize tools that handle repetitive tasks and prevent issues before they occur. P \u2013 Personalize: Confirm client-specific needs are being met with flexibility and clarity. E \u2013 Ecosystem: Evaluate requests for integration and partnership potential.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211500803370496",
+          "enabled": true,
+          "name": "Completed.",
+          "description": "The date the ticket was marked complete.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "date",
+          "resource_type": "custom_field",
+          "date_value": null,
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "date"
+        },
+        {
+          "gid": "1209413464681995",
+          "enabled": true,
+          "name": "Reported By",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "justin.bilodeau@safetyservicescompany.com",
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": "justin.bilodeau@safetyservicescompany.com",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "text"
+        },
+        {
+          "gid": "1211653954478600",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211653954478603",
+              "color": "green",
+              "enabled": true,
+              "name": "Revenue",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211653954478604",
+              "color": "red",
+              "enabled": true,
+              "name": "Expense",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211653954478605",
+              "color": "orange",
+              "enabled": true,
+              "name": "Optimization",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211653807544135",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "Operations",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211736971622516",
+              "color": "none",
+              "enabled": true,
+              "name": "Security",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Impact Vector",
+          "description": "This ticket MOST impacts this vector. ",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211538609251962",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211538609251965",
+              "color": "pink",
+              "enabled": true,
+              "name": "Reputational",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211538609251966",
+              "color": "hot-pink",
+              "enabled": true,
+              "name": "Client Experience",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211538609251967",
+              "color": "magenta",
+              "enabled": true,
+              "name": "Productivity",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211538609251968",
+              "color": "purple",
+              "enabled": true,
+              "name": "Strategic Alignment",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211538609251969",
+              "color": "indigo",
+              "enabled": true,
+              "name": "Technical",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211736991347115",
+              "color": "none",
+              "enabled": true,
+              "name": "Security",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211538609251970",
+              "color": "blue",
+              "enabled": true,
+              "name": "Growth",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211538624386301",
+              "color": "green",
+              "enabled": true,
+              "name": "No Risk?",
+              "resource_type": "enum_option"
+            }
+          ],
+          "multi_enum_values": [],
+          "name": "Risk MS",
+          "description": "This is the multi-select version of Risk vectors related to software development",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "multi_enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "multi_enum"
+        },
+        {
+          "gid": "1211527992750111",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211527992750114",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "Communication",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211527992750115",
+              "color": "aqua",
+              "enabled": true,
+              "name": "Data Management",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211527992750116",
+              "color": "blue",
+              "enabled": true,
+              "name": "Documentation",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211528102662997",
+              "color": "indigo",
+              "enabled": true,
+              "name": "Fullfillment",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211527992750117",
+              "color": "purple",
+              "enabled": true,
+              "name": "Reporting",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211527932982059",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "System Function",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Work Type",
+          "description": "This is a field that captures the big rocks of work type. Use for development guidance or work prioritization and categorization.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211537418358339",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211537418358342",
+              "color": "green",
+              "enabled": true,
+              "name": "R1 - Triage +",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211539704726383",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "R2 - Classification +",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211539704726384",
+              "color": "yellow",
+              "enabled": true,
+              "name": "R3 - Description +",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211539704726385",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "R4 - Prioritization +",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211539704726386",
+              "color": "orange",
+              "enabled": true,
+              "name": "R5 - Validation +",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211722435660826",
+              "color": "red",
+              "enabled": true,
+              "name": "R6 - Communication +",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": null,
+          "name": "Virtual Assistant",
+          "description": "Used to trigger series of Virtual Assistant upon completion.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211332719113932",
+          "enabled": true,
+          "enum_options": [
+            {
+              "gid": "1211332719113935",
+              "color": "green",
+              "enabled": true,
+              "name": "E \u2013 Experience-First",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211332719113936",
+              "color": "red",
+              "enabled": true,
+              "name": "S \u2013 Simplify",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211332719113937",
+              "color": "orange",
+              "enabled": true,
+              "name": "C \u2013 Centralize",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211332719113938",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "A \u2013 Automate & Anticipate",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211332719113939",
+              "color": "yellow",
+              "enabled": true,
+              "name": "P \u2013 Personalize",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211332719113940",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "E \u2013 Ecosystem",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211334826888173",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "NOT APPLICABLE",
+              "resource_type": "enum_option"
+            }
+          ],
+          "multi_enum_values": [],
+          "name": "ESCAPE MULTI",
+          "description": "E \u2013 Experience-First: Ensure every decision enhances usability and builds contractor trust. S \u2013 Simplify: Ruthlessly remove complexity by confirming only features that reduce friction. C \u2013 Centralize: Align on how updates unify compliance data under one secure system. A \u2013 Automate & Anticipate: Prioritize tools that handle repetitive tasks and prevent issues before they occur. P \u2013 Personalize: Confirm client-specific needs are being met with flexibility and clarity. E \u2013 Ecosystem: Evaluate requests for integration and partnership potential.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": null,
+          "resource_subtype": "multi_enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "multi_enum"
+        },
+        {
+          "gid": "1209345044428523",
+          "enabled": false,
+          "enum_options": [
+            {
+              "gid": "1209345044428526",
+              "color": "red",
+              "enabled": true,
+              "name": "Full Stoppage (Revenue Impacting)",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209346109766186",
+              "color": "red",
+              "enabled": true,
+              "name": "Broken (Revenue Impacting)",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345044428527",
+              "color": "orange",
+              "enabled": true,
+              "name": "Security Related",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345044428528",
+              "color": "yellow-orange",
+              "enabled": true,
+              "name": "Stoppage (non-revenue)",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345044428529",
+              "color": "yellow",
+              "enabled": true,
+              "name": "Inconvenience",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345044428530",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "New Process or Feature",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345044428531",
+              "color": "green",
+              "enabled": true,
+              "name": "Access Request (Licensing)",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209345044428532",
+              "color": "blue-green",
+              "enabled": true,
+              "name": "New Platform (Software)",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209345044428530",
+            "color": "yellow-green",
+            "enabled": true,
+            "name": "New Process or Feature",
+            "resource_type": "enum_option"
+          },
+          "name": "TIE Ticket Type",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "New Process or Feature",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209415836003613",
+          "enabled": false,
+          "name": "TIE",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "TIE-249",
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": "TIE-249",
+          "is_formula_field": false,
+          "is_value_read_only": true,
+          "type": "text"
+        },
+        {
+          "gid": "1209714514684815",
+          "enabled": false,
+          "enum_options": [
+            {
+              "gid": "1209714514684816",
+              "color": "none",
+              "enabled": true,
+              "name": "Done",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684817",
+              "color": "none",
+              "enabled": true,
+              "name": "In Progress",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684818",
+              "color": "none",
+              "enabled": true,
+              "name": "Requirement Gathering",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684819",
+              "color": "none",
+              "enabled": true,
+              "name": "Blocked",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684820",
+              "color": "none",
+              "enabled": true,
+              "name": "Ready for Prod",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684821",
+              "color": "none",
+              "enabled": true,
+              "name": "Ready for Development",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684822",
+              "color": "none",
+              "enabled": true,
+              "name": "Business Acceptance Testing",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684823",
+              "color": "none",
+              "enabled": true,
+              "name": "Ready for UAT",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684824",
+              "color": "none",
+              "enabled": true,
+              "name": "Ready for staging",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684825",
+              "color": "none",
+              "enabled": true,
+              "name": "Backlog",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714514684826",
+              "color": "none",
+              "enabled": true,
+              "name": "Ready for MOC",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209714514684818",
+            "color": "none",
+            "enabled": true,
+            "name": "Requirement Gathering",
+            "resource_type": "enum_option"
+          },
+          "name": "Jira status",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "Requirement Gathering",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1209714224047991",
+          "enabled": false,
+          "enum_options": [
+            {
+              "gid": "1209714224047992",
+              "color": "none",
+              "enabled": true,
+              "name": "11",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714224047993",
+              "color": "none",
+              "enabled": true,
+              "name": "Highest",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714224047994",
+              "color": "none",
+              "enabled": true,
+              "name": "High",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714224047995",
+              "color": "none",
+              "enabled": true,
+              "name": "Medium",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714224047996",
+              "color": "none",
+              "enabled": true,
+              "name": "Low",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1209714224047997",
+              "color": "none",
+              "enabled": true,
+              "name": "Lowest",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1209714224047994",
+            "color": "none",
+            "enabled": true,
+            "name": "High",
+            "resource_type": "enum_option"
+          },
+          "name": "Jira priority",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "High",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1210624960094314",
+          "enabled": false,
+          "name": "CLD",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "CLD-1976",
+          "resource_subtype": "text",
+          "resource_type": "custom_field",
+          "text_value": "CLD-1976",
+          "is_formula_field": false,
+          "is_value_read_only": true,
+          "type": "text"
+        },
+        {
+          "gid": "1211502676412180",
+          "enabled": false,
+          "enum_options": [
+            {
+              "gid": "1211502676412183",
+              "color": "green",
+              "enabled": true,
+              "name": "ABOVE",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211653561504990",
+              "color": "orange",
+              "enabled": true,
+              "name": "LINE",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211502676412184",
+              "color": "red",
+              "enabled": true,
+              "name": "BELOW",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211653628169621",
+              "color": "cool-gray",
+              "enabled": true,
+              "name": "DONE",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1211502676412184",
+            "color": "red",
+            "enabled": true,
+            "name": "BELOW",
+            "resource_type": "enum_option"
+          },
+          "name": "Living Line",
+          "description": "Above is to do today. Line is already been worked today and I'm holding. Below is not prioritized for today.",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "BELOW",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        },
+        {
+          "gid": "1211502745840762",
+          "enabled": false,
+          "name": "AGE: 60 Days",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "2025-07-31T00:00:00.000Z",
+          "resource_subtype": "date",
+          "resource_type": "custom_field",
+          "date_value": {
+            "date": "2025-07-31",
+            "date_time": null
+          },
+          "is_formula_field": true,
+          "is_value_read_only": true,
+          "type": "date"
+        },
+        {
+          "gid": "1211503225561407",
+          "enabled": false,
+          "name": "AGE: 30 Days",
+          "description": "",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "2025-08-30T00:00:00.000Z",
+          "resource_subtype": "date",
+          "resource_type": "custom_field",
+          "date_value": {
+            "date": "2025-08-30",
+            "date_time": null
+          },
+          "is_formula_field": true,
+          "is_value_read_only": true,
+          "type": "date"
+        },
+        {
+          "gid": "1211502961508839",
+          "enabled": false,
+          "enum_options": [
+            {
+              "gid": "1211502961508842",
+              "color": "green",
+              "enabled": true,
+              "name": "24 Hours",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211502961508843",
+              "color": "yellow-green",
+              "enabled": true,
+              "name": "1 Week",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211502961508844",
+              "color": "yellow",
+              "enabled": true,
+              "name": "30 Days",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211502961508845",
+              "color": "orange",
+              "enabled": true,
+              "name": "60 Days",
+              "resource_type": "enum_option"
+            },
+            {
+              "gid": "1211502961508846",
+              "color": "red",
+              "enabled": true,
+              "name": "60 Days +",
+              "resource_type": "enum_option"
+            }
+          ],
+          "enum_value": {
+            "gid": "1211502961508846",
+            "color": "red",
+            "enabled": true,
+            "name": "60 Days +",
+            "resource_type": "enum_option"
+          },
+          "name": "Ticket Age",
+          "description": "24 Hours -> 60+ Days",
+          "created_by": {
+            "gid": "1209127804647256",
+            "name": "Daniel DeZago",
+            "resource_type": "user"
+          },
+          "display_value": "60 Days +",
+          "resource_subtype": "enum",
+          "resource_type": "custom_field",
+          "is_formula_field": false,
+          "is_value_read_only": false,
+          "type": "enum"
+        }
+      ],
+      "due_at": null,
+      "due_on": "2025-10-24",
+      "followers": [
+        {
+          "gid": "1178935386410033",
+          "name": "Alexander Eakins",
+          "resource_type": "user"
+        },
+        {
+          "gid": "1209127804647256",
+          "name": "Daniel DeZago",
+          "resource_type": "user"
+        },
+        {
+          "gid": "1209599400299836",
+          "name": "Nisha Singh",
+          "resource_type": "user"
+        },
+        {
+          "gid": "1209998459158909",
+          "name": "Derrick Taylor",
+          "resource_type": "user"
+        },
+        {
+          "gid": "1209319599279141",
+          "name": "Justin Bilodeau",
+          "resource_type": "user"
+        }
+      ],
+      "hearted": false,
+      "hearts": [],
+      "liked": false,
+      "likes": [],
+      "memberships": [
+        {
+          "project": {
+            "gid": "1210016542964783",
+            "name": "CUST - Client Success Departmental Hub",
+            "resource_type": "project"
+          },
+          "section": {
+            "gid": "1210018204621443",
+            "name": "Current Priorities",
+            "resource_type": "section"
+          }
+        },
+        {
+          "project": {
+            "gid": "1210015162248604",
+            "name": "DATA - Data Intelligence Departmental Hub",
+            "resource_type": "project"
+          },
+          "section": {
+            "gid": "1210018357099211",
+            "name": "Completed Tasks",
+            "resource_type": "section"
+          }
+        },
+        {
+          "project": {
+            "gid": "1210125139660073",
+            "name": "SSCSF - Invoice Migration Project",
+            "resource_type": "project"
+          },
+          "section": {
+            "gid": "1210570535190411",
+            "name": "Closed Tickets",
+            "resource_type": "section"
+          }
+        },
+        {
+          "project": {
+            "gid": "1210697046917010",
+            "name": "TICKETS - SFDC",
+            "resource_type": "project"
+          },
+          "section": {
+            "gid": "1210702617176155",
+            "name": "90 Day Complete",
+            "resource_type": "section"
+          }
+        },
+        {
+          "project": {
+            "gid": "1210698810765473",
+            "name": "ARCHIVE - SFDC",
+            "resource_type": "project"
+          },
+          "section": {
+            "gid": "1210698810765474",
+            "name": "Untitled section",
+            "resource_type": "section"
+          }
+        }
+      ],
+      "modified_at": "2025-10-23T14:38:59.332Z",
+      "name": "[SFDC-341] Import Stripe Primary Email to Account Records",
+      "notes": "Per ticket:\n[https://verifiedfirst.atlassian.net/browse/SSCSF-592|https://verifiedfirst.atlassian.net/browse/SSCSF-592]\nIt was discovered that the account field \u2018Stripe Primary Email\u2019 is required to create any payment objects on an account. However, field is not present on all account records.\nNeed to run a report to identify all accounts with account record type = GCS Account or record type = Traditional Account with Stripe Primary Email = NULL\n\nFrom those accounts identify the appropriate email from another location (statistical contact email, authorized purchaser email, Billing contact email, etc.) on the account and populate in mass the Stripe Primary Email to identified account records\n\nThis will prevent issues when importing Invoice objects and processing future payments on accounts",
+      "num_hearts": 0,
+      "num_likes": 0,
+      "parent": null,
+      "permalink_url": "https://app.asana.com/1/169426931772429/project/1210015162248604/task/1209282085540383",
+      "projects": [
+        {
+          "gid": "1210015162248604",
+          "name": "DATA - Data Intelligence Departmental Hub",
+          "resource_type": "project"
+        },
+        {
+          "gid": "1210016542964783",
+          "name": "CUST - Client Success Departmental Hub",
+          "resource_type": "project"
+        },
+        {
+          "gid": "1210125139660073",
+          "name": "SSCSF - Invoice Migration Project",
+          "resource_type": "project"
+        },
+        {
+          "gid": "1210697046917010",
+          "name": "TICKETS - SFDC",
+          "resource_type": "project"
+        },
+        {
+          "gid": "1210698810765473",
+          "name": "ARCHIVE - SFDC",
+          "resource_type": "project"
+        }
+      ],
+      "resource_type": "task",
+      "start_at": null,
+      "start_on": null,
+      "subtasks": [],
+      "tags": [],
+      "resource_subtype": "default_task",
+      "workspace": {
+        "gid": "169426931772429",
+        "name": "safetyservicescompany.com",
+        "resource_type": "workspace"
+      }
+    }
+  ]
+}
