@@ -207,11 +207,11 @@ export default function MasterDashboard() {
                             <div className="pt-2 border-t">
                               <CollapsibleTrigger asChild>
                                 <Button
-                                  variant="ghost"
+                                  variant="outline"
                                   size="sm"
-                                  className="w-full justify-between p-0 h-auto font-medium text-muted-foreground hover:text-foreground"
+                                  className="w-full justify-between"
                                 >
-                                  <span>Task Summary</span>
+                                  <span>View Task Summary</span>
                                   {expandedTickets.has(ticket.id) ? (
                                     <ChevronUp className="w-4 h-4" />
                                   ) : (
@@ -220,7 +220,7 @@ export default function MasterDashboard() {
                                 </Button>
                               </CollapsibleTrigger>
                               <CollapsibleContent className="mt-2">
-                                <p className="text-muted-foreground">
+                                <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
                                   {ticket.summary}
                                 </p>
                               </CollapsibleContent>
@@ -305,11 +305,11 @@ export default function MasterDashboard() {
                             <div className="pt-2 border-t">
                               <CollapsibleTrigger asChild>
                                 <Button
-                                  variant="ghost"
+                                  variant="outline"
                                   size="sm"
-                                  className="w-full justify-between p-0 h-auto font-medium text-muted-foreground hover:text-foreground"
+                                  className="w-full justify-between"
                                 >
-                                  <span>Task Summary</span>
+                                  <span>View Task Summary</span>
                                   {expandedTickets.has(ticket.id) ? (
                                     <ChevronUp className="w-4 h-4" />
                                   ) : (
@@ -318,7 +318,7 @@ export default function MasterDashboard() {
                                 </Button>
                               </CollapsibleTrigger>
                               <CollapsibleContent className="mt-2">
-                                <p className="text-muted-foreground">
+                                <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
                                   {ticket.summary}
                                 </p>
                               </CollapsibleContent>
