@@ -86,24 +86,22 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     );
   }
 
-  const boardColor = board === "TIE" ? "primary" : "chart-3";
-  const boardBadgeClass = board === "TIE" ? "border-primary text-primary" : "border-chart-3 text-chart-3";
+  const boardBadgeClass = board === "TIE" 
+    ? "border-blue-500 text-blue-600 dark:text-blue-400" 
+    : "border-purple-500 text-purple-600 dark:text-purple-400";
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="bg-background">
+      <div className="max-w-[1400px] mx-auto px-6 py-8 space-y-6">
         {/* Platform Badge + Title */}
         <div className="flex items-start justify-between animate-fade-in">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <Badge variant="outline" className={boardBadgeClass}>{board} Platform</Badge>
-              <h2 className="text-xl font-semibold text-foreground">Deep Dive Analytics</h2>
+            <div className="flex items-center gap-3 mb-2">
+              <Badge variant="outline" className={`${boardBadgeClass} text-xs px-2 py-0.5`}>{board} Platform</Badge>
+              <h2 className="text-lg font-semibold text-foreground">Deep Dive Analytics</h2>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Strategic performance dashboard • 12-month rolling analysis
-            </p>
             {lastUpdated && (
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground">
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             )}
@@ -159,19 +157,21 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className={board === "TIE" ? "bg-primary/10 border border-primary/30 rounded-lg p-4" : "bg-chart-3/10 border border-chart-3/30 rounded-lg p-4"}
+            className={board === "TIE" 
+              ? "bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-4" 
+              : "bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/50 rounded-lg p-4"}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <TrendingDown className={board === "TIE" ? "w-5 h-5 text-primary" : "w-5 h-5 text-chart-3"} />
-                <div>
-                  <h3 className="font-semibold text-foreground">Automation Impact Analysis</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Real-time automation savings calculated using business hours only (8am-5pm, M-F, excluding holidays)
-                  </p>
+            <div className="flex items-start gap-3">
+              <TrendingDown className={board === "TIE" ? "w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" : "w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5"} />
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="font-semibold text-foreground text-sm">Automation Impact Analysis</h3>
+                  <Badge variant="outline" className={`${boardBadgeClass} text-xs px-2 py-0.5`}>{board} Platform</Badge>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Real-time automation savings calculated using business hours only (8am-5pm, M-F, excluding holidays)
+                </p>
               </div>
-              <Badge variant="outline" className={boardBadgeClass}>{board} Platform</Badge>
             </div>
           </motion.div>
         )}

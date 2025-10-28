@@ -103,34 +103,23 @@ export default function MasterDashboard() {
   const allNewest = getNewestTickets([...tieTickets, ...sfdcTickets]);
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            Technology Solutions Open Tickets
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Strategic performance dashboard • 12-month rolling analysis
-          </p>
-        </motion.div>
-
+    <div className="bg-background">
+      <div className="max-w-[1400px] mx-auto px-6 py-8 space-y-6">
         {/* Business Hours Methodology Banner */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-primary/5 border border-primary/20 rounded-lg p-4 flex items-start gap-3"
+          className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-4"
         >
-          <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-          <div>
-            <h3 className="font-semibold text-foreground mb-1">Business Hours Methodology</h3>
-            <p className="text-sm text-muted-foreground">
-              All response times and automation savings are calculated using <span className="font-medium">business hours only</span> (8am-5pm, Monday-Friday, excluding 10 US federal holidays). This provides accurate, actionable metrics for operational planning and ROI justification. Cost savings assume $75/hour average support cost.
-            </p>
+          <div className="flex items-start gap-3">
+            <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-foreground text-sm mb-1">Business Hours Methodology</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                All response times and automation savings are calculated using <span className="font-medium text-foreground">business hours only</span> (8am-5pm, Monday-Friday, excluding 10 US federal holidays). This provides accurate, actionable metrics for operational planning and ROI justification. Cost savings assume $75/hour average support cost.
+              </p>
+            </div>
           </div>
         </motion.div>
 
@@ -140,20 +129,20 @@ export default function MasterDashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-destructive/10 border border-destructive/30 rounded-lg p-4"
+            className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-lg p-4"
           >
-            <div className="flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0" />
-              <div>
-                <h3 className="font-semibold text-foreground">Critical Attention Required - Level 11 Priority</h3>
-                <div className="flex gap-4 mt-2">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-foreground text-sm mb-2">Critical Attention Required - Level 11 Priority</h3>
+                <div className="flex flex-wrap gap-4">
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="border-primary text-primary">TIE Platform</Badge>
-                    <span className="text-sm text-muted-foreground">{tieCritical.length} critical tickets</span>
+                    <Badge variant="outline" className="border-blue-500 text-blue-600 dark:text-blue-400 text-xs px-2 py-0.5">TIE Platform</Badge>
+                    <span className="text-xs text-muted-foreground">{tieCritical.length} critical tickets</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="border-chart-3 text-chart-3">SFDC Platform</Badge>
-                    <span className="text-sm text-muted-foreground">{sfdcCritical.length} critical tickets</span>
+                    <Badge variant="outline" className="border-purple-500 text-purple-600 dark:text-purple-400 text-xs px-2 py-0.5">SFDC Platform</Badge>
+                    <span className="text-xs text-muted-foreground">{sfdcCritical.length} critical tickets</span>
                   </div>
                 </div>
               </div>
@@ -166,8 +155,9 @@ export default function MasterDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
+          className="space-y-4"
         >
-          <h2 className="text-lg font-semibold text-foreground mb-4">At-a-Glance Performance</h2>
+          <h2 className="text-base font-semibold text-foreground">At-a-Glance Performance</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricCard
               title="TIE Avg Response"
@@ -357,8 +347,9 @@ export default function MasterDashboard() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
+          className="space-y-4"
         >
-          <h2 className="text-lg font-semibold text-foreground mb-4">Newest Tickets - All Platforms</h2>
+          <h2 className="text-base font-semibold text-foreground">Newest Tickets - All Platforms</h2>
           <Card className="hover:shadow-md transition-shadow duration-300">
           <CardContent className="p-0">
             <Table>
