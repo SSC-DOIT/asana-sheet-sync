@@ -1,20 +1,37 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import MasterDashboard from "./pages/MasterDashboard";
-import TIEBoard from "./pages/TIEBoard";
-import SFDCBoard from "./pages/SFDCBoard";
-import Comparison from "./pages/Comparison";
-import NotFound from "./pages/NotFound";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const queryClient = new QueryClient();
+// Lazy load page components for code splitting
+const MasterDashboard = lazy(() => import("./pages/MasterDashboard"));
+const TIEBoard = lazy(() => import("./pages/TIEBoard"));
+const SFDCBoard = lazy(() => import("./pages/SFDCBoard"));
+const Comparison = lazy(() => import("./pages/Comparison"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen bg-background p-8">
+    <div className="max-w-7xl mx-auto space-y-8">
+      <Skeleton className="h-12 w-64" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} className="h-32" />
+        ))}
+      </div>
+      <Skeleton className="h-96" />
+    </div>
+  </div>
+);
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <ErrorBoundary>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -27,20 +44,22 @@ const App = () => (
                 <SidebarTrigger />
                 <h2 className="ml-4 font-semibold text-foreground">Ticket Response Analytics</h2>
               </header>
-              <Routes>
-                <Route path="/" element={<MasterDashboard />} />
-                <Route path="/tie" element={<TIEBoard />} />
-                <Route path="/sfdc" element={<SFDCBoard />} />
-                <Route path="/comparison" element={<Comparison />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<MasterDashboard />} />
+                  <Route path="/tie" element={<TIEBoard />} />
+                  <Route path="/sfdc" element={<SFDCBoard />} />
+                  <Route path="/comparison" element={<Comparison />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </main>
           </div>
         </SidebarProvider>
       </BrowserRouter>
     </TooltipProvider>
-  </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

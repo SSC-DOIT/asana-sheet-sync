@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -8,6 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { exportTableToCSV } from "@/utils/csvExport";
+import { Download, Search } from "lucide-react";
 
 interface Ticket {
   id: string;
@@ -23,6 +28,32 @@ interface TicketTableProps {
 }
 
 export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTableProps) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredTickets = useMemo(() => {
+    if (!searchQuery) return tickets;
+    const query = searchQuery.toLowerCase();
+    return tickets.filter(
+      (t) =>
+        t.name.toLowerCase().includes(query) ||
+        t.assignee.toLowerCase().includes(query)
+    );
+  }, [tickets, searchQuery]);
+
+  const handleExport = () => {
+    const exportData = filteredTickets.map((t) => ({
+      ID: t.id,
+      Name: t.name,
+      "Created At": new Date(t.createdAt).toLocaleString(),
+      Assignee: t.assignee,
+      "Response Time (hours)": t.responseTime.toFixed(2),
+    }));
+    exportTableToCSV(
+      exportData,
+      ["ID", "Name", "Created At", "Assignee", "Response Time (hours)"],
+      "recent-tickets.csv"
+    );
+  };
   const getResponseTimeBadge = (hours: number) => {
     if (hours < 2) return <Badge className="bg-accent">Fast</Badge>;
     if (hours < 8) return <Badge variant="secondary">Moderate</Badge>;
@@ -37,7 +68,29 @@ export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTablePr
   return (
     <Card className="p-6">
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+          <div className="flex gap-2">
+            <div className="relative w-64">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search tickets..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+            <Button
+              onClick={handleExport}
+              variant="outline"
+              size="sm"
+              disabled={filteredTickets.length === 0}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export CSV
+            </Button>
+          </div>
+        </div>
         <div className="border rounded-lg">
           <Table>
             <TableHeader>
@@ -50,14 +103,14 @@ export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTablePr
               </TableRow>
             </TableHeader>
             <TableBody>
-              {tickets.length === 0 ? (
+              {filteredTickets.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center text-muted-foreground">
                     No tickets found
                   </TableCell>
                 </TableRow>
               ) : (
-                tickets.map((ticket) => (
+                filteredTickets.map((ticket) => (
                   <TableRow key={ticket.id}>
                     <TableCell className="font-medium">{ticket.name}</TableCell>
                     <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
