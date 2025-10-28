@@ -3,8 +3,9 @@ import { loadLiveData } from "@/utils/liveDataLoader";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Clock, User } from "lucide-react";
+import { AlertCircle, Clock, User, ExternalLink, Calendar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Table,
   TableBody,
@@ -41,28 +42,38 @@ export default function MasterDashboard() {
 
   const getCriticalTickets = (tickets: EnhancedParsedTicket[]) => {
     return tickets
-      .filter((t) => t.isOpen && t.ticketAge > 30)
-      .sort((a, b) => b.ticketAge - a.ticketAge);
+      .filter((t) => t.isOpen && (t.customFields?.Priority === "Highest" || t.customFields?.Priority === "11"))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   };
 
   const getNewestTickets = (tickets: EnhancedParsedTicket[]) => {
     return tickets
+      .filter((t) => t.isOpen)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 5);
+      .slice(0, 10);
   };
 
-  const getAgeBadge = (age: number) => {
-    if (age > 30) return <Badge variant="destructive">Critical ({age}d)</Badge>;
-    if (age > 14) return <Badge className="bg-orange-500">High ({age}d)</Badge>;
-    if (age > 7) return <Badge className="bg-yellow-500">Medium ({age}d)</Badge>;
-    return <Badge variant="secondary">New ({age}d)</Badge>;
+  const getPriorityBadge = (priority?: string) => {
+    if (!priority) return <Badge variant="secondary">No Priority</Badge>;
+    if (priority === "Highest" || priority === "11") return <Badge variant="destructive">Highest</Badge>;
+    if (priority === "High" || priority === "10") return <Badge className="bg-orange-500">High</Badge>;
+    if (priority === "Medium" || priority === "9") return <Badge className="bg-yellow-500">Medium</Badge>;
+    return <Badge variant="secondary">{priority}</Badge>;
   };
 
-  const getStatusBadge = (ticket: EnhancedParsedTicket) => {
-    if (ticket.isOpen) {
-      return <Badge variant="outline">Open</Badge>;
-    }
-    return <Badge variant="secondary">Closed</Badge>;
+  const getAsanaUrl = (taskId: string, board: string) => {
+    // You'll need to get the project GID from your config
+    const projectGid = board === "TIE" ? "1210587239106056" : "1210698810765473";
+    return `https://app.asana.com/0/${projectGid}/${taskId}`;
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   if (loading) {
@@ -89,10 +100,10 @@ export default function MasterDashboard() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div>
           <h1 className="text-4xl font-bold text-foreground mb-2">
-            Department Master Dashboard
+            Technology Solutions Open Tickets
           </h1>
           <p className="text-muted-foreground">
-            Overview of critical tickets and recent activity across all boards
+            High priority tickets and recent activity across all boards
           </p>
         </div>
 
@@ -103,37 +114,56 @@ export default function MasterDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
-                TIE Critical Tickets ({tieCritical.length})
+                TIE High Priority Tickets ({tieCritical.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               {tieCritical.length === 0 ? (
                 <p className="text-muted-foreground text-center py-8">
-                  No critical tickets
+                  No high priority tickets
                 </p>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {tieCritical.slice(0, 5).map((ticket) => (
-                    <div
+                    <a
                       key={ticket.id}
-                      className="p-3 border rounded-lg space-y-2"
+                      href={getAsanaUrl(ticket.id, "TIE")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3"
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-sm font-medium text-foreground line-clamp-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <h4 className="text-sm font-semibold text-foreground flex-1">
                           {ticket.name}
-                        </span>
-                        {getAgeBadge(ticket.ticketAge)}
+                        </h4>
+                        <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <User className="w-3 h-3" />
-                        {ticket.assignee}
+                      
+                      <div className="text-xs text-muted-foreground line-clamp-3">
+                        {ticket.name}
                       </div>
-                      {ticket.automationStage && (
-                        <Badge variant="secondary" className="text-xs">
-                          {ticket.automationStage}
-                        </Badge>
-                      )}
-                    </div>
+
+                      <div className="flex items-center gap-3 pt-2 border-t">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="w-6 h-6">
+                            <AvatarFallback className="text-xs">
+                              {getInitials(ticket.assignee)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-xs text-muted-foreground">
+                            {ticket.assignee}
+                          </span>
+                        </div>
+                        
+                        {getPriorityBadge(ticket.customFields?.Priority)}
+                        
+                        {ticket.customFields?.Category && (
+                          <Badge variant="outline" className="text-xs">
+                            {ticket.customFields.Category}
+                          </Badge>
+                        )}
+                      </div>
+                    </a>
                   ))}
                 </div>
               )}
@@ -145,37 +175,56 @@ export default function MasterDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
-                SFDC Critical Tickets ({sfdcCritical.length})
+                SFDC High Priority Tickets ({sfdcCritical.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
               {sfdcCritical.length === 0 ? (
                 <p className="text-muted-foreground text-center py-8">
-                  No critical tickets
+                  No high priority tickets
                 </p>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {sfdcCritical.slice(0, 5).map((ticket) => (
-                    <div
+                    <a
                       key={ticket.id}
-                      className="p-3 border rounded-lg space-y-2"
+                      href={getAsanaUrl(ticket.id, "SFDC")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3"
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-sm font-medium text-foreground line-clamp-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <h4 className="text-sm font-semibold text-foreground flex-1">
                           {ticket.name}
-                        </span>
-                        {getAgeBadge(ticket.ticketAge)}
+                        </h4>
+                        <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <User className="w-3 h-3" />
-                        {ticket.assignee}
+                      
+                      <div className="text-xs text-muted-foreground line-clamp-3">
+                        {ticket.name}
                       </div>
-                      {ticket.automationStage && (
-                        <Badge variant="secondary" className="text-xs">
-                          {ticket.automationStage}
-                        </Badge>
-                      )}
-                    </div>
+
+                      <div className="flex items-center gap-3 pt-2 border-t">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="w-6 h-6">
+                            <AvatarFallback className="text-xs">
+                              {getInitials(ticket.assignee)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-xs text-muted-foreground">
+                            {ticket.assignee}
+                          </span>
+                        </div>
+                        
+                        {getPriorityBadge(ticket.customFields?.Priority)}
+                        
+                        {ticket.customFields?.Category && (
+                          <Badge variant="outline" className="text-xs">
+                            {ticket.customFields.Category}
+                          </Badge>
+                        )}
+                      </div>
+                    </a>
                   ))}
                 </div>
               )}
@@ -183,12 +232,12 @@ export default function MasterDashboard() {
           </Card>
         </div>
 
-        {/* 5 Newest Tickets */}
+        {/* 10 Newest Open Tickets */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
-              5 Newest Tickets (All Boards)
+              10 Newest Open Tickets (All Boards)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -197,9 +246,9 @@ export default function MasterDashboard() {
                 <TableRow>
                   <TableHead>Ticket</TableHead>
                   <TableHead>Board</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Priority</TableHead>
+                  <TableHead>Department</TableHead>
                   <TableHead>Assignee</TableHead>
-                  <TableHead>Age</TableHead>
                   <TableHead>Created</TableHead>
                 </TableRow>
               </TableHeader>
@@ -211,15 +260,29 @@ export default function MasterDashboard() {
                   return (
                     <TableRow key={ticket.id}>
                       <TableCell className="font-medium max-w-md">
-                        <div className="line-clamp-2">{ticket.name}</div>
+                        <a
+                          href={getAsanaUrl(ticket.id, board)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:underline"
+                        >
+                          <div className="line-clamp-2">{ticket.name}</div>
+                          <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                        </a>
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">{board}</Badge>
                       </TableCell>
-                      <TableCell>{getStatusBadge(ticket)}</TableCell>
-                      <TableCell>{ticket.assignee}</TableCell>
-                      <TableCell>{getAgeBadge(ticket.ticketAge)}</TableCell>
-                      <TableCell className="text-muted-foreground">
+                      <TableCell>{getPriorityBadge(ticket.customFields?.Priority)}</TableCell>
+                      <TableCell>
+                        {ticket.customFields?.Category ? (
+                          <Badge variant="secondary">{ticket.customFields.Category}</Badge>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-sm">{ticket.assignee}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">
                         {new Date(ticket.createdAt).toLocaleDateString()}
                       </TableCell>
                     </TableRow>
