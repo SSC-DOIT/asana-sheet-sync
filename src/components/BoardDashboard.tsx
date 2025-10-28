@@ -187,7 +187,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           </TabsContent>
 
           <TabsContent value="current" className="space-y-6">
-            <CurrentStateTicketsTable tickets={tickets} />
+            <CurrentStateTicketsTable tickets={tickets} board={board} />
           </TabsContent>
 
           <TabsContent value="tickets" className="space-y-6">

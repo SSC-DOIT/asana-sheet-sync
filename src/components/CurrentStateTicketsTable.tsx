@@ -13,14 +13,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { exportTicketsToCSV } from "@/utils/csvExport";
-import { AlertCircle, Clock, Download, Search } from "lucide-react";
+import { AlertCircle, Clock, Download, Search, ExternalLink } from "lucide-react";
+import { ASANA_PROJECTS } from "@/config/asanaProjects";
 
 interface CurrentStateTicketsTableProps {
   tickets: EnhancedParsedTicket[];
+  board: "TIE" | "SFDC";
 }
 
-export const CurrentStateTicketsTable = ({ tickets }: CurrentStateTicketsTableProps) => {
+export const CurrentStateTicketsTable = ({ tickets, board }: CurrentStateTicketsTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const getAsanaUrl = (taskId: string) => {
+    const projectGid = board === "TIE" ? ASANA_PROJECTS.TIE : ASANA_PROJECTS.SFDC;
+    return `https://app.asana.com/0/${projectGid}/${taskId}`;
+  };
 
   // Filter and sort tickets
   const openTickets = useMemo(() => {
@@ -129,8 +136,16 @@ export const CurrentStateTicketsTable = ({ tickets }: CurrentStateTicketsTablePr
                   const ageBadge = getAgeBadge(ticket.ticketAge);
                   return (
                     <TableRow key={ticket.id}>
-                      <TableCell className="font-medium max-w-xs truncate">
-                        {ticket.name}
+                      <TableCell className="font-medium max-w-xs">
+                        <a
+                          href={getAsanaUrl(ticket.id)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:underline text-foreground"
+                        >
+                          <span className="truncate">{ticket.name}</span>
+                          <ExternalLink className="w-3 h-3 flex-shrink-0 text-muted-foreground" />
+                        </a>
                       </TableCell>
                       <TableCell>
                         <Badge variant={ageBadge.variant}>{ageBadge.label}</Badge>
