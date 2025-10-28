@@ -42,7 +42,7 @@ export default function MasterDashboard() {
 
   const getCriticalTickets = (tickets: EnhancedParsedTicket[]) => {
     return tickets
-      .filter((t) => t.isOpen && (t.customFields?.Priority === "Highest" || t.customFields?.Priority === "11"))
+      .filter((t) => t.isOpen && (t.customFields?.Priority === "Highest" || t.customFields?.Priority === "Level 11"))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   };
 
@@ -55,9 +55,12 @@ export default function MasterDashboard() {
 
   const getPriorityBadge = (priority?: string) => {
     if (!priority) return <Badge variant="secondary">No Priority</Badge>;
-    if (priority === "Highest" || priority === "11") return <Badge variant="destructive">Highest</Badge>;
-    if (priority === "High" || priority === "10") return <Badge className="bg-orange-500">High</Badge>;
-    if (priority === "Medium" || priority === "9") return <Badge className="bg-yellow-500">Medium</Badge>;
+    if (priority === "Highest" || priority === "Level 11") return <Badge variant="destructive">Highest</Badge>;
+    if (priority === "High") return <Badge className="bg-orange-500">High</Badge>;
+    if (priority === "Medium") return <Badge className="bg-yellow-500">Medium</Badge>;
+    if (priority === "Low") return <Badge variant="secondary">Low</Badge>;
+    if (priority === "Lowest") return <Badge variant="outline">Lowest</Badge>;
+    if (priority === "Current Sprint") return <Badge className="bg-blue-500">Current Sprint</Badge>;
     return <Badge variant="secondary">{priority}</Badge>;
   };
 

@@ -79,7 +79,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       }
       
       const priorityField = task.custom_fields.find(
-        (field: any) => field.name === "Priority (Auto Fills)"
+        (field: any) => field.name === "TS Prioritization"
       );
       if (priorityField?.enum_value?.name) {
         priority = priorityField.enum_value.name;
