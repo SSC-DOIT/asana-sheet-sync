@@ -17,6 +17,141 @@
 
 ## [Unreleased]
 
+### 2025-10-28 - Animation Enhancement with Framer Motion
+
+#### Added
+- **Framer Motion animations throughout the application**
+  - Dependency: `motion` package (Framer Motion) installed
+  - File: `package.json` - Added motion dependency (4 new packages)
+
+- **AnimatedBackground component**
+  - Location: `src/components/AnimatedBackground.tsx` (NEW)
+  - Features: 30 animated SVG lines with gradient colors
+  - Grid overlay with subtle blue tint
+  - Automatically responsive to window resizing
+  - Opacity set to 20% for subtle background effect
+  - Pointer-events disabled to not interfere with UI interactions
+
+- **AnimatedMetric component**
+  - Location: `src/components/AnimatedMetric.tsx` (NEW)
+  - Smooth number counter animations for metrics
+  - Configurable: value, decimals, prefix, suffix, duration
+  - Uses Framer Motion's useMotionValue and useTransform
+  - Default 2-second animation duration
+
+- **Animated header with gradient text**
+  - Location: `src/App.tsx`
+  - Header fades in from top (opacity + y-axis slide)
+  - Gradient text effect: blue → purple → blue
+  - Sticky positioning with backdrop blur effect
+  - Animates on initial page load
+
+#### Changed
+- **MetricCard component enhanced with animations**
+  - Location: `src/components/MetricCard.tsx`
+  - Added motion wrapper with entrance animations
+  - Initial state: opacity 0, y-offset +20px
+  - Animate to: opacity 1, y-offset 0
+  - Hover effect: scales to 1.02x
+  - Animated bottom accent bar (gradient: blue → purple)
+  - Bottom bar animates with scaleX from 0 to 1
+  - All animations respect the `animated` prop (defaults to true)
+  - Numeric values use AnimatedMetric for counter animation
+
+- **BoardDashboard updated with staggered entrance animations**
+  - Location: `src/components/BoardDashboard.tsx`
+  - Added motion import
+  - Four metric cards now have staggered delays:
+    - "Recent Avg Response": 0s delay
+    - "Historical Avg": 0.1s delay
+    - "Time Saved": 0.2s delay
+    - "Recent Tickets": 0.3s delay
+  - Creates smooth sequential appearance effect
+
+- **App.tsx layout updated**
+  - Added AnimatedBackground component to main layout
+  - Background is absolutely positioned behind all content
+  - z-index layering: background (default) → main content (z-10)
+  - Header is sticky with z-50 to stay on top
+
+#### Technical Details
+
+**Animation Specifications:**
+- **Entrance duration**: 0.5s for cards, 0.6s for header
+- **Easing**: Default smooth easing from Framer Motion
+- **Stagger pattern**: 0.1s increments for sequential appearance
+- **Hover scale**: 1.02x (subtle lift effect)
+- **Accent bar duration**: 1s with delay offset
+- **Number counter**: 2s default duration, interpolated values
+
+**Performance Considerations:**
+- Animations use GPU-accelerated transforms (opacity, scale, translate)
+- AnimatedBackground uses SVG with efficient path animations
+- Grid overlay uses CSS background-image (no JS)
+- Pointer-events: none on background to avoid interaction overhead
+- All animations can be disabled via `animated={false}` prop
+
+**Color Scheme:**
+- Primary gradient: #3b82f6 (blue-500) → #8b5cf6 (purple-500)
+- Grid lines: rgba(59, 130, 246, 0.1) - 10% opacity blue
+- Accent bar: gradient from blue-500 to purple-500
+
+#### Files Modified
+- `package.json` - Added motion dependency
+- `src/App.tsx` - Added AnimatedBackground and animated header
+- `src/components/MetricCard.tsx` - Enhanced with full animation support
+- `src/components/BoardDashboard.tsx` - Added staggered entrance delays
+- `src/components/AnimatedBackground.tsx` - NEW file
+- `src/components/AnimatedMetric.tsx` - NEW file
+
+#### Migration Guide
+
+**Using animations in new components:**
+
+Import and wrap with motion:
+```typescript
+import { motion } from "motion/react";
+
+// Basic entrance animation
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+>
+  Your content
+</motion.div>
+```
+
+**Using AnimatedMetric:**
+```typescript
+import { AnimatedMetric } from "@/components/AnimatedMetric";
+
+<AnimatedMetric
+  value={1234.5}
+  decimals={1}
+  prefix="$"
+  suffix=" saved"
+  duration={2}
+/>
+```
+
+**Disabling animations:**
+```typescript
+<MetricCard
+  title="My Metric"
+  value="100"
+  animated={false}  // Disables all animations
+/>
+```
+
+**Build Status:**
+✓ All animations compile successfully
+✓ No TypeScript errors
+✓ Build size: 477.36 kB (main bundle)
+✓ Production build tested and verified
+
+---
+
 ### 2025-10-28 - Revised Automation Analytics (Per-Ticket Calculations & Forecasting)
 
 #### Changed

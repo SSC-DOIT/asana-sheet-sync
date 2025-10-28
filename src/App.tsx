@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { motion } from "motion/react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load page components for code splitting
@@ -37,13 +39,23 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <SidebarProvider>
-          <div className="flex min-h-screen w-full">
+          <div className="flex min-h-screen w-full relative">
+            {/* Animated Background */}
+            <AnimatedBackground />
+
             <AppSidebar />
-            <main className="flex-1">
-              <header className="h-14 flex items-center border-b border-border px-4 bg-card">
+            <main className="flex-1 relative z-10">
+              <motion.header
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="h-14 flex items-center border-b border-border px-4 bg-card/80 backdrop-blur-sm sticky top-0 z-50"
+              >
                 <SidebarTrigger />
-                <h2 className="ml-4 font-semibold text-foreground">Ticket Response Analytics</h2>
-              </header>
+                <h2 className="ml-4 font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                  Ticket Response Analytics
+                </h2>
+              </motion.header>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   <Route path="/" element={<MasterDashboard />} />
