@@ -2,10 +2,19 @@ import { useEffect, useState } from "react";
 import { MetricCard } from "./MetricCard";
 import { ResponseTimeChart } from "./ResponseTimeChart";
 import { TicketTable } from "./TicketTable";
-import { loadAndParseData } from "@/utils/dataLoader";
-import { analyzeResponseTimes, ParsedTicket } from "@/utils/asanaJsonParser";
+import { TicketAgeTrendChart } from "./TicketAgeTrendChart";
+import { FirstResponseTrendChart } from "./FirstResponseTrendChart";
+import { AutomationSavingsCard } from "./AutomationSavingsCard";
+import { loadEnhancedData, EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
+import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
+import {
+  analyzeTicketAgeTrends,
+  analyzeFirstResponseTrends,
+  analyzeAutomationSavings,
+} from "@/utils/enhancedAnalytics";
 import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 interface BoardDashboardProps {
   board: "TIE" | "SFDC";
@@ -14,16 +23,36 @@ interface BoardDashboardProps {
 
 export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   const [analytics, setAnalytics] = useState<any>(null);
+  const [enhancedData, setEnhancedData] = useState<{
+    ageTrends: any[];
+    responseTrends: any[];
+    automationSavings: any[];
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const tickets = await loadAndParseData(board);
-        const rolloutDate = new Date("2025-10-21"); // Last week from Oct 28
+        const tickets = await loadEnhancedData(board);
+        const rolloutDate = new Date("2025-10-21");
         const analyzed = analyzeResponseTimes(tickets, rolloutDate);
+        
+        // Enhanced analytics
+        const ageTrends = analyzeTicketAgeTrends(tickets);
+        const responseTrends = analyzeFirstResponseTrends(tickets);
+        
+        // Extract automation stages
+        const automationStages: { [key: string]: string } = {};
+        tickets.forEach((ticket: EnhancedParsedTicket) => {
+          if (ticket.automationStage) {
+            automationStages[ticket.id] = ticket.automationStage;
+          }
+        });
+        const automationSavings = analyzeAutomationSavings(automationStages);
+        
         setAnalytics(analyzed);
+        setEnhancedData({ ageTrends, responseTrends, automationSavings });
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -103,15 +132,46 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           />
         </div>
 
-        <ResponseTimeChart
-          data={analytics.chartData}
-          rolloutDate="Oct 21"
-        />
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="trends">Long-Term Trends</TabsTrigger>
+            <TabsTrigger value="automation">Automation Savings</TabsTrigger>
+            <TabsTrigger value="tickets">Recent Tickets</TabsTrigger>
+          </TabsList>
 
-        <TicketTable
-          tickets={analytics.recentTickets}
-          title="Recent Tickets (Last 2 Days)"
-        />
+          <TabsContent value="overview" className="space-y-6">
+            <ResponseTimeChart
+              data={analytics.chartData}
+              rolloutDate="Oct 21"
+            />
+          </TabsContent>
+
+          <TabsContent value="trends" className="space-y-6">
+            {enhancedData && (
+              <>
+                <TicketAgeTrendChart data={enhancedData.ageTrends} />
+                <FirstResponseTrendChart
+                  data={enhancedData.responseTrends}
+                  rolloutDate="Oct 21"
+                />
+              </>
+            )}
+          </TabsContent>
+
+          <TabsContent value="automation" className="space-y-6">
+            {enhancedData && (
+              <AutomationSavingsCard data={enhancedData.automationSavings} />
+            )}
+          </TabsContent>
+
+          <TabsContent value="tickets" className="space-y-6">
+            <TicketTable
+              tickets={analytics.recentTickets}
+              title="Recent Tickets (Last 2 Days)"
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

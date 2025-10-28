@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { loadAndParseData } from "@/utils/dataLoader";
+import { loadEnhancedData } from "@/utils/enhancedDataLoader";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
+import { calculateTotalAutomationSavings, analyzeAutomationSavings } from "@/utils/enhancedAnalytics";
 import { MetricCard } from "@/components/MetricCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Clock, TrendingDown } from "lucide-react";
+import { ArrowRight, Clock, TrendingDown, Bot, Zap } from "lucide-react";
 
 const Comparison = () => {
   const [tieAnalytics, setTieAnalytics] = useState<any>(null);
   const [sfdcAnalytics, setSfdcAnalytics] = useState<any>(null);
+  const [tieAutomation, setTieAutomation] = useState<any>(null);
+  const [sfdcAutomation, setSfdcAutomation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,15 +21,36 @@ const Comparison = () => {
         const rolloutDate = new Date("2025-10-21");
         
         const [tieTickets, sfdcTickets] = await Promise.all([
-          loadAndParseData("TIE"),
-          loadAndParseData("SFDC"),
+          loadEnhancedData("TIE"),
+          loadEnhancedData("SFDC"),
         ]);
 
         const tieAnalyzed = analyzeResponseTimes(tieTickets, rolloutDate);
         const sfdcAnalyzed = analyzeResponseTimes(sfdcTickets, rolloutDate);
 
+        // Automation savings analysis
+        const tieAutomationStages: { [key: string]: string } = {};
+        tieTickets.forEach((ticket) => {
+          if (ticket.automationStage) {
+            tieAutomationStages[ticket.id] = ticket.automationStage;
+          }
+        });
+        const tieAutomationData = analyzeAutomationSavings(tieAutomationStages);
+        const tieTotals = calculateTotalAutomationSavings(tieAutomationData);
+
+        const sfdcAutomationStages: { [key: string]: string } = {};
+        sfdcTickets.forEach((ticket) => {
+          if (ticket.automationStage) {
+            sfdcAutomationStages[ticket.id] = ticket.automationStage;
+          }
+        });
+        const sfdcAutomationData = analyzeAutomationSavings(sfdcAutomationStages);
+        const sfdcTotals = calculateTotalAutomationSavings(sfdcAutomationData);
+
         setTieAnalytics(tieAnalyzed);
         setSfdcAnalytics(sfdcAnalyzed);
+        setTieAutomation(tieTotals);
+        setSfdcAutomation(sfdcTotals);
       } catch (error) {
         console.error("Error loading comparison data:", error);
       } finally {
@@ -165,32 +189,84 @@ const Comparison = () => {
 
         {/* Overall Impact */}
         <Card className="p-6">
-          <h2 className="text-2xl font-semibold text-foreground mb-4">Overall Impact</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-6">Combined Impact</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Combined Improvement</p>
-              <p className="text-3xl font-bold text-accent">
-                {((tieAnalytics.improvement + sfdcAnalytics.improvement) / 2).toFixed(1)}%
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* Response Time Impact */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-muted-foreground">Response Time Improvements</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">Combined Improvement</p>
+                  <p className="text-3xl font-bold text-accent">
+                    {((tieAnalytics.improvement + sfdcAnalytics.improvement) / 2).toFixed(1)}%
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">Total Recent Tickets</p>
+                  <p className="text-3xl font-bold text-foreground">
+                    {tieAnalytics.recentCount + sfdcAnalytics.recentCount}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Avg Time Saved Per Ticket</p>
+                <p className="text-3xl font-bold text-accent">
+                  {formatHours(
+                    ((tieAnalytics.previousAvg - tieAnalytics.recentAvg) + 
+                     (sfdcAnalytics.previousAvg - sfdcAnalytics.recentAvg)) / 2
+                  )}
+                </p>
+              </div>
             </div>
-            
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Recent Tickets</p>
-              <p className="text-3xl font-bold text-foreground">
-                {tieAnalytics.recentCount + sfdcAnalytics.recentCount}
-              </p>
-            </div>
-            
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg Time Saved</p>
-              <p className="text-3xl font-bold text-accent">
-                {formatHours(
-                  ((tieAnalytics.previousAvg - tieAnalytics.recentAvg) + 
-                   (sfdcAnalytics.previousAvg - sfdcAnalytics.recentAvg)) / 2
-                )}
-              </p>
-            </div>
+
+            {/* Automation Impact */}
+            {tieAutomation && sfdcAutomation && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-muted-foreground">Automation Savings</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Bot className="w-4 h-4 text-primary" />
+                      <p className="text-sm text-muted-foreground">Total Automated</p>
+                    </div>
+                    <p className="text-3xl font-bold text-foreground">
+                      {tieAutomation.totalTickets + sfdcAutomation.totalTickets}
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-accent" />
+                      <p className="text-sm text-muted-foreground">Hours Saved</p>
+                    </div>
+                    <p className="text-3xl font-bold text-accent">
+                      {(tieAutomation.totalHours + sfdcAutomation.totalHours).toFixed(1)}h
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-accent" />
+                    <p className="text-sm text-muted-foreground">Work Days Saved</p>
+                  </div>
+                  <p className="text-3xl font-bold text-accent">
+                    {(tieAutomation.totalDays + sfdcAutomation.totalDays).toFixed(1)}d
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="pt-4 border-t border-border">
+            <p className="text-sm text-muted-foreground">
+              <strong>Summary:</strong> The automated ticketing process has significantly improved response times 
+              and saved substantial staff time across both boards. The R1-R6 automation rules handle initial triage, 
+              classification, and communication, allowing staff to focus on complex problem-solving.
+            </p>
           </div>
         </Card>
       </div>
