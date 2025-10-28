@@ -11,6 +11,7 @@ interface AsanaTask {
   modified_at?: string;
   completed_at?: string | null;
   name?: string;
+  notes?: string;
   assignee?: {
     name: string;
     gid: string;
@@ -50,9 +51,9 @@ serve(async (req) => {
 
     console.log(`Fetching tasks for project: ${projectGid}`);
 
-    // Fetch tasks from Asana with all fields
+    // Fetch tasks from Asana with all fields including notes
     const response = await fetch(
-      `https://app.asana.com/api/1.0/tasks?project=${projectGid}&opt_fields=gid,name,created_at,modified_at,completed,completed_at,assignee,assignee.name,custom_fields,custom_fields.name,custom_fields.enum_value,custom_fields.number_value,custom_fields.date_value,custom_fields.text_value&limit=100`,
+      `https://app.asana.com/api/1.0/tasks?project=${projectGid}&opt_fields=gid,name,notes,created_at,modified_at,completed,completed_at,assignee,assignee.name,custom_fields,custom_fields.name,custom_fields.enum_value,custom_fields.number_value,custom_fields.date_value,custom_fields.text_value&limit=100`,
       {
         headers: {
           'Authorization': `Bearer ${ASANA_TOKEN}`,
@@ -86,7 +87,7 @@ serve(async (req) => {
     while (nextPage) {
       console.log(`Fetching next page with offset: ${nextPage}`);
       const pageResponse = await fetch(
-        `https://app.asana.com/api/1.0/tasks?project=${projectGid}&opt_fields=gid,name,created_at,modified_at,completed,completed_at,assignee,assignee.name,custom_fields,custom_fields.name,custom_fields.enum_value,custom_fields.number_value,custom_fields.date_value,custom_fields.text_value&limit=100&offset=${nextPage}`,
+        `https://app.asana.com/api/1.0/tasks?project=${projectGid}&opt_fields=gid,name,notes,created_at,modified_at,completed,completed_at,assignee,assignee.name,custom_fields,custom_fields.name,custom_fields.enum_value,custom_fields.number_value,custom_fields.date_value,custom_fields.text_value&limit=100&offset=${nextPage}`,
         {
           headers: {
             'Authorization': `Bearer ${ASANA_TOKEN}`,

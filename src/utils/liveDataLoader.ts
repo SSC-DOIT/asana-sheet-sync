@@ -1,6 +1,7 @@
 import { EnhancedParsedTicket } from "./enhancedDataLoader";
 import { parseEnhancedAsanaJSON } from "./enhancedDataLoader";
 import { ASANA_PROJECTS } from "@/config/asanaProjects";
+import { getCachedData, setCachedData, filterLast12Months } from "./dataCache";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -83,5 +84,22 @@ export const loadLiveData = async (
   board: "TIE" | "SFDC",
   includeArchive: boolean = true
 ): Promise<EnhancedParsedTicket[]> => {
-  return fetchLiveAsanaData(board, includeArchive);
+  const cacheKey = `asana-data-${board}-${includeArchive ? "with" : "without"}-archive`;
+  
+  // Try to get cached data first
+  const cachedData = getCachedData(cacheKey);
+  if (cachedData) {
+    console.log(`Using cached data for ${board}`);
+    return filterLast12Months(cachedData);
+  }
+  
+  // Fetch fresh data
+  console.log(`Fetching fresh data for ${board}`);
+  const freshData = await fetchLiveAsanaData(board, includeArchive);
+  
+  // Cache the fresh data
+  setCachedData(cacheKey, freshData);
+  
+  // Return filtered data (last 12 months)
+  return filterLast12Months(freshData);
 };

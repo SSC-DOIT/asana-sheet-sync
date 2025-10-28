@@ -143,28 +143,35 @@ export default function MasterDashboard() {
                         <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                       </div>
                       
-                      <div className="text-xs text-muted-foreground line-clamp-3">
-                        {ticket.name}
-                      </div>
-
-                      <div className="flex items-center gap-3 pt-2 border-t">
+                      <div className="space-y-2 text-xs">
                         <div className="flex items-center gap-2">
-                          <Avatar className="w-6 h-6">
-                            <AvatarFallback className="text-xs">
-                              {getInitials(ticket.assignee)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="text-xs text-muted-foreground">
-                            {ticket.assignee}
-                          </span>
+                          <span className="text-muted-foreground font-medium">Assignee:</span>
+                          <div className="flex items-center gap-1">
+                            <Avatar className="w-5 h-5">
+                              <AvatarFallback className="text-xs">
+                                {getInitials(ticket.assignee)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span>{ticket.assignee}</span>
+                          </div>
                         </div>
                         
-                        {getPriorityBadge(ticket.customFields?.Priority)}
+                        {ticket.customFields?.Department && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-muted-foreground font-medium">Department:</span>
+                            <Badge variant="outline" className="text-xs">
+                              {ticket.customFields.Department}
+                            </Badge>
+                          </div>
+                        )}
                         
-                        {ticket.customFields?.Category && (
-                          <Badge variant="outline" className="text-xs">
-                            {ticket.customFields.Category}
-                          </Badge>
+                        {ticket.summary && (
+                          <div className="pt-2 border-t">
+                            <span className="text-muted-foreground font-medium">Summary:</span>
+                            <p className="text-muted-foreground mt-1 line-clamp-3">
+                              {ticket.summary}
+                            </p>
+                          </div>
                         )}
                       </div>
                     </a>
@@ -204,28 +211,35 @@ export default function MasterDashboard() {
                         <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                       </div>
                       
-                      <div className="text-xs text-muted-foreground line-clamp-3">
-                        {ticket.name}
-                      </div>
-
-                      <div className="flex items-center gap-3 pt-2 border-t">
+                      <div className="space-y-2 text-xs">
                         <div className="flex items-center gap-2">
-                          <Avatar className="w-6 h-6">
-                            <AvatarFallback className="text-xs">
-                              {getInitials(ticket.assignee)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="text-xs text-muted-foreground">
-                            {ticket.assignee}
-                          </span>
+                          <span className="text-muted-foreground font-medium">Assignee:</span>
+                          <div className="flex items-center gap-1">
+                            <Avatar className="w-5 h-5">
+                              <AvatarFallback className="text-xs">
+                                {getInitials(ticket.assignee)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span>{ticket.assignee}</span>
+                          </div>
                         </div>
                         
-                        {getPriorityBadge(ticket.customFields?.Priority)}
+                        {ticket.customFields?.Department && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-muted-foreground font-medium">Department:</span>
+                            <Badge variant="outline" className="text-xs">
+                              {ticket.customFields.Department}
+                            </Badge>
+                          </div>
+                        )}
                         
-                        {ticket.customFields?.Category && (
-                          <Badge variant="outline" className="text-xs">
-                            {ticket.customFields.Category}
-                          </Badge>
+                        {ticket.summary && (
+                          <div className="pt-2 border-t">
+                            <span className="text-muted-foreground font-medium">Summary:</span>
+                            <p className="text-muted-foreground mt-1 line-clamp-3">
+                              {ticket.summary}
+                            </p>
+                          </div>
                         )}
                       </div>
                     </a>
@@ -250,7 +264,6 @@ export default function MasterDashboard() {
                 <TableRow>
                   <TableHead>Ticket</TableHead>
                   <TableHead>Board</TableHead>
-                  <TableHead>Priority</TableHead>
                   <TableHead>Department</TableHead>
                   <TableHead>Assignee</TableHead>
                   <TableHead>Created</TableHead>
@@ -277,7 +290,6 @@ export default function MasterDashboard() {
                       <TableCell>
                         <Badge variant="outline">{board}</Badge>
                       </TableCell>
-                      <TableCell>{getPriorityBadge(ticket.customFields?.Priority)}</TableCell>
                       <TableCell>
                         {ticket.customFields?.Department ? (
                           <Badge variant="secondary">{ticket.customFields.Department}</Badge>

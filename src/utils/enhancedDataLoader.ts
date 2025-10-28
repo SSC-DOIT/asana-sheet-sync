@@ -7,6 +7,7 @@ interface AsanaTask {
   modified_at?: string;
   completed_at?: string | null;
   name?: string;
+  notes?: string;
   assignee?: {
     name: string;
     gid: string;
@@ -22,6 +23,7 @@ export interface EnhancedParsedTicket extends ParsedTicket {
   automationStage: string | null;
   ticketAge: number;
   isOpen: boolean;
+  summary?: string;
   customFields?: {
     Priority?: string;
     Status?: string;
@@ -141,6 +143,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       automationStage,
       ticketAge,
       isOpen,
+      summary: task.notes ? task.notes.substring(0, 280) : undefined,
       customFields: {
         Priority: priority,
         Status: status,
