@@ -1,4 +1,4 @@
-import { Home, Server, Database, GitCompare } from "lucide-react";
+import { Home, Server, Database, GitCompare, Building2 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -34,6 +34,11 @@ const items = [
     title: "Comparison",
     url: "/comparison",
     icon: GitCompare,
+  },
+  {
+    title: "Department View",
+    url: "/departments",
+    icon: Building2,
   },
 ];
 
