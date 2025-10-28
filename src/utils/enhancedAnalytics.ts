@@ -258,21 +258,15 @@ export const analyzeAutomationAnalytics = (
   // Calculate ticket rate (using last 90 days)
   const now = new Date();
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-  const recentTickets = tickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
+  const recentAutomatedTickets = automatedTickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
 
   const daysInPeriod = 90;
-  const ticketsPerDay = recentTickets.length / daysInPeriod;
-  const ticketsPerWeek = ticketsPerDay * 7;
-  const ticketsPerMonth = ticketsPerDay * 30;
+  const automatedTicketsPerDay = recentAutomatedTickets.length / daysInPeriod;
+  const automatedTicketsPerWeek = automatedTicketsPerDay * 7;
+  const automatedTicketsPerMonth = automatedTicketsPerDay * 30;
+  const automatedTicketsPerYear = automatedTicketsPerDay * 365;
 
-  // Calculate automation rate (percentage of tickets that are automated)
-  const automationRate = tickets.length > 0 ? automatedTickets.length / tickets.length : 0;
-
-  // Forecast savings based on current ticket rate and automation rate
-  const automatedTicketsPerDay = ticketsPerDay * automationRate;
-  const automatedTicketsPerMonth = ticketsPerMonth * automationRate;
-  const automatedTicketsPerYear = automatedTicketsPerDay * 365; // Use 365 days for accurate yearly calculation
-
+  // Forecast savings based on actual automated ticket rate
   const minutesSavedPerDay = automatedTicketsPerDay * averageTimeSavedPerTicket;
   const monthlyForecastMinutes = automatedTicketsPerMonth * averageTimeSavedPerTicket;
   const yearlyForecastMinutes = automatedTicketsPerYear * averageTimeSavedPerTicket;
@@ -304,9 +298,9 @@ export const analyzeAutomationAnalytics = (
     manualTicketsAvgResponse,
     responseTimeImprovement,
     ticketRate: {
-      perDay: Number(ticketsPerDay.toFixed(2)),
-      perWeek: Number(ticketsPerWeek.toFixed(2)),
-      perMonth: Number(ticketsPerMonth.toFixed(2)),
+      perDay: Number(automatedTicketsPerDay.toFixed(2)),
+      perWeek: Number(automatedTicketsPerWeek.toFixed(2)),
+      perMonth: Number(automatedTicketsPerMonth.toFixed(2)),
     },
     projections,
     byStage,
