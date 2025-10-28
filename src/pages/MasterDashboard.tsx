@@ -203,29 +203,27 @@ export default function MasterDashboard() {
                             </div>
                           )}
                           
-                          {ticket.summary && (
-                            <div className="pt-2 border-t">
-                              <CollapsibleTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="w-full justify-between"
-                                >
-                                  <span>View Task Summary</span>
-                                  {expandedTickets.has(ticket.id) ? (
-                                    <ChevronUp className="w-4 h-4" />
-                                  ) : (
-                                    <ChevronDown className="w-4 h-4" />
-                                  )}
-                                </Button>
-                              </CollapsibleTrigger>
-                              <CollapsibleContent className="mt-2">
-                                <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
-                                  {ticket.summary}
-                                </p>
-                              </CollapsibleContent>
-                            </div>
-                          )}
+                          <div className="pt-2 border-t">
+                            <CollapsibleTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full justify-between"
+                              >
+                                <span>View Task Summary</span>
+                                {expandedTickets.has(ticket.id) ? (
+                                  <ChevronUp className="w-4 h-4" />
+                                ) : (
+                                  <ChevronDown className="w-4 h-4" />
+                                )}
+                              </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="mt-2">
+                              <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
+                                {ticket.summary || "No task summary available"}
+                              </p>
+                            </CollapsibleContent>
+                          </div>
                         </div>
                       </div>
                     </Collapsible>
@@ -301,29 +299,27 @@ export default function MasterDashboard() {
                             </div>
                           )}
                           
-                          {ticket.summary && (
-                            <div className="pt-2 border-t">
-                              <CollapsibleTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="w-full justify-between"
-                                >
-                                  <span>View Task Summary</span>
-                                  {expandedTickets.has(ticket.id) ? (
-                                    <ChevronUp className="w-4 h-4" />
-                                  ) : (
-                                    <ChevronDown className="w-4 h-4" />
-                                  )}
-                                </Button>
-                              </CollapsibleTrigger>
-                              <CollapsibleContent className="mt-2">
-                                <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
-                                  {ticket.summary}
-                                </p>
-                              </CollapsibleContent>
-                            </div>
-                          )}
+                          <div className="pt-2 border-t">
+                            <CollapsibleTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full justify-between"
+                              >
+                                <span>View Task Summary</span>
+                                {expandedTickets.has(ticket.id) ? (
+                                  <ChevronUp className="w-4 h-4" />
+                                ) : (
+                                  <ChevronDown className="w-4 h-4" />
+                                )}
+                              </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="mt-2">
+                              <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
+                                {ticket.summary || "No task summary available"}
+                              </p>
+                            </CollapsibleContent>
+                          </div>
                         </div>
                       </div>
                     </Collapsible>
