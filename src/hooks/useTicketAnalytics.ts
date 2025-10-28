@@ -4,7 +4,7 @@ import { loadBoardData } from "@/services/asanaService";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
 import {
-  analyzeTicketAgeTrends,
+  analyzeNetNewTickets,
   analyzeFirstResponseTrends,
   analyzeAutomationAnalytics,
   analyzeOpenTicketTrends,
@@ -62,7 +62,7 @@ export function useTicketAnalytics(
   const enhancedData = useMemo<EnhancedAnalyticsData | null>(() => {
     if (tickets.length === 0) return null;
 
-    const ageTrends = analyzeTicketAgeTrends(tickets, daysBack);
+    const netNewTrends = analyzeNetNewTickets(tickets, daysBack);
     const responseTrends = analyzeFirstResponseTrends(tickets, daysBack);
     const openTrends = analyzeOpenTicketTrends(tickets, daysBack);
 
@@ -73,7 +73,7 @@ export function useTicketAnalytics(
     const categories = analyzeCategoryCounts(tickets);
 
     return {
-      ageTrends,
+      netNewTrends,
       responseTrends,
       automationAnalytics,
       openTrends,

@@ -8,25 +8,27 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  Bar,
+  ComposedChart,
 } from "recharts";
-import { TicketAgeData } from "@/utils/enhancedAnalytics";
+import { NetNewTicketData } from "@/utils/enhancedAnalytics";
 
-interface TicketAgeTrendChartProps {
-  data: TicketAgeData[];
+interface NetNewTicketChartProps {
+  data: NetNewTicketData[];
 }
 
-export const TicketAgeTrendChart = ({ data }: TicketAgeTrendChartProps) => {
+export const NetNewTicketChart = ({ data }: NetNewTicketChartProps) => {
   return (
     <Card className="p-6">
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-semibold text-foreground">Ticket Age Trends</h3>
+          <h3 className="text-lg font-semibold text-foreground">Net New Tickets</h3>
           <p className="text-sm text-muted-foreground">
-            Average age of tickets over time (open vs closed)
+            Daily tickets created vs closed, showing net change over time
           </p>
         </div>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
+          <ComposedChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="date"
@@ -37,7 +39,7 @@ export const TicketAgeTrendChart = ({ data }: TicketAgeTrendChartProps) => {
               stroke="hsl(var(--muted-foreground))"
               tick={{ fill: "hsl(var(--muted-foreground))" }}
               label={{
-                value: "Days",
+                value: "Tickets",
                 angle: -90,
                 position: "insideLeft",
                 style: { fill: "hsl(var(--muted-foreground))" },
@@ -51,23 +53,25 @@ export const TicketAgeTrendChart = ({ data }: TicketAgeTrendChartProps) => {
               }}
             />
             <Legend />
+            <Bar
+              dataKey="created"
+              fill="hsl(var(--primary))"
+              name="Created"
+            />
+            <Bar
+              dataKey="closed"
+              fill="hsl(var(--accent))"
+              name="Closed"
+            />
             <Line
               type="monotone"
-              dataKey="openAvg"
+              dataKey="netChange"
               stroke="hsl(var(--destructive))"
               strokeWidth={2}
               dot={{ fill: "hsl(var(--destructive))" }}
-              name="Open Tickets"
+              name="Net Change"
             />
-            <Line
-              type="monotone"
-              dataKey="closedAvg"
-              stroke="hsl(var(--accent))"
-              strokeWidth={2}
-              dot={{ fill: "hsl(var(--accent))" }}
-              name="Closed Tickets"
-            />
-          </LineChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
     </Card>

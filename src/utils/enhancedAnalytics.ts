@@ -8,6 +8,13 @@ export interface TicketAgeData {
   closedAvg: number;
 }
 
+export interface NetNewTicketData {
+  date: string;
+  created: number;
+  closed: number;
+  netChange: number;
+}
+
 export interface FirstResponseTrendData {
   date: string;
   avgResponseHours: number;
@@ -42,6 +49,59 @@ export const calculateTicketAge = (createdAt: string, referenceDate?: string): n
   const diffDays = diffMs / (1000 * 60 * 60 * 24);
   
   return diffDays >= 0 ? diffDays : 0;
+};
+
+export const analyzeNetNewTickets = (tickets: ParsedTicket[], daysBack: number = 365): NetNewTicketData[] => {
+  const now = new Date();
+  const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+  
+  const dailyData: { [key: string]: { created: number; closed: number } } = {};
+  
+  // Count tickets created per day
+  tickets.forEach((ticket) => {
+    const created = new Date(ticket.createdAt);
+    if (isNaN(created.getTime()) || created < startDate) return;
+    
+    const createdDateKey = created.toISOString().split("T")[0];
+    if (!dailyData[createdDateKey]) {
+      dailyData[createdDateKey] = { created: 0, closed: 0 };
+    }
+    dailyData[createdDateKey].created += 1;
+    
+    // Count tickets closed per day
+    if (ticket.completedAt) {
+      const completed = new Date(ticket.completedAt);
+      if (!isNaN(completed.getTime()) && completed >= startDate) {
+        const closedDateKey = completed.toISOString().split("T")[0];
+        if (!dailyData[closedDateKey]) {
+          dailyData[closedDateKey] = { created: 0, closed: 0 };
+        }
+        dailyData[closedDateKey].closed += 1;
+      }
+    }
+  });
+  
+  // Fill in missing dates with zero values
+  const dates: string[] = [];
+  for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
+    const dateKey = new Date(d).toISOString().split("T")[0];
+    dates.push(dateKey);
+    if (!dailyData[dateKey]) {
+      dailyData[dateKey] = { created: 0, closed: 0 };
+    }
+  }
+  
+  return dates
+    .sort()
+    .map((date) => {
+      const data = dailyData[date];
+      return {
+        date: new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        created: data.created,
+        closed: data.closed,
+        netChange: data.created - data.closed,
+      };
+    });
 };
 
 export const analyzeTicketAgeTrends = (tickets: ParsedTicket[], daysBack: number = 365): TicketAgeData[] => {

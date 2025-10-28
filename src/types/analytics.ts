@@ -28,11 +28,19 @@ export interface RecentTicket {
 
 // Enhanced analytics including trends and automation data
 export interface EnhancedAnalyticsData {
-  ageTrends: TicketAgeTrendPoint[];
+  netNewTrends: NetNewTicketPoint[];
   responseTrends: ResponseTrendPoint[];
   automationAnalytics: AutomationAnalytics;
   openTrends: OpenTicketTrendPoint[];
   categories: CategoryData[];
+}
+
+// Net new ticket trend data point
+export interface NetNewTicketPoint {
+  date: string;
+  created: number;
+  closed: number;
+  netChange: number;
 }
 
 // Ticket age trend data point

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { MetricCard } from "./MetricCard";
 import { ResponseTimeChart } from "./ResponseTimeChart";
 import { TicketTable } from "./TicketTable";
-import { TicketAgeTrendChart } from "./TicketAgeTrendChart";
+import { NetNewTicketChart } from "./NetNewTicketChart";
 import { FirstResponseTrendChart } from "./FirstResponseTrendChart";
 import { AutomationSavingsCard } from "./AutomationSavingsCard";
 import { OpenTicketTrendChart } from "./OpenTicketTrendChart";
@@ -162,7 +162,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             {enhancedData && (
               <>
                 <OpenTicketTrendChart data={enhancedData.openTrends} />
-                <TicketAgeTrendChart data={enhancedData.ageTrends} />
+                <NetNewTicketChart data={enhancedData.netNewTrends} />
                 <FirstResponseTrendChart
                   data={enhancedData.responseTrends}
                   rolloutDate="Oct 21"
