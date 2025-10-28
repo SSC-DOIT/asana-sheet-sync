@@ -27,6 +27,8 @@ export interface EnhancedParsedTicket extends ParsedTicket {
     Status?: string;
     Effort?: number;
     Category?: string;
+    "TIE Request Detail"?: string;
+    "Work Type"?: string;
   };
 }
 
@@ -65,6 +67,8 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
     let status: string | undefined;
     let effort: number | undefined;
     let category: string | undefined;
+    let tieRequestDetail: string | undefined;
+    let workType: string | undefined;
     
     if (task.custom_fields) {
       const virtualAssistantField = task.custom_fields.find(
@@ -101,6 +105,20 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       if (categoryField?.enum_value?.name) {
         category = categoryField.enum_value.name;
       }
+      
+      const tieRequestDetailField = task.custom_fields.find(
+        (field: any) => field.name === "TIE Request Detail"
+      );
+      if (tieRequestDetailField?.enum_value?.name) {
+        tieRequestDetail = tieRequestDetailField.enum_value.name;
+      }
+      
+      const workTypeField = task.custom_fields.find(
+        (field: any) => field.name === "Work Type"
+      );
+      if (workTypeField?.enum_value?.name) {
+        workType = workTypeField.enum_value.name;
+      }
     }
     
     tickets.push({
@@ -119,6 +137,8 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
         Status: status,
         Effort: effort,
         Category: category,
+        "TIE Request Detail": tieRequestDetail,
+        "Work Type": workType,
       },
     });
   });
@@ -164,7 +184,10 @@ const loadSFDCData = async () => {
   return [jan, feb, mar, apr, may, jun, jul, aug, sep, oct];
 };
 
-export const loadEnhancedData = async (board: "TIE" | "SFDC"): Promise<EnhancedParsedTicket[]> => {
+export const loadEnhancedData = async (
+  board: "TIE" | "SFDC",
+  includeArchive: boolean = false
+): Promise<EnhancedParsedTicket[]> => {
   const dataFiles = board === "TIE" ? await loadTIEData() : await loadSFDCData();
   
   const allTickets: EnhancedParsedTicket[] = [];

@@ -5,8 +5,10 @@
 // 3. Update the GIDs below
 
 export const ASANA_PROJECTS = {
-  TIE: "1210697649939560", // Replace with your TIE project GID
-  SFDC: "1210697046917010", // Replace with your SFDC project GID
+  TIE: "1210697649939560",
+  SFDC: "1210697046917010",
+  TIE_ARCHIVE: "1210587239106056",
+  SFDC_ARCHIVE: "1210698810765473",
 };
 
 // Example: If your URL is https://app.asana.com/0/1234567890/list

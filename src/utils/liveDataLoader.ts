@@ -9,9 +9,11 @@ interface AsanaResponse {
 }
 
 export const fetchLiveAsanaData = async (
-  board: "TIE" | "SFDC"
+  board: "TIE" | "SFDC",
+  includeArchive: boolean = true
 ): Promise<EnhancedParsedTicket[]> => {
   const projectGid = ASANA_PROJECTS[board];
+  const archiveGid = ASANA_PROJECTS[`${board}_ARCHIVE` as keyof typeof ASANA_PROJECTS];
 
   if (!projectGid || projectGid.includes("YOUR_")) {
     throw new Error(
@@ -20,7 +22,8 @@ export const fetchLiveAsanaData = async (
   }
 
   try {
-    const response = await fetch(
+    // Fetch main board data
+    const mainResponse = await fetch(
       `${SUPABASE_URL}/functions/v1/fetch-asana-tickets`,
       {
         method: "POST",
@@ -31,17 +34,44 @@ export const fetchLiveAsanaData = async (
       }
     );
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+    if (!mainResponse.ok) {
+      const errorData = await mainResponse.json().catch(() => ({}));
       throw new Error(
-        `Failed to fetch live data: ${response.status} ${
-          errorData.error || response.statusText
+        `Failed to fetch live data: ${mainResponse.status} ${
+          errorData.error || mainResponse.statusText
         }`
       );
     }
 
-    const data: AsanaResponse = await response.json();
-    return parseEnhancedAsanaJSON(data);
+    const mainData: AsanaResponse = await mainResponse.json();
+    let allTickets = parseEnhancedAsanaJSON(mainData);
+
+    // Fetch archive data if requested and configured
+    if (includeArchive && archiveGid && !archiveGid.includes("YOUR_")) {
+      try {
+        const archiveResponse = await fetch(
+          `${SUPABASE_URL}/functions/v1/fetch-asana-tickets`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ projectGid: archiveGid }),
+          }
+        );
+
+        if (archiveResponse.ok) {
+          const archiveData: AsanaResponse = await archiveResponse.json();
+          const archiveTickets = parseEnhancedAsanaJSON(archiveData);
+          allTickets = [...allTickets, ...archiveTickets];
+        }
+      } catch (archiveError) {
+        console.warn(`Could not fetch archive data for ${board}:`, archiveError);
+        // Continue with main board data only
+      }
+    }
+
+    return allTickets;
   } catch (error) {
     console.error(`Error fetching live ${board} data:`, error);
     throw error;
@@ -50,7 +80,8 @@ export const fetchLiveAsanaData = async (
 
 // Wrapper to maintain compatibility with existing code
 export const loadLiveData = async (
-  board: "TIE" | "SFDC"
+  board: "TIE" | "SFDC",
+  includeArchive: boolean = true
 ): Promise<EnhancedParsedTicket[]> => {
-  return fetchLiveAsanaData(board);
+  return fetchLiveAsanaData(board, includeArchive);
 };
