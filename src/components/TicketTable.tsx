@@ -12,23 +12,23 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { exportTableToCSV } from "@/utils/csvExport";
-import { Download, Search } from "lucide-react";
-
-interface Ticket {
-  id: string;
-  name: string;
-  createdAt: string;
-  responseTime: number;
-  assignee: string;
-}
+import { Download, Search, ExternalLink } from "lucide-react";
+import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
+import { ASANA_PROJECTS } from "@/config/asanaProjects";
 
 interface TicketTableProps {
-  tickets: Ticket[];
+  tickets: EnhancedParsedTicket[];
+  board: "TIE" | "SFDC";
   title?: string;
 }
 
-export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTableProps) => {
+export const TicketTable = ({ tickets, board, title = "Recent Tickets" }: TicketTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const getAsanaUrl = (taskId: string) => {
+    const projectGid = board === "TIE" ? ASANA_PROJECTS.TIE : ASANA_PROJECTS.SFDC;
+    return `https://app.asana.com/0/${projectGid}/${taskId}`;
+  };
 
   const filteredTickets = useMemo(() => {
     if (!searchQuery) return tickets;
@@ -36,7 +36,7 @@ export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTablePr
     return tickets.filter(
       (t) =>
         t.name.toLowerCase().includes(query) ||
-        t.assignee.toLowerCase().includes(query)
+        (t.assignee?.toLowerCase() || "").includes(query)
     );
   }, [tickets, searchQuery]);
 
@@ -45,24 +45,27 @@ export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTablePr
       ID: t.id,
       Name: t.name,
       "Created At": new Date(t.createdAt).toLocaleString(),
-      Assignee: t.assignee,
-      "Response Time (hours)": t.responseTime.toFixed(2),
+      Assignee: t.assignee || "Unassigned",
+      "Response Time (hours)": t.responseTimeHours?.toFixed(2) || "N/A",
+      Status: t.customFields?.Priority || t.customFields?.Section || "N/A",
     }));
     exportTableToCSV(
       exportData,
-      ["ID", "Name", "Created At", "Assignee", "Response Time (hours)"],
+      ["ID", "Name", "Created At", "Assignee", "Response Time (hours)", "Status"],
       "recent-tickets.csv"
     );
   };
-  const getResponseTimeBadge = (hours: number) => {
-    if (hours < 2) return <Badge className="bg-accent">Fast</Badge>;
-    if (hours < 8) return <Badge variant="secondary">Moderate</Badge>;
-    return <Badge variant="destructive">Slow</Badge>;
-  };
 
-  const formatResponseTime = (hours: number) => {
+  const formatResponseTime = (hours: number | null | undefined) => {
+    if (hours === null || hours === undefined) return "N/A";
     if (hours < 1) return `${Math.round(hours * 60)}m`;
     return `${hours.toFixed(1)}h`;
+  };
+
+  const getStatusBadge = (ticket: EnhancedParsedTicket) => {
+    const status = ticket.customFields?.Priority || ticket.customFields?.Section;
+    if (!status) return <Badge variant="secondary">N/A</Badge>;
+    return <Badge variant="outline">{status}</Badge>;
   };
 
   return (
@@ -112,11 +115,21 @@ export const TicketTable = ({ tickets, title = "Recent Tickets" }: TicketTablePr
               ) : (
                 filteredTickets.map((ticket) => (
                   <TableRow key={ticket.id}>
-                    <TableCell className="font-medium">{ticket.name}</TableCell>
+                    <TableCell className="font-medium">
+                      <a
+                        href={getAsanaUrl(ticket.id)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 hover:underline text-foreground"
+                      >
+                        <span className="line-clamp-2">{ticket.name}</span>
+                        <ExternalLink className="w-3 h-3 flex-shrink-0 text-muted-foreground" />
+                      </a>
+                    </TableCell>
                     <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{ticket.assignee || "Unassigned"}</TableCell>
-                    <TableCell>{formatResponseTime(ticket.responseTime)}</TableCell>
-                    <TableCell>{getResponseTimeBadge(ticket.responseTime)}</TableCell>
+                    <TableCell>{formatResponseTime(ticket.responseTimeHours)}</TableCell>
+                    <TableCell>{getStatusBadge(ticket)}</TableCell>
                   </TableRow>
                 ))
               )}

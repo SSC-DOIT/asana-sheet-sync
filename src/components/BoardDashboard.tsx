@@ -192,7 +192,8 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
 
           <TabsContent value="tickets" className="space-y-6">
             <TicketTable
-              tickets={analytics.recentTickets}
+              tickets={tickets.filter(t => analytics.recentTickets.some(rt => rt.id === t.id))}
+              board={board}
               title="Recent Tickets (Since Last Thursday)"
             />
           </TabsContent>

@@ -13,6 +13,16 @@ interface AsanaTask {
     gid: string;
   } | null;
   custom_fields?: any[];
+  memberships?: Array<{
+    project: {
+      gid: string;
+      name: string;
+    };
+    section?: {
+      gid: string;
+      name: string;
+    };
+  }>;
 }
 
 interface AsanaResponse {
@@ -32,6 +42,7 @@ export interface EnhancedParsedTicket extends ParsedTicket {
     "TIE Request Detail"?: string;
     "Work Type"?: string;
     Department?: string;
+    Section?: string;
   };
 }
 
@@ -106,6 +117,13 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       });
     }
     
+    // Extract section from memberships
+    let section: string | undefined;
+    if (task.memberships && task.memberships.length > 0) {
+      // Use the first membership's section (usually the primary project)
+      section = task.memberships[0].section?.name;
+    }
+    
     tickets.push({
       id: task.gid,
       name: task.name || "Untitled Task",
@@ -126,6 +144,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
         "TIE Request Detail": tieRequestDetail,
         "Work Type": workType,
         Department: department,
+        Section: section,
       },
     });
   });
