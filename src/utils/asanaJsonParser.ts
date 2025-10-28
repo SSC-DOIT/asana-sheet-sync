@@ -1,3 +1,5 @@
+import { calculateBusinessHours } from "./businessHours";
+
 interface AsanaTask {
   gid: string;
   created_at: string;
@@ -51,7 +53,6 @@ export const calculateResponseTime = (createdAt: string, modifiedAt?: string): n
   if (!createdAt || !modifiedAt) return null;
   
   // Use business hours calculation instead of raw time
-  const { calculateBusinessHours } = require("./businessHours");
   return calculateBusinessHours(createdAt, modifiedAt);
 };
 

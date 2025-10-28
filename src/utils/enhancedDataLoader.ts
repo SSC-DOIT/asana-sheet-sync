@@ -1,4 +1,5 @@
 import { ParsedTicket } from "./asanaJsonParser";
+import { calculateBusinessHours } from "./businessHours";
 
 interface AsanaTask {
   gid: string;
@@ -33,7 +34,6 @@ const calculateResponseTime = (createdAt: string, modifiedAt?: string): number |
   if (!createdAt || !modifiedAt) return null;
   
   // Use business hours calculation
-  const { calculateBusinessHours } = require("./businessHours");
   return calculateBusinessHours(createdAt, modifiedAt);
 };
 
