@@ -47,7 +47,12 @@ export default function MasterDashboard() {
   };
 
   const getNewestTickets = (tickets: EnhancedParsedTicket[]) => {
-    return tickets
+    // Deduplicate by ticket ID
+    const uniqueTickets = Array.from(
+      new Map(tickets.map(t => [t.id, t])).values()
+    );
+    
+    return uniqueTickets
       .filter((t) => t.isOpen)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 10);
@@ -118,7 +123,7 @@ export default function MasterDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
-                TIE High Priority Tickets ({Math.min(tieCritical.length, 5)}{tieCritical.length > 5 ? ` of ${tieCritical.length}` : ''})
+                TIE High Priority Tickets ({tieCritical.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -128,7 +133,7 @@ export default function MasterDashboard() {
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {tieCritical.slice(0, 5).map((ticket) => (
+                  {tieCritical.map((ticket) => (
                     <a
                       key={ticket.id}
                       href={getAsanaUrl(ticket.id, "TIE")}
@@ -186,7 +191,7 @@ export default function MasterDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
-                SFDC High Priority Tickets ({Math.min(sfdcCritical.length, 5)}{sfdcCritical.length > 5 ? ` of ${sfdcCritical.length}` : ''})
+                SFDC High Priority Tickets ({sfdcCritical.length})
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -196,7 +201,7 @@ export default function MasterDashboard() {
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {sfdcCritical.slice(0, 5).map((ticket) => (
+                  {sfdcCritical.map((ticket) => (
                     <a
                       key={ticket.id}
                       href={getAsanaUrl(ticket.id, "SFDC")}
