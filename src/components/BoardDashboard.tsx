@@ -124,13 +124,13 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-12 w-64 shimmer" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="h-32" />
+              <Skeleton key={i} className="h-32 shimmer" />
             ))}
           </div>
-          <Skeleton className="h-96" />
+          <Skeleton className="h-96 shimmer" />
         </div>
       </div>
     );
@@ -147,7 +147,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between animate-fade-in">
           <div>
             <h1 className="text-4xl font-bold text-foreground mb-2">
               {boardName} Board Analytics
@@ -172,7 +172,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
           <MetricCard
             title="Recent Avg Response"
             value={formatHours(analytics.recentAvg)}

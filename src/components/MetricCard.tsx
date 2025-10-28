@@ -32,11 +32,11 @@ export const MetricCard = ({
   };
 
   return (
-    <Card className="p-6 transition-all duration-300 hover:shadow-lg border-border/50">
+    <Card className="p-6 card-hover border-border/50 group">
       <div className="flex items-start justify-between">
         <div className="space-y-2 flex-1">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="text-3xl font-bold text-foreground tracking-tight">{value}</p>
+          <p className="text-3xl font-bold text-foreground tracking-tight transition-smooth group-hover:text-primary">{value}</p>
           {change !== undefined && (
             <div className={cn("flex items-center gap-1 text-sm font-medium", getTrendColor())}>
               {getTrendIcon()}
@@ -47,7 +47,7 @@ export const MetricCard = ({
           )}
         </div>
         {icon && (
-          <div className="p-3 rounded-lg bg-primary/10 text-primary">
+          <div className="p-3 rounded-lg bg-primary/10 text-primary transition-smooth group-hover:bg-primary/20 group-hover:scale-110">
             {icon}
           </div>
         )}

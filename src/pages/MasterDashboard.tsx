@@ -84,12 +84,12 @@ export default function MasterDashboard() {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          <Skeleton className="h-12 w-96" />
+          <Skeleton className="h-12 w-96 shimmer" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Skeleton className="h-96" />
-            <Skeleton className="h-96" />
+            <Skeleton className="h-96 shimmer" />
+            <Skeleton className="h-96 shimmer" />
           </div>
-          <Skeleton className="h-96" />
+          <Skeleton className="h-96 shimmer" />
         </div>
       </div>
     );
@@ -102,7 +102,7 @@ export default function MasterDashboard() {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div>
+        <div className="animate-fade-in">
           <h1 className="text-4xl font-bold text-foreground mb-2">
             Technology Solutions Open Tickets
           </h1>
@@ -112,7 +112,7 @@ export default function MasterDashboard() {
         </div>
 
         {/* Critical Tickets Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
           {/* TIE Critical */}
           <Card>
             <CardHeader>
@@ -134,7 +134,7 @@ export default function MasterDashboard() {
                       href={getAsanaUrl(ticket.id, "TIE")}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3"
+                      className="block p-4 border rounded-lg card-hover space-y-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <h4 className="text-sm font-semibold text-foreground flex-1">
@@ -202,7 +202,7 @@ export default function MasterDashboard() {
                       href={getAsanaUrl(ticket.id, "SFDC")}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3"
+                      className="block p-4 border rounded-lg card-hover space-y-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <h4 className="text-sm font-semibold text-foreground flex-1">
@@ -251,7 +251,7 @@ export default function MasterDashboard() {
         </div>
 
         {/* 10 Newest Open Tickets */}
-        <Card>
+        <Card className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
