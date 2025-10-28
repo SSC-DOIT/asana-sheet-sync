@@ -44,7 +44,7 @@ export const calculateTicketAge = (createdAt: string, referenceDate?: string): n
   return diffDays >= 0 ? diffDays : 0;
 };
 
-export const analyzeTicketAgeTrends = (tickets: ParsedTicket[], daysBack: number = 90): TicketAgeData[] => {
+export const analyzeTicketAgeTrends = (tickets: ParsedTicket[], daysBack: number = 365): TicketAgeData[] => {
   const now = new Date();
   const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
   
@@ -94,7 +94,7 @@ export const analyzeTicketAgeTrends = (tickets: ParsedTicket[], daysBack: number
     });
 };
 
-export const analyzeFirstResponseTrends = (tickets: ParsedTicket[], daysBack: number = 90): FirstResponseTrendData[] => {
+export const analyzeFirstResponseTrends = (tickets: ParsedTicket[], daysBack: number = 365): FirstResponseTrendData[] => {
   const now = new Date();
   const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
   
@@ -127,7 +127,7 @@ export const analyzeFirstResponseTrends = (tickets: ParsedTicket[], daysBack: nu
     }));
 };
 
-export const analyzeOpenTicketTrends = (tickets: ParsedTicket[], daysBack: number = 90): OpenTicketTrendData[] => {
+export const analyzeOpenTicketTrends = (tickets: ParsedTicket[], daysBack: number = 365): OpenTicketTrendData[] => {
   const now = new Date();
   const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
   

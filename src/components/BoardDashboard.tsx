@@ -24,7 +24,7 @@ interface BoardDashboardProps {
 export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   const { toast } = useToast();
 
-  // Use the custom hook for all data loading and analytics
+  // Use the custom hook for all data loading and analytics (with archive data)
   const {
     analytics,
     enhancedData,
@@ -34,7 +34,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     lastUpdated,
     isRefreshing,
     refresh,
-  } = useTicketAnalytics(board);
+  } = useTicketAnalytics(board, true);
 
   // Handle refresh with toast notification
   const handleRefresh = async () => {
