@@ -180,22 +180,26 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             change={analytics.improvement}
             changeLabel="improvement"
             trend={analytics.improvement > 0 ? "up" : analytics.improvement < 0 ? "down" : "neutral"}
+            delay={0}
           />
           <MetricCard
             title="Historical Avg"
             value={formatHours(analytics.previousAvg)}
             icon={<BarChart3 className="w-5 h-5" />}
+            delay={0.1}
           />
           <MetricCard
             title="Time Saved"
             value={formatHours(analytics.previousAvg - analytics.recentAvg)}
             icon={<TrendingDown className="w-5 h-5" />}
             trend="up"
+            delay={0.2}
           />
           <MetricCard
             title="Recent Tickets"
             value={analytics.recentCount.toString()}
             icon={<Ticket className="w-5 h-5" />}
+            delay={0.3}
           />
         </div>
 
