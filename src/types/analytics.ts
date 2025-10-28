@@ -30,7 +30,7 @@ export interface RecentTicket {
 export interface EnhancedAnalyticsData {
   ageTrends: TicketAgeTrendPoint[];
   responseTrends: ResponseTrendPoint[];
-  automationSavings: AutomationSavingsData[];
+  automationAnalytics: AutomationAnalytics;
   openTrends: OpenTicketTrendPoint[];
   categories: CategoryData[];
 }
@@ -49,13 +49,50 @@ export interface ResponseTrendPoint {
   count: number;
 }
 
-// Automation savings by stage
+// Automation savings by stage (per-ticket basis)
 export interface AutomationSavingsData {
   stage: string;
   count: number;
-  hoursPerTicket: number;
-  totalHours: number;
-  workDays: number;
+  minutesPerTicket: number;
+  totalMinutesSaved: number;
+  totalHoursSaved: number;
+}
+
+// Comprehensive automation analytics
+export interface AutomationAnalytics {
+  // Per-ticket metrics
+  averageTimeSavedPerTicket: number; // minutes
+  averageAutomationRulesPerTicket: number;
+
+  // Response time comparison
+  automatedTicketsAvgResponse: number; // hours (business hours)
+  manualTicketsAvgResponse: number; // hours (business hours)
+  responseTimeImprovement: number; // percentage
+
+  // Ticket rate and forecasting
+  ticketRate: {
+    perDay: number;
+    perWeek: number;
+    perMonth: number;
+  };
+
+  // Time savings projections
+  projections: {
+    currentMonthSavings: number; // hours
+    monthlyForecast: number; // hours per month
+    yearlyForecast: number; // hours per year
+    monthlyForecastDays: number; // work days per month
+    yearlyForecastDays: number; // work days per year
+  };
+
+  // Breakdown by automation stage
+  byStage: AutomationSavingsData[];
+
+  // Summary totals
+  totalAutomatedTickets: number;
+  totalManualTickets: number;
+  totalTimeSavedHours: number;
+  totalTimeSavedDays: number;
 }
 
 // Open ticket trend data point

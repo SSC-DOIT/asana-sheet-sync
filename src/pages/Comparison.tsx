@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { loadLiveData } from "@/utils/liveDataLoader";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
-import { calculateTotalAutomationSavings, analyzeAutomationSavings, getLastThursday, getJulyFirst } from "@/utils/enhancedAnalytics";
+import { analyzeAutomationAnalytics, getLastThursday, getJulyFirst } from "@/utils/enhancedAnalytics";
 import { MetricCard } from "@/components/MetricCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
@@ -31,29 +31,14 @@ const Comparison = () => {
         const tieAnalyzed = analyzeResponseTimes(tieTickets, rolloutDate, lastThursday, julyFirst);
         const sfdcAnalyzed = analyzeResponseTimes(sfdcTickets, rolloutDate, lastThursday, julyFirst);
 
-        // Automation savings analysis
-        const tieAutomationStages: { [key: string]: string } = {};
-        tieTickets.forEach((ticket) => {
-          if (ticket.automationStage) {
-            tieAutomationStages[ticket.id] = ticket.automationStage;
-          }
-        });
-        const tieAutomationData = analyzeAutomationSavings(tieAutomationStages);
-        const tieTotals = calculateTotalAutomationSavings(tieAutomationData);
-
-        const sfdcAutomationStages: { [key: string]: string } = {};
-        sfdcTickets.forEach((ticket) => {
-          if (ticket.automationStage) {
-            sfdcAutomationStages[ticket.id] = ticket.automationStage;
-          }
-        });
-        const sfdcAutomationData = analyzeAutomationSavings(sfdcAutomationStages);
-        const sfdcTotals = calculateTotalAutomationSavings(sfdcAutomationData);
+        // Automation analytics (per-ticket savings and forecasting)
+        const tieAutomationAnalytics = analyzeAutomationAnalytics(tieTickets);
+        const sfdcAutomationAnalytics = analyzeAutomationAnalytics(sfdcTickets);
 
         setTieAnalytics(tieAnalyzed);
         setSfdcAnalytics(sfdcAnalyzed);
-        setTieAutomation(tieTotals);
-        setSfdcAutomation(sfdcTotals);
+        setTieAutomation(tieAutomationAnalytics);
+        setSfdcAutomation(sfdcAutomationAnalytics);
       } catch (error) {
         console.error("Error loading comparison data:", error);
       } finally {
@@ -236,28 +221,28 @@ const Comparison = () => {
                       <p className="text-sm text-muted-foreground">Total Automated</p>
                     </div>
                     <p className="text-3xl font-bold text-foreground">
-                      {tieAutomation.totalTickets + sfdcAutomation.totalTickets}
+                      {tieAutomation.totalAutomatedTickets + sfdcAutomation.totalAutomatedTickets}
                     </p>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-accent" />
                       <p className="text-sm text-muted-foreground">Hours Saved</p>
                     </div>
                     <p className="text-3xl font-bold text-accent">
-                      {(tieAutomation.totalHours + sfdcAutomation.totalHours).toFixed(1)}h
+                      {(tieAutomation.totalTimeSavedHours + sfdcAutomation.totalTimeSavedHours).toFixed(1)}h
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-accent" />
                     <p className="text-sm text-muted-foreground">Work Days Saved</p>
                   </div>
                   <p className="text-3xl font-bold text-accent">
-                    {(tieAutomation.totalDays + sfdcAutomation.totalDays).toFixed(1)}d
+                    {(tieAutomation.totalTimeSavedDays + sfdcAutomation.totalTimeSavedDays).toFixed(1)}d
                   </p>
                 </div>
               </div>

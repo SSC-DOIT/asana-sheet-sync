@@ -17,6 +17,122 @@
 
 ## [Unreleased]
 
+### 2025-10-28 - Revised Automation Analytics (Per-Ticket Calculations & Forecasting)
+
+#### Changed
+- **BREAKING**: Automation analytics completely redesigned to show per-ticket time savings
+  - File: `src/utils/enhancedAnalytics.ts` - Added `analyzeAutomationAnalytics()` function
+  - **Old approach**: Aggregate savings by automation stage
+  - **New approach**: Per-ticket savings with response time comparison and forecasting
+  - **Rationale**: Provides more realistic and meaningful ROI metrics for stakeholders
+
+#### Added
+- **Per-Ticket Time Savings Calculations**
+  - Shows average minutes saved per automated ticket
+  - Each automation rule (R1-R6) contributes specific time savings
+  - Example: Ticket with R1 (5min) + R3 (8min) + R6 (10min) = 23 minutes saved
+
+- **Response Time Impact Analysis**
+  - Compares automated vs manual ticket response times (business hours only)
+  - Shows percentage improvement from automation
+  - All calculations use 8-hour workdays (8am-5pm, M-F, excluding holidays)
+
+- **Time Savings Forecasting**
+  - Current month savings (actual to-date)
+  - Monthly forecast based on last 90 days ticket rate
+  - Yearly forecast extrapolated from monthly projections
+  - Ticket rate metrics: per day, per week, per month
+
+- **New Interface**: `AutomationAnalytics` in `src/types/analytics.ts`
+  - Comprehensive metrics including per-ticket averages
+  - Response time comparison between automated and manual tickets
+  - Ticket rate calculations
+  - Monthly and yearly projections
+  - Breakdown by automation stage
+
+#### Updated Components
+- `src/components/AutomationSavingsCard.tsx` - Completely redesigned UI
+  - Now shows per-ticket metrics prominently
+  - Response time comparison card
+  - Forecasting projections card with current month, monthly, and yearly estimates
+  - Detailed breakdown table with minutes/ticket column
+
+- `src/pages/Comparison.tsx` - Updated to use new `AutomationAnalytics`
+  - Uses `analyzeAutomationAnalytics()` instead of deprecated functions
+  - Updated property names to match new interface
+
+- `src/hooks/useTicketAnalytics.ts` - Updated analytics calculation
+  - Calls `analyzeAutomationAnalytics()` for comprehensive metrics
+  - Returns `automationAnalytics` instead of `automationSavings`
+
+- `src/components/BoardDashboard.tsx` - Updated to pass correct data
+  - Passes `enhancedData.automationAnalytics` to AutomationSavingsCard
+
+#### Improved
+- **Business Hours Calculation**: Verified correct implementation
+  - File: `src/utils/businessHours.ts`
+  - Excludes weekends and 10 US holidays
+  - Only counts 8am-5pm (8-hour workdays)
+  - Applied consistently to all response time calculations
+
+#### Technical Details
+
+**Time Estimates Per Rule (minutes per ticket):**
+- R1 Triage: 5 min (manual triage, categorization, initial assessment)
+- R2 Classification: 3 min (determining ticket type and category)
+- R3 Description: 8 min (formatting, clarifying, writing descriptions)
+- R4 Prioritization: 4 min (evaluating urgency and impact)
+- R5 Validation: 6 min (checking requirements, verifying data)
+- R6 Communication: 10 min (drafting, reviewing, sending updates)
+
+**Calculation Methodology:**
+1. Separate tickets into automated vs manual categories
+2. Calculate time saved per automated ticket based on its automation stage
+3. Calculate average response times for automated vs manual tickets (business hours)
+4. Determine ticket rate from last 90 days of data
+5. Calculate automation rate (% of tickets automated)
+6. Project savings based on current ticket rate × automation rate × avg time saved
+
+**Forecasting Logic:**
+- Uses last 90 days to calculate average daily ticket rate
+- Multiplies by automation rate to get automated tickets per period
+- Multiplies by average time saved per automated ticket
+- Converts to hours and 8-hour work days
+
+#### Removed
+- `calculateTotalAutomationSavings()` function - No longer needed
+- Aggregate-only automation metrics
+
+#### Migration Guide
+
+**If you're using automation analytics:**
+
+Before:
+```typescript
+const automationStages = { /* ticket id to stage mapping */ };
+const savings = analyzeAutomationSavings(automationStages);
+const totals = calculateTotalAutomationSavings(savings);
+// Access: totals.totalHours, totals.totalDays, totals.totalTickets
+```
+
+After:
+```typescript
+const analytics = analyzeAutomationAnalytics(tickets);
+// Access: analytics.totalTimeSavedHours, analytics.totalTimeSavedDays
+// Plus: analytics.averageTimeSavedPerTicket, analytics.projections, etc.
+```
+
+**New properties available:**
+- `averageTimeSavedPerTicket` - Minutes saved per automated ticket
+- `automatedTicketsAvgResponse` - Avg response time for automated tickets
+- `manualTicketsAvgResponse` - Avg response time for manual tickets
+- `responseTimeImprovement` - Percentage improvement
+- `ticketRate` - Tickets per day/week/month
+- `projections` - Current month, monthly, and yearly forecasts
+- `byStage` - Breakdown by automation stage (R1-R6)
+
+---
+
 ### 2025-10-28 - Major Performance and Architecture Optimization
 
 #### Added

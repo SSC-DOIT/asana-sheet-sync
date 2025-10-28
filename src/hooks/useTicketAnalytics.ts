@@ -6,7 +6,7 @@ import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
 import {
   analyzeTicketAgeTrends,
   analyzeFirstResponseTrends,
-  analyzeAutomationSavings,
+  analyzeAutomationAnalytics,
   analyzeOpenTicketTrends,
   getLastThursday,
   getJulyFirst,
@@ -65,14 +65,8 @@ export function useTicketAnalytics(
     const responseTrends = analyzeFirstResponseTrends(tickets);
     const openTrends = analyzeOpenTicketTrends(tickets);
 
-    // Extract automation stages
-    const automationStages: { [key: string]: string } = {};
-    tickets.forEach((ticket: EnhancedParsedTicket) => {
-      if (ticket.automationStage) {
-        automationStages[ticket.id] = ticket.automationStage;
-      }
-    });
-    const automationSavings = analyzeAutomationSavings(automationStages);
+    // Comprehensive automation analytics (per-ticket savings and forecasting)
+    const automationAnalytics = analyzeAutomationAnalytics(tickets);
 
     // Category analysis
     const categories = analyzeCategoryCounts(tickets);
@@ -80,7 +74,7 @@ export function useTicketAnalytics(
     return {
       ageTrends,
       responseTrends,
-      automationSavings,
+      automationAnalytics,
       openTrends,
       categories,
     };

@@ -171,7 +171,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
 
           <TabsContent value="automation" className="space-y-6">
             {enhancedData && (
-              <AutomationSavingsCard data={enhancedData.automationSavings} />
+              <AutomationSavingsCard data={enhancedData.automationAnalytics} />
             )}
           </TabsContent>
 
