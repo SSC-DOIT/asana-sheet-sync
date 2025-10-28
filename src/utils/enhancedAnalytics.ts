@@ -258,11 +258,15 @@ export const analyzeAutomationAnalytics = (
   // Calculate ticket rate (using last 90 days)
   const now = new Date();
   const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+  const recentTickets = tickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
   const recentAutomatedTickets = automatedTickets.filter((t) => new Date(t.createdAt) >= ninetyDaysAgo);
 
   const daysInPeriod = 90;
+  const totalTicketsPerDay = recentTickets.length / daysInPeriod;
+  const totalTicketsPerWeek = totalTicketsPerDay * 7;
+  const totalTicketsPerMonth = totalTicketsPerDay * 30;
+  
   const automatedTicketsPerDay = recentAutomatedTickets.length / daysInPeriod;
-  const automatedTicketsPerWeek = automatedTicketsPerDay * 7;
   const automatedTicketsPerMonth = automatedTicketsPerDay * 30;
   const automatedTicketsPerYear = automatedTicketsPerDay * 365;
 
@@ -298,8 +302,13 @@ export const analyzeAutomationAnalytics = (
     manualTicketsAvgResponse,
     responseTimeImprovement,
     ticketRate: {
+      perDay: Number(totalTicketsPerDay.toFixed(2)),
+      perWeek: Number(totalTicketsPerWeek.toFixed(2)),
+      perMonth: Number(totalTicketsPerMonth.toFixed(2)),
+    },
+    automatedTicketRate: {
       perDay: Number(automatedTicketsPerDay.toFixed(2)),
-      perWeek: Number(automatedTicketsPerWeek.toFixed(2)),
+      perWeek: Number((automatedTicketsPerDay * 7).toFixed(2)),
       perMonth: Number(automatedTicketsPerMonth.toFixed(2)),
     },
     projections,

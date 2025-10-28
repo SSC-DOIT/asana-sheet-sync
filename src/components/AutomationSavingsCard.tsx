@@ -93,7 +93,7 @@ export const AutomationSavingsCard = ({ data }: AutomationSavingsCardProps) => {
               Time Savings Projections
             </h3>
             <p className="text-sm text-muted-foreground">
-              Based on current automated ticket rate: {data.ticketRate.perDay.toFixed(1)} tickets/day, {data.ticketRate.perWeek.toFixed(1)} tickets/week
+              Based on {data.ticketRate.perDay.toFixed(1)} total tickets/day ({data.automatedTicketRate.perDay.toFixed(1)} automated)
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
