@@ -84,6 +84,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
     let tieRequestDetail: string | undefined;
     let workType: string | undefined;
     let department: string | undefined;
+    let taskSummary: string | undefined;
 
     if (task.custom_fields) {
       // Single pass through custom fields (8x faster than multiple find() calls)
@@ -113,6 +114,9 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
           case "Department":
             department = field.enum_value?.name;
             break;
+          case "Task summary":
+            taskSummary = field.text_value;
+            break;
         }
       });
     }
@@ -135,7 +139,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
       automationStage,
       ticketAge,
       isOpen,
-      summary: task.notes ? task.notes.substring(0, 280) : undefined,
+      summary: taskSummary,
       customFields: {
         Priority: priority,
         Status: status,
