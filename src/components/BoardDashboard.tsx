@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MetricCard } from "./MetricCard";
 import { ResponseTimeChart } from "./ResponseTimeChart";
 import { TicketTable } from "./TicketTable";
@@ -15,6 +15,7 @@ import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { CategoryBreakdownCard } from "./CategoryBreakdownCard";
+import { DateRangeSelector, DateRange } from "./DateRangeSelector";
 
 interface BoardDashboardProps {
   board: "TIE" | "SFDC";
@@ -23,6 +24,7 @@ interface BoardDashboardProps {
 
 export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   const { toast } = useToast();
+  const [dateRange, setDateRange] = useState<DateRange>(365);
 
   // Use the custom hook for all data loading and analytics (with archive data)
   const {
@@ -34,7 +36,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     lastUpdated,
     isRefreshing,
     refresh,
-  } = useTicketAnalytics(board, true);
+  } = useTicketAnalytics(board, true, dateRange);
 
   // Handle refresh with toast notification
   const handleRefresh = async () => {
@@ -157,6 +159,9 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           </TabsContent>
 
           <TabsContent value="trends" className="space-y-6">
+            <div className="flex justify-end">
+              <DateRangeSelector selected={dateRange} onChange={setDateRange} />
+            </div>
             {enhancedData && (
               <>
                 <OpenTicketTrendChart data={enhancedData.openTrends} />

@@ -27,7 +27,8 @@ const REFETCH_INTERVAL = 5 * 60 * 1000; // 5 minutes
  */
 export function useTicketAnalytics(
   board: "TIE" | "SFDC",
-  includeArchive: boolean = true
+  includeArchive: boolean = true,
+  daysBack: number = 365
 ): UseTicketAnalyticsReturn {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -61,9 +62,9 @@ export function useTicketAnalytics(
   const enhancedData = useMemo<EnhancedAnalyticsData | null>(() => {
     if (tickets.length === 0) return null;
 
-    const ageTrends = analyzeTicketAgeTrends(tickets);
-    const responseTrends = analyzeFirstResponseTrends(tickets);
-    const openTrends = analyzeOpenTicketTrends(tickets);
+    const ageTrends = analyzeTicketAgeTrends(tickets, daysBack);
+    const responseTrends = analyzeFirstResponseTrends(tickets, daysBack);
+    const openTrends = analyzeOpenTicketTrends(tickets, daysBack);
 
     // Comprehensive automation analytics (per-ticket savings and forecasting)
     const automationAnalytics = analyzeAutomationAnalytics(tickets);
@@ -78,7 +79,7 @@ export function useTicketAnalytics(
       openTrends,
       categories,
     };
-  }, [tickets]);
+  }, [tickets, daysBack]);
 
   // Manual refresh with loading state
   const refresh = useCallback(async () => {

@@ -28,13 +28,13 @@ const AsanaUserSchema = z.object({
 // Asana task schema
 export const AsanaTaskSchema = z.object({
   gid: z.string(),
-  name: z.string().optional().default("Untitled Task"),
+  name: z.string().default("Untitled Task"),
   created_at: z.string(),
   modified_at: z.string().optional(),
   completed_at: z.string().nullable().optional(),
-  notes: z.string().optional().default(""),
+  notes: z.string().default(""),
   assignee: AsanaUserSchema.optional(),
-  custom_fields: z.array(AsanaCustomFieldSchema).optional().default([]),
+  custom_fields: z.array(AsanaCustomFieldSchema).default([]),
   resource_type: z.string().optional(),
 });
 

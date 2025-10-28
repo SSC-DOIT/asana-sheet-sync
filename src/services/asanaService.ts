@@ -52,7 +52,7 @@ async function fetchAsanaTicketsWithRetry(
       const data = await response.json();
 
       // Validate response with Zod schema
-      const validatedData = validateAsanaResponse(data);
+      const validatedData = validateAsanaResponse(data) as AsanaResponse;
 
       return validatedData;
     } catch (error) {
@@ -90,7 +90,8 @@ async function fetchProjectTickets(
   projectGid: string
 ): Promise<EnhancedParsedTicket[]> {
   const response = await fetchAsanaTicketsWithRetry(projectGid);
-  return parseEnhancedAsanaJSON(response);
+  // Type assertion safe after Zod validation
+  return parseEnhancedAsanaJSON(response as any);
 }
 
 /**
