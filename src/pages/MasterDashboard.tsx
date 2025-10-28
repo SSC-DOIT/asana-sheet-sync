@@ -108,7 +108,13 @@ export default function MasterDashboard() {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          <Skeleton className="h-12 w-96" />
+          <div className="flex flex-col items-center justify-center space-y-4 py-12">
+            <Clock className="w-8 h-8 animate-spin text-primary" />
+            <div className="text-center space-y-2">
+              <p className="text-lg font-semibold text-foreground">Loading Master Dashboard</p>
+              <p className="text-sm text-muted-foreground">Fetching tickets from TIE and SFDC boards...</p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Skeleton className="h-96" />
             <Skeleton className="h-96" />

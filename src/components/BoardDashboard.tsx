@@ -58,15 +58,21 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
 
   const formatHours = (hours: number): string => {
     if (hours < 1) return `${Math.round(hours * 60)}m`;
-    if (hours < 24) return `${hours.toFixed(1)}h`;
-    return `${(hours / 24).toFixed(1)}d`;
+    if (hours < 24) return `${hours.toFixed(2)}h`;
+    return `${(hours / 24).toFixed(2)}d`;
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          <Skeleton className="h-12 w-64" />
+          <div className="flex flex-col items-center justify-center space-y-4 py-12">
+            <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+            <div className="text-center space-y-2">
+              <p className="text-lg font-semibold text-foreground">Loading {boardName} Dashboard</p>
+              <p className="text-sm text-muted-foreground">Fetching tickets from Asana...</p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
               <Skeleton key={i} className="h-32" />

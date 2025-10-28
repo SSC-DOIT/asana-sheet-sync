@@ -87,8 +87,8 @@ export const analyzeResponseTimes = (tickets: ParsedTicket[], rolloutDate: Date,
     return sum / responseTimes.length;
   };
   
-  const recentAvg = calculateAverage(recentTickets);
-  const previousAvg = calculateAverage(previousTickets);
+  const recentAvg = Math.round(calculateAverage(recentTickets) * 100) / 100;
+  const previousAvg = Math.round(calculateAverage(previousTickets) * 100) / 100;
   
   const improvement = previousAvg > 0 
     ? ((previousAvg - recentAvg) / previousAvg) * 100 

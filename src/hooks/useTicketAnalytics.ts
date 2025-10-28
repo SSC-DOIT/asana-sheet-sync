@@ -42,9 +42,11 @@ export function useTicketAnalytics(
   } = useQuery({
     queryKey: ["tickets", board, includeArchive],
     queryFn: () => loadBoardData(board, includeArchive),
-    staleTime: REFETCH_INTERVAL,
+    staleTime: REFETCH_INTERVAL, // Keep data fresh for 5 minutes
+    gcTime: REFETCH_INTERVAL, // Cache in memory for 5 minutes
     refetchInterval: REFETCH_INTERVAL,
     refetchOnWindowFocus: false,
+    placeholderData: (previousData) => previousData, // Keep previous data during refetch
     retry: 2,
   });
 
