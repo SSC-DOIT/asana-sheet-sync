@@ -55,12 +55,12 @@ export const NetNewTicketChart = ({ data }: NetNewTicketChartProps) => {
             <Legend />
             <Bar
               dataKey="created"
-              fill="hsl(var(--primary))"
+              fill="hsl(var(--chart-1))"
               name="Created"
             />
             <Bar
               dataKey="closed"
-              fill="hsl(var(--accent))"
+              fill="hsl(var(--chart-2))"
               name="Closed"
             />
             <Line
