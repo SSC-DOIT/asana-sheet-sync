@@ -47,11 +47,10 @@ export const TicketTable = ({ tickets, board, title = "Recent Tickets" }: Ticket
       "Created At": new Date(t.createdAt).toLocaleString(),
       Assignee: t.assignee || "Unassigned",
       "Response Time (hours)": t.responseTimeHours?.toFixed(2) || "N/A",
-      Status: t.customFields?.Priority || t.customFields?.Section || "N/A",
     }));
     exportTableToCSV(
       exportData,
-      ["ID", "Name", "Created At", "Assignee", "Response Time (hours)", "Status"],
+      ["ID", "Name", "Created At", "Assignee", "Response Time (hours)"],
       "recent-tickets.csv"
     );
   };
@@ -60,12 +59,6 @@ export const TicketTable = ({ tickets, board, title = "Recent Tickets" }: Ticket
     if (hours === null || hours === undefined) return "N/A";
     if (hours < 1) return `${Math.round(hours * 60)}m`;
     return `${hours.toFixed(1)}h`;
-  };
-
-  const getStatusBadge = (ticket: EnhancedParsedTicket) => {
-    const status = ticket.customFields?.Priority || ticket.customFields?.Section;
-    if (!status) return <Badge variant="secondary">N/A</Badge>;
-    return <Badge variant="outline">{status}</Badge>;
   };
 
   return (
@@ -102,13 +95,12 @@ export const TicketTable = ({ tickets, board, title = "Recent Tickets" }: Ticket
                 <TableHead>Created</TableHead>
                 <TableHead>Assignee</TableHead>
                 <TableHead>Response Time</TableHead>
-                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredTickets.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-muted-foreground">
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
                     No tickets found
                   </TableCell>
                 </TableRow>
@@ -129,7 +121,6 @@ export const TicketTable = ({ tickets, board, title = "Recent Tickets" }: Ticket
                     <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell>{ticket.assignee || "Unassigned"}</TableCell>
                     <TableCell>{formatResponseTime(ticket.responseTimeHours)}</TableCell>
-                    <TableCell>{getStatusBadge(ticket)}</TableCell>
                   </TableRow>
                 ))
               )}
