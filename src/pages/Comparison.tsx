@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { loadEnhancedData } from "@/utils/enhancedDataLoader";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
-import { calculateTotalAutomationSavings, analyzeAutomationSavings } from "@/utils/enhancedAnalytics";
+import { calculateTotalAutomationSavings, analyzeAutomationSavings, getLastThursday, getJulyFirst } from "@/utils/enhancedAnalytics";
 import { MetricCard } from "@/components/MetricCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
@@ -19,14 +19,16 @@ const Comparison = () => {
       setLoading(true);
       try {
         const rolloutDate = new Date("2025-10-21");
+        const lastThursday = getLastThursday();
+        const julyFirst = getJulyFirst();
         
         const [tieTickets, sfdcTickets] = await Promise.all([
           loadEnhancedData("TIE"),
           loadEnhancedData("SFDC"),
         ]);
 
-        const tieAnalyzed = analyzeResponseTimes(tieTickets, rolloutDate);
-        const sfdcAnalyzed = analyzeResponseTimes(sfdcTickets, rolloutDate);
+        const tieAnalyzed = analyzeResponseTimes(tieTickets, rolloutDate, lastThursday, julyFirst);
+        const sfdcAnalyzed = analyzeResponseTimes(sfdcTickets, rolloutDate, lastThursday, julyFirst);
 
         // Automation savings analysis
         const tieAutomationStages: { [key: string]: string } = {};
@@ -101,7 +103,7 @@ const Comparison = () => {
             Board Comparison
           </h1>
           <p className="text-muted-foreground">
-            Comparing response time improvements across TIE and SFDC boards
+            Recent period: Since last Thursday | Historical: July 1 - Last Thursday
           </p>
         </div>
 
@@ -112,7 +114,7 @@ const Comparison = () => {
             
             <div className="space-y-4">
               <MetricCard
-                title="Recent Avg Response (2d)"
+                title="Recent Avg Response"
                 value={formatHours(tieAnalytics.recentAvg)}
                 icon={<Clock className="w-5 h-5" />}
                 change={tieAnalytics.improvement}
@@ -121,7 +123,7 @@ const Comparison = () => {
               />
               
               <MetricCard
-                title="Previous Avg (90d)"
+                title="Historical Avg"
                 value={formatHours(tieAnalytics.previousAvg)}
                 icon={<Clock className="w-5 h-5" />}
               />
@@ -152,7 +154,7 @@ const Comparison = () => {
             
             <div className="space-y-4">
               <MetricCard
-                title="Recent Avg Response (2d)"
+                title="Recent Avg Response"
                 value={formatHours(sfdcAnalytics.recentAvg)}
                 icon={<Clock className="w-5 h-5" />}
                 change={sfdcAnalytics.improvement}
@@ -161,7 +163,7 @@ const Comparison = () => {
               />
               
               <MetricCard
-                title="Previous Avg (90d)"
+                title="Historical Avg"
                 value={formatHours(sfdcAnalytics.previousAvg)}
                 icon={<Clock className="w-5 h-5" />}
               />

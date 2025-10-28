@@ -5,12 +5,17 @@ import { TicketTable } from "./TicketTable";
 import { TicketAgeTrendChart } from "./TicketAgeTrendChart";
 import { FirstResponseTrendChart } from "./FirstResponseTrendChart";
 import { AutomationSavingsCard } from "./AutomationSavingsCard";
+import { OpenTicketTrendChart } from "./OpenTicketTrendChart";
+import { CurrentStateTicketsTable } from "./CurrentStateTicketsTable";
 import { loadEnhancedData, EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { analyzeResponseTimes } from "@/utils/asanaJsonParser";
 import {
   analyzeTicketAgeTrends,
   analyzeFirstResponseTrends,
   analyzeAutomationSavings,
+  analyzeOpenTicketTrends,
+  getLastThursday,
+  getJulyFirst,
 } from "@/utils/enhancedAnalytics";
 import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
@@ -27,32 +32,39 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     ageTrends: any[];
     responseTrends: any[];
     automationSavings: any[];
+    openTrends: any[];
   } | null>(null);
+  const [tickets, setTickets] = useState<EnhancedParsedTicket[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
-        const tickets = await loadEnhancedData(board);
+        const loadedTickets = await loadEnhancedData(board);
         const rolloutDate = new Date("2025-10-21");
-        const analyzed = analyzeResponseTimes(tickets, rolloutDate);
+        const lastThursday = getLastThursday();
+        const julyFirst = getJulyFirst();
+        
+        const analyzed = analyzeResponseTimes(loadedTickets, rolloutDate, lastThursday, julyFirst);
         
         // Enhanced analytics
-        const ageTrends = analyzeTicketAgeTrends(tickets);
-        const responseTrends = analyzeFirstResponseTrends(tickets);
+        const ageTrends = analyzeTicketAgeTrends(loadedTickets);
+        const responseTrends = analyzeFirstResponseTrends(loadedTickets);
+        const openTrends = analyzeOpenTicketTrends(loadedTickets);
         
         // Extract automation stages
         const automationStages: { [key: string]: string } = {};
-        tickets.forEach((ticket: EnhancedParsedTicket) => {
+        loadedTickets.forEach((ticket: EnhancedParsedTicket) => {
           if (ticket.automationStage) {
             automationStages[ticket.id] = ticket.automationStage;
           }
         });
         const automationSavings = analyzeAutomationSavings(automationStages);
         
+        setTickets(loadedTickets);
         setAnalytics(analyzed);
-        setEnhancedData({ ageTrends, responseTrends, automationSavings });
+        setEnhancedData({ ageTrends, responseTrends, automationSavings, openTrends });
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -101,13 +113,13 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             {boardName} Board Analytics
           </h1>
           <p className="text-muted-foreground">
-            Analyzing response times for new ticketing process rollout
+            Recent period: Since last Thursday | Historical: July 1 - Last Thursday
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
-            title="Recent Avg Response (2d)"
+            title="Recent Avg Response"
             value={formatHours(analytics.recentAvg)}
             icon={<Clock className="w-5 h-5" />}
             change={analytics.improvement}
@@ -115,7 +127,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             trend={analytics.improvement > 0 ? "up" : analytics.improvement < 0 ? "down" : "neutral"}
           />
           <MetricCard
-            title="Previous Avg (90d)"
+            title="Historical Avg"
             value={formatHours(analytics.previousAvg)}
             icon={<BarChart3 className="w-5 h-5" />}
           />
@@ -133,10 +145,11 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="trends">Long-Term Trends</TabsTrigger>
             <TabsTrigger value="automation">Automation Savings</TabsTrigger>
+            <TabsTrigger value="current">Current State</TabsTrigger>
             <TabsTrigger value="tickets">Recent Tickets</TabsTrigger>
           </TabsList>
 
@@ -150,6 +163,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
           <TabsContent value="trends" className="space-y-6">
             {enhancedData && (
               <>
+                <OpenTicketTrendChart data={enhancedData.openTrends} />
                 <TicketAgeTrendChart data={enhancedData.ageTrends} />
                 <FirstResponseTrendChart
                   data={enhancedData.responseTrends}
@@ -165,10 +179,14 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
             )}
           </TabsContent>
 
+          <TabsContent value="current" className="space-y-6">
+            <CurrentStateTicketsTable tickets={tickets} />
+          </TabsContent>
+
           <TabsContent value="tickets" className="space-y-6">
             <TicketTable
               tickets={analytics.recentTickets}
-              title="Recent Tickets (Last 2 Days)"
+              title="Recent Tickets (Since Last Thursday)"
             />
           </TabsContent>
         </Tabs>

@@ -61,10 +61,11 @@ export const calculateResponseTime = (createdAt: string, modifiedAt?: string): n
   return diffHours >= 0 ? diffHours : null;
 };
 
-export const analyzeResponseTimes = (tickets: ParsedTicket[], rolloutDate: Date) => {
+export const analyzeResponseTimes = (tickets: ParsedTicket[], rolloutDate: Date, lastThursday?: Date, julyFirst?: Date) => {
   const now = new Date();
-  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
-  const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+  // Use provided dates or calculate defaults
+  const recentCutoff = lastThursday || new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+  const previousStart = julyFirst || new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
   
   const recentTickets: ParsedTicket[] = [];
   const previousTickets: ParsedTicket[] = [];
@@ -73,9 +74,9 @@ export const analyzeResponseTimes = (tickets: ParsedTicket[], rolloutDate: Date)
     const created = new Date(ticket.createdAt);
     if (isNaN(created.getTime())) return;
     
-    if (created >= twoDaysAgo) {
+    if (created >= recentCutoff) {
       recentTickets.push(ticket);
-    } else if (created >= ninetyDaysAgo && created < twoDaysAgo) {
+    } else if (created >= previousStart && created < recentCutoff) {
       previousTickets.push(ticket);
     }
   });
@@ -105,7 +106,7 @@ export const analyzeResponseTimes = (tickets: ParsedTicket[], rolloutDate: Date)
     const created = new Date(ticket.createdAt);
     if (isNaN(created.getTime())) return;
     
-    if (created >= ninetyDaysAgo) {
+    if (created >= previousStart) {
       const dateKey = created.toISOString().split("T")[0];
       const responseTime = ticket.responseTimeHours;
       

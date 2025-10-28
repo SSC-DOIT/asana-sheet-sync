@@ -12,6 +12,11 @@ export interface FirstResponseTrendData {
   count: number;
 }
 
+export interface OpenTicketTrendData {
+  date: string;
+  openCount: number;
+}
+
 export interface AutomationSavingsData {
   stage: string;
   ticketCount: number;
@@ -122,6 +127,50 @@ export const analyzeFirstResponseTrends = (tickets: ParsedTicket[], daysBack: nu
       avgResponseHours: Number((weeklyData[date].total / weeklyData[date].count).toFixed(2)),
       count: weeklyData[date].count,
     }));
+};
+
+export const analyzeOpenTicketTrends = (tickets: ParsedTicket[], daysBack: number = 90): OpenTicketTrendData[] => {
+  const now = new Date();
+  const startDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+  
+  const dailyOpenCounts: { [key: string]: number } = {};
+  
+  // For each day, count how many tickets were open on that day
+  for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
+    const dateKey = new Date(d).toISOString().split("T")[0];
+    dailyOpenCounts[dateKey] = 0;
+    
+    tickets.forEach((ticket) => {
+      const created = new Date(ticket.createdAt);
+      const completed = ticket.completedAt ? new Date(ticket.completedAt) : null;
+      
+      // Ticket is open on this day if created before/on this day and not completed, or completed after this day
+      if (created <= d && (!completed || completed > d)) {
+        dailyOpenCounts[dateKey]++;
+      }
+    });
+  }
+  
+  return Object.keys(dailyOpenCounts)
+    .sort()
+    .map((date) => ({
+      date: new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      openCount: dailyOpenCounts[date],
+    }));
+};
+
+export const getLastThursday = (): Date => {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 4 = Thursday
+  const daysToSubtract = dayOfWeek >= 4 ? dayOfWeek - 4 : dayOfWeek + 3;
+  const lastThursday = new Date(today);
+  lastThursday.setDate(today.getDate() - daysToSubtract);
+  lastThursday.setHours(0, 0, 0, 0);
+  return lastThursday;
+};
+
+export const getJulyFirst = (): Date => {
+  return new Date("2025-07-01T00:00:00");
 };
 
 export const analyzeAutomationSavings = (
