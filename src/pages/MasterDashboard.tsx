@@ -57,11 +57,11 @@ export default function MasterDashboard() {
     if (!priority) return <Badge variant="secondary">No Priority</Badge>;
     if (priority === "Level 11") return <Badge variant="destructive">Level 11</Badge>;
     if (priority === "Highest") return <Badge variant="destructive">Highest</Badge>;
-    if (priority === "High") return <Badge className="bg-orange-500">High</Badge>;
-    if (priority === "Medium") return <Badge className="bg-yellow-500">Medium</Badge>;
+    if (priority === "High") return <Badge variant="destructive" className="bg-orange-600 hover:bg-orange-700">High</Badge>;
+    if (priority === "Medium") return <Badge variant="outline">Medium</Badge>;
     if (priority === "Low") return <Badge variant="secondary">Low</Badge>;
     if (priority === "Lowest") return <Badge variant="outline">Lowest</Badge>;
-    if (priority === "Current Sprint") return <Badge className="bg-blue-500">Current Sprint</Badge>;
+    if (priority === "Current Sprint") return <Badge variant="default">Current Sprint</Badge>;
     return <Badge variant="secondary">{priority}</Badge>;
   };
 
