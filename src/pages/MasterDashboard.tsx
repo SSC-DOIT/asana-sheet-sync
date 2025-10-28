@@ -118,7 +118,7 @@ export default function MasterDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
-                TIE High Priority Tickets ({tieCritical.length})
+                TIE High Priority Tickets ({Math.min(tieCritical.length, 5)}{tieCritical.length > 5 ? ` of ${tieCritical.length}` : ''})
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -186,7 +186,7 @@ export default function MasterDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-destructive" />
-                SFDC High Priority Tickets ({sfdcCritical.length})
+                SFDC High Priority Tickets ({Math.min(sfdcCritical.length, 5)}{sfdcCritical.length > 5 ? ` of ${sfdcCritical.length}` : ''})
               </CardTitle>
             </CardHeader>
             <CardContent>
