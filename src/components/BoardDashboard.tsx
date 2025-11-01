@@ -160,7 +160,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
               data={analytics.chartData}
               rolloutDate="Oct 21"
             />
-            <StatusDistributionChart tickets={tickets} />
+            <StatusDistributionChart tickets={tickets} board={board} />
           </TabsContent>
 
           <TabsContent value="trends" className="space-y-6">
