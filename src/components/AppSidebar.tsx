@@ -1,4 +1,4 @@
-import { Home, Server, Database, GitCompare, Building2 } from "lucide-react";
+import { Home, Server, Database, GitCompare, Building2, AlertCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -39,6 +39,11 @@ const items = [
     title: "Department View",
     url: "/departments",
     icon: Building2,
+  },
+  {
+    title: "Blockers",
+    url: "/blockers",
+    icon: AlertCircle,
   },
 ];
 

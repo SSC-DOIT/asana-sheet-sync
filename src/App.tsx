@@ -14,6 +14,7 @@ const TIEBoard = lazy(() => import("./pages/TIEBoard"));
 const SFDCBoard = lazy(() => import("./pages/SFDCBoard"));
 const Comparison = lazy(() => import("./pages/Comparison"));
 const DepartmentView = lazy(() => import("./pages/DepartmentView"));
+const BlockersView = lazy(() => import("./pages/BlockersView"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Loading fallback component
@@ -52,6 +53,7 @@ const App = () => (
                   <Route path="/sfdc" element={<SFDCBoard />} />
                   <Route path="/comparison" element={<Comparison />} />
                   <Route path="/departments" element={<DepartmentView />} />
+                  <Route path="/blockers" element={<BlockersView />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
