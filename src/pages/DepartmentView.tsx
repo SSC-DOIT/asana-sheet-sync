@@ -13,7 +13,12 @@ const DepartmentView = () => {
     searchParams.get("dept") || "Sales"
   );
 
-  const { tickets, loading, error } = useTicketAnalytics("TIE", true);
+  const { tickets: tieTickets, loading: tieLoading, error: tieError } = useTicketAnalytics("TIE", true);
+  const { tickets: sfdcTickets, loading: sfdcLoading, error: sfdcError } = useTicketAnalytics("SFDC", true);
+
+  const loading = tieLoading || sfdcLoading;
+  const error = tieError || sfdcError;
+  const tickets = [...tieTickets, ...sfdcTickets];
 
   useEffect(() => {
     setSearchParams({ dept: selectedDepartment }, { replace: true });
@@ -31,7 +36,7 @@ const DepartmentView = () => {
             <RefreshCw className="w-8 h-8 animate-spin text-primary" />
             <div className="text-center space-y-2">
               <p className="text-lg font-semibold text-foreground">Loading Department View</p>
-              <p className="text-sm text-muted-foreground">Fetching tickets from TIE board...</p>
+              <p className="text-sm text-muted-foreground">Fetching tickets from TIE and SFDC boards...</p>
             </div>
           </div>
         </div>
