@@ -12,7 +12,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 const MasterDashboard = lazy(() => import("./pages/MasterDashboard"));
 const TIEBoard = lazy(() => import("./pages/TIEBoard"));
 const SFDCBoard = lazy(() => import("./pages/SFDCBoard"));
-const Comparison = lazy(() => import("./pages/Comparison"));
 const DepartmentView = lazy(() => import("./pages/DepartmentView"));
 const BlockersView = lazy(() => import("./pages/BlockersView"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -51,7 +50,6 @@ const App = () => (
                   <Route path="/" element={<MasterDashboard />} />
                   <Route path="/tie" element={<TIEBoard />} />
                   <Route path="/sfdc" element={<SFDCBoard />} />
-                  <Route path="/comparison" element={<Comparison />} />
                   <Route path="/departments" element={<DepartmentView />} />
                   <Route path="/blockers" element={<BlockersView />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
