@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -68,62 +68,95 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Open Tickets by Status</CardTitle>
+          <CardTitle className="text-xl">{board} Board - Open Tickets by Status</CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            {totalTickets} open {totalTickets === 1 ? 'ticket' : 'tickets'}
+          </p>
         </CardHeader>
         <CardContent>
-          <div className="h-[400px] flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={80}
-                  outerRadius={140}
-                  paddingAngle={2}
-                  dataKey="value"
-                  label={({ name, value, percent }) => 
-                    `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
-                  }
-                  onClick={(data) => handleStatusClick(data.name)}
-                  cursor="pointer"
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={getColor(entry.name)}
-                      opacity={selectedStatus === null || selectedStatus === entry.name ? 1 : 0.3}
-                      className="transition-opacity duration-200"
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-center">
+            {/* Chart */}
+            <div className="h-[350px] flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={120}
+                    paddingAngle={2}
+                    dataKey="value"
+                    onClick={(data) => handleStatusClick(data.name)}
+                    cursor="pointer"
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={getColor(entry.name)}
+                        opacity={selectedStatus === null || selectedStatus === entry.name ? 1 : 0.3}
+                        className="transition-opacity duration-200"
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0];
+                        const percent = ((data.value as number / totalTickets) * 100).toFixed(1);
+                        return (
+                          <div className="bg-popover border border-border rounded-lg shadow-lg p-3">
+                            <p className="font-medium text-foreground">{data.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {data.value} tickets ({percent}%)
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">Click to view tickets</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Custom Legend */}
+            <div className="space-y-2">
+              {chartData.map((entry) => {
+                const percent = ((entry.value / totalTickets) * 100).toFixed(0);
+                const isSelected = selectedStatus === entry.name;
+                const isOtherSelected = selectedStatus !== null && !isSelected;
+                
+                return (
+                  <button
+                    key={entry.name}
+                    onClick={() => handleStatusClick(entry.name)}
+                    className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all hover:bg-accent/50 ${
+                      isSelected ? 'bg-accent' : ''
+                    } ${isOtherSelected ? 'opacity-40' : ''}`}
+                  >
+                    <div
+                      className="w-4 h-4 rounded-sm flex-shrink-0"
+                      style={{ backgroundColor: getColor(entry.name) }}
                     />
-                  ))}
-                </Pie>
-                <Tooltip
-                  content={({ active, payload }) => {
-                    if (active && payload && payload.length) {
-                      const data = payload[0];
-                      const percent = ((data.value as number / totalTickets) * 100).toFixed(1);
-                      return (
-                        <div className="bg-popover border border-border rounded-lg shadow-lg p-3">
-                          <p className="font-medium text-foreground">{data.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {data.value} tickets ({percent}%)
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-1">Click to view tickets</p>
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
-                <Legend 
-                  verticalAlign="bottom" 
-                  height={36}
-                  formatter={(value, entry: any) => `${value} (${entry.payload.value})`}
-                  onClick={(data) => handleStatusClick(data.value)}
-                  wrapperStyle={{ cursor: "pointer" }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">
+                        {entry.name}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <span className="text-sm font-semibold text-foreground">
+                        {entry.value}
+                      </span>
+                      <span className="text-xs text-muted-foreground w-10 text-right">
+                        ({percent}%)
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </CardContent>
       </Card>
