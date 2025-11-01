@@ -22,7 +22,7 @@ const BlockersView = () => {
 
   // Filter for tickets with "Waiting For Customer" or "Waiting on Customer" status
   const blockerTickets = allTickets.filter((ticket) => {
-    const status = ticket.customFields?.["TS-Status"];
+    const status = ticket.customFields?.Status;
     return (
       ticket.isOpen &&
       (status === "Waiting For Customer" || status === "Waiting on Customer")

@@ -96,7 +96,7 @@ export const parseEnhancedAsanaJSON = (jsonData: AsanaResponse): EnhancedParsedT
           case "TS Prioritization":
             priority = field.enum_value?.name;
             break;
-          case "Status":
+          case "TS-Status":
             status = field.enum_value?.name;
             break;
           case "Effort":
