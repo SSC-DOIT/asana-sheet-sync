@@ -74,17 +74,17 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
           </p>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8 items-start">
             {/* Chart */}
-            <div className="h-[350px] flex items-center justify-center">
+            <div className="h-[380px] flex items-center justify-center px-4">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                   <Pie
                     data={chartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={70}
-                    outerRadius={120}
+                    innerRadius={60}
+                    outerRadius={100}
                     paddingAngle={2}
                     dataKey="value"
                     onClick={(data) => handleStatusClick(data.name)}
@@ -105,12 +105,12 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
                         const data = payload[0];
                         const percent = ((data.value as number / totalTickets) * 100).toFixed(1);
                         return (
-                          <div className="bg-popover border border-border rounded-lg shadow-lg p-3">
-                            <p className="font-medium text-foreground">{data.name}</p>
+                          <div className="bg-popover border border-border rounded-lg shadow-lg p-3 max-w-[200px]">
+                            <p className="font-medium text-foreground text-sm">{data.name}</p>
                             <p className="text-sm text-muted-foreground">
                               {data.value} tickets ({percent}%)
                             </p>
-                            <p className="text-xs text-muted-foreground mt-1">Click to view tickets</p>
+                            <p className="text-xs text-muted-foreground mt-1">Click to view</p>
                           </div>
                         );
                       }
@@ -122,7 +122,7 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
             </div>
 
             {/* Custom Legend */}
-            <div className="space-y-2">
+            <div className="space-y-2 min-w-0">
               {chartData.map((entry) => {
                 const percent = ((entry.value / totalTickets) * 100).toFixed(0);
                 const isSelected = selectedStatus === entry.name;
@@ -132,7 +132,7 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
                   <button
                     key={entry.name}
                     onClick={() => handleStatusClick(entry.name)}
-                    className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all hover:bg-accent/50 ${
+                    className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all hover:bg-accent/50 ${
                       isSelected ? 'bg-accent' : ''
                     } ${isOtherSelected ? 'opacity-40' : ''}`}
                   >
@@ -145,11 +145,11 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
                         {entry.name}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-sm font-semibold text-foreground">
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <span className="text-sm font-semibold text-foreground min-w-[2ch] text-right">
                         {entry.value}
                       </span>
-                      <span className="text-xs text-muted-foreground w-10 text-right">
+                      <span className="text-xs text-muted-foreground min-w-[3.5rem] text-right">
                         ({percent}%)
                       </span>
                     </div>
@@ -178,46 +178,46 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
               {filteredTickets.map((ticket) => (
                 <Card key={ticket.id} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-4 space-y-3">
-                    <div className="space-y-2">
+                    <div>
                       <a
                         href={getAsanaUrl(ticket.id)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-sm hover:underline flex items-start gap-2 text-foreground"
+                        className="font-medium text-sm hover:underline flex items-start gap-2 text-foreground group"
                       >
-                        <span className="flex-1 line-clamp-2">{ticket.name}</span>
-                        <ExternalLink className="w-3 h-3 flex-shrink-0 mt-0.5 text-muted-foreground" />
+                        <span className="flex-1 line-clamp-2 min-w-0">{ticket.name}</span>
+                        <ExternalLink className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                       </a>
                     </div>
                     
-                    <div className="space-y-1.5 text-xs">
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Assignee:</span>
-                        <span className="font-medium text-foreground">{ticket.assignee}</span>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-muted-foreground flex-shrink-0">Assignee:</span>
+                        <span className="font-medium text-foreground truncate text-right">{ticket.assignee}</span>
                       </div>
                       
                       {ticket.customFields?.Department && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Department:</span>
-                          <Badge variant="outline" className="text-xs">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-muted-foreground flex-shrink-0">Department:</span>
+                          <Badge variant="outline" className="text-xs truncate max-w-[60%]" title={ticket.customFields.Department}>
                             {ticket.customFields.Department}
                           </Badge>
                         </div>
                       )}
                       
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Age:</span>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-muted-foreground flex-shrink-0">Age:</span>
                         <span className="font-medium text-foreground">
                           {Math.round(ticket.ticketAge)} days
                         </span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Created:</span>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-muted-foreground flex-shrink-0">Created:</span>
                         <span className="text-muted-foreground">
                           {new Date(ticket.createdAt).toLocaleDateString()}
                         </span>
