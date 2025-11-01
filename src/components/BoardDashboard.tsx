@@ -16,6 +16,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { CategoryBreakdownCard } from "./CategoryBreakdownCard";
 import { DateRangeSelector, DateRange } from "./DateRangeSelector";
+import { StatusDistributionChart } from "./StatusDistributionChart";
 
 interface BoardDashboardProps {
   board: "TIE" | "SFDC";
@@ -159,6 +160,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
               data={analytics.chartData}
               rolloutDate="Oct 21"
             />
+            <StatusDistributionChart tickets={tickets} />
           </TabsContent>
 
           <TabsContent value="trends" className="space-y-6">

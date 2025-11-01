@@ -52,13 +52,6 @@ export const DepartmentTicketsTable = ({ tickets, department }: DepartmentTicket
     exportTicketsToCSV(departmentTickets, filename);
   };
 
-  const getAgeBadge = (age: number) => {
-    if (age > 30) return { variant: "destructive" as const, label: `${Math.round(age)}d - Critical` };
-    if (age > 14) return { variant: "default" as const, label: `${Math.round(age)}d - High` };
-    if (age > 7) return { variant: "secondary" as const, label: `${Math.round(age)}d - Medium` };
-    return { variant: "outline" as const, label: `${Math.round(age)}d - New` };
-  };
-
   return (
     <Card className="p-6">
       <div className="space-y-4">
@@ -126,7 +119,7 @@ export const DepartmentTicketsTable = ({ tickets, department }: DepartmentTicket
             <TableHeader>
               <TableRow>
                 <TableHead>Ticket</TableHead>
-                <TableHead>Age</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Created</TableHead>
                 <TableHead>Assignee</TableHead>
                 <TableHead>Department</TableHead>
@@ -141,7 +134,6 @@ export const DepartmentTicketsTable = ({ tickets, department }: DepartmentTicket
                 </TableRow>
               ) : (
                 departmentTickets.slice(0, 100).map((ticket) => {
-                  const ageBadge = getAgeBadge(ticket.ticketAge);
                   return (
                     <TableRow key={ticket.id}>
                       <TableCell className="font-medium max-w-xs">
@@ -156,7 +148,11 @@ export const DepartmentTicketsTable = ({ tickets, department }: DepartmentTicket
                         </a>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={ageBadge.variant}>{ageBadge.label}</Badge>
+                        {ticket.customFields?.Status ? (
+                          <Badge variant="outline">{ticket.customFields.Status}</Badge>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">No Status</span>
+                        )}
                       </TableCell>
                       <TableCell className="text-muted-foreground">
                         {new Date(ticket.createdAt).toLocaleDateString()}
