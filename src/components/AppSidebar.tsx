@@ -41,7 +41,7 @@ const items = [
     icon: Building2,
   },
   {
-    title: "Blockers",
+    title: "Information Needed",
     url: "/blockers",
     icon: AlertCircle,
   },

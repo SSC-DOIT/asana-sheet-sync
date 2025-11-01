@@ -36,7 +36,7 @@ const BlockersView = () => {
           <div className="flex flex-col items-center justify-center space-y-4 py-12">
             <RefreshCw className="w-8 h-8 animate-spin text-primary" />
             <div className="text-center space-y-2">
-              <p className="text-lg font-semibold text-foreground">Loading Blockers</p>
+              <p className="text-lg font-semibold text-foreground">Loading Information Needed</p>
               <p className="text-sm text-muted-foreground">Fetching tickets from TIE and SFDC boards...</p>
             </div>
           </div>
@@ -62,7 +62,7 @@ const BlockersView = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Blockers</h1>
+            <h1 className="text-3xl font-bold text-foreground">Information Needed</h1>
             <p className="text-muted-foreground mt-1">
               Tickets waiting for customer response
             </p>

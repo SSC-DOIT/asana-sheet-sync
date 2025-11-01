@@ -57,7 +57,7 @@ export const BlockersChart = ({
           {totalTickets}
         </tspan>
         <tspan x={cx} dy="1.5em" fontSize="14" className="fill-muted-foreground">
-          Total Blockers
+          Total Tickets
         </tspan>
       </text>
     );
@@ -67,7 +67,7 @@ export const BlockersChart = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Blockers by Assignee</CardTitle>
+        <CardTitle>Information Needed by Assignee</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
