@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { MetricCard } from "./MetricCard";
 import { ResponseTimeChart } from "./ResponseTimeChart";
 import { TicketTable } from "./TicketTable";
@@ -9,16 +9,14 @@ import { OpenTicketTrendChart } from "./OpenTicketTrendChart";
 import { CurrentStateTicketsTable } from "./CurrentStateTicketsTable";
 import { useTicketAnalytics } from "@/hooks/useTicketAnalytics";
 import { useToast } from "@/hooks/use-toast";
-import { RefreshCw, AlertCircle, ExternalLink } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { Button } from "./ui/button";
 import { Clock, TrendingDown, Ticket, BarChart3 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { CategoryBreakdownCard } from "./CategoryBreakdownCard";
 import { DateRangeSelector, DateRange } from "./DateRangeSelector";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { StatusDistributionChart } from "./StatusDistributionChart";
 
 interface BoardDashboardProps {
   board: "TIE" | "SFDC";
@@ -28,7 +26,6 @@ interface BoardDashboardProps {
 export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
   const { toast } = useToast();
   const [dateRange, setDateRange] = useState<DateRange>(365);
-  const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
 
   // Use the custom hook for all data loading and analytics (with archive data)
   const {
@@ -65,40 +62,6 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
     if (hours < 24) return `${hours.toFixed(2)}h`;
     return `${(hours / 24).toFixed(2)}d`;
   };
-
-  const getCriticalTickets = () => {
-    return tickets
-      .filter((t) => t.isOpen && (t.customFields?.["TS Prioritization"] === "Highest" || t.customFields?.["TS Prioritization"] === "Level 11"))
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  };
-
-  const getAsanaUrl = (taskId: string) => {
-    const projectGid = board === "TIE" ? "1210587239106056" : "1210698810765473";
-    return `https://app.asana.com/0/${projectGid}/${taskId}`;
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
-  const toggleTicket = (ticketId: string) => {
-    setExpandedTickets(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(ticketId)) {
-        newSet.delete(ticketId);
-      } else {
-        newSet.add(ticketId);
-      }
-      return newSet;
-    });
-  };
-
-  const criticalTickets = getCriticalTickets();
 
   if (loading) {
     return (
@@ -197,90 +160,7 @@ export const BoardDashboard = ({ board, boardName }: BoardDashboardProps) => {
               data={analytics.chartData}
               rolloutDate="Oct 21"
             />
-            
-            {/* High Priority Tickets */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-destructive" />
-                  High Priority Tickets ({criticalTickets.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {criticalTickets.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    No high priority tickets
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {criticalTickets.map((ticket) => (
-                      <Card key={ticket.id} className="hover:bg-accent/50 transition-colors">
-                        <CardContent className="p-4 space-y-3">
-                          <a
-                            href={getAsanaUrl(ticket.id)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block group"
-                          >
-                            <div className="flex items-start justify-between gap-2 mb-2">
-                              <h4 className="text-sm font-semibold text-foreground line-clamp-2 group-hover:underline flex-1">
-                                {ticket.name}
-                              </h4>
-                              <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                            </div>
-                          </a>
-                          
-                          <div className="space-y-2 text-xs">
-                            {ticket.customFields?.Department && (
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-muted-foreground">Department:</span>
-                                <Badge variant="outline" className="text-xs">
-                                  {ticket.customFields.Department}
-                                </Badge>
-                              </div>
-                            )}
-                            
-                            {ticket.customFields?.["TS Prioritization"] && (
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="text-muted-foreground">Priority:</span>
-                                <Badge 
-                                  variant={
-                                    ticket.customFields["TS Prioritization"] === "Level 11" || 
-                                    ticket.customFields["TS Prioritization"] === "Highest" 
-                                      ? "destructive" 
-                                      : "default"
-                                  }
-                                  className="text-xs"
-                                >
-                                  {ticket.customFields["TS Prioritization"]}
-                                </Badge>
-                              </div>
-                            )}
-                            
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-muted-foreground">Assignee:</span>
-                              <div className="flex items-center gap-1">
-                                <Avatar className="w-4 h-4">
-                                  <AvatarFallback className="text-[10px]">
-                                    {getInitials(ticket.assignee)}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <span className="truncate max-w-[120px]">{ticket.assignee}</span>
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center justify-between gap-2 pt-2 border-t">
-                              <span className="text-muted-foreground">Created:</span>
-                              <span>{new Date(ticket.createdAt).toLocaleDateString()}</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <StatusDistributionChart tickets={tickets} board={board} />
           </TabsContent>
 
           <TabsContent value="trends" className="space-y-6">

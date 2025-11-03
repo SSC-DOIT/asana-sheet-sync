@@ -3,9 +3,9 @@ import { loadLiveData } from "@/utils/liveDataLoader";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, ExternalLink } from "lucide-react";
+import { AlertCircle, Clock, User, ExternalLink, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { StatusDistributionChart } from "@/components/StatusDistributionChart";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Table,
   TableBody,
@@ -14,11 +14,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 
 export default function MasterDashboard() {
   const [tieTickets, setTieTickets] = useState<EnhancedParsedTicket[]>([]);
   const [sfdcTickets, setSfdcTickets] = useState<EnhancedParsedTicket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedTickets, setExpandedTickets] = useState<Set<string>>(new Set());
+
+  const toggleTicket = (ticketId: string) => {
+    setExpandedTickets(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(ticketId)) {
+        newSet.delete(ticketId);
+      } else {
+        newSet.add(ticketId);
+      }
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -40,6 +59,12 @@ export default function MasterDashboard() {
     loadData();
   }, []);
 
+  const getCriticalTickets = (tickets: EnhancedParsedTicket[]) => {
+    return tickets
+      .filter((t) => t.isOpen && (t.customFields?.Priority === "Highest" || t.customFields?.Priority === "Level 11"))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  };
+
   const getNewestTickets = (tickets: EnhancedParsedTicket[]) => {
     // Deduplicate by ticket ID
     const uniqueTickets = Array.from(
@@ -52,10 +77,31 @@ export default function MasterDashboard() {
       .slice(0, 10);
   };
 
+  const getPriorityBadge = (priority?: string) => {
+    if (!priority) return <Badge variant="secondary">No Priority</Badge>;
+    if (priority === "Level 11") return <Badge variant="destructive">Level 11</Badge>;
+    if (priority === "Highest") return <Badge variant="destructive">Highest</Badge>;
+    if (priority === "High") return <Badge variant="destructive" className="bg-orange-600 hover:bg-orange-700">High</Badge>;
+    if (priority === "Medium") return <Badge variant="outline">Medium</Badge>;
+    if (priority === "Low") return <Badge variant="secondary">Low</Badge>;
+    if (priority === "Lowest") return <Badge variant="outline">Lowest</Badge>;
+    if (priority === "Current Sprint") return <Badge variant="default">Current Sprint</Badge>;
+    return <Badge variant="secondary">{priority}</Badge>;
+  };
+
   const getAsanaUrl = (taskId: string, board: string) => {
     // You'll need to get the project GID from your config
     const projectGid = board === "TIE" ? "1210587239106056" : "1210698810765473";
     return `https://app.asana.com/0/${projectGid}/${taskId}`;
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   if (loading) {
@@ -79,6 +125,8 @@ export default function MasterDashboard() {
     );
   }
 
+  const tieCritical = getCriticalTickets(tieTickets);
+  const sfdcCritical = getCriticalTickets(sfdcTickets);
   const allNewest = getNewestTickets([...tieTickets, ...sfdcTickets]);
 
   return (
@@ -89,14 +137,203 @@ export default function MasterDashboard() {
             Technology Solutions Open Tickets
           </h1>
           <p className="text-muted-foreground">
-            Open tickets by status and recent activity across all boards
+            High priority tickets and recent activity across all boards
           </p>
         </div>
 
-        {/* Open Tickets by Status - Doughnut Charts */}
+        {/* Critical Tickets Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <StatusDistributionChart tickets={tieTickets} board="TIE" />
-          <StatusDistributionChart tickets={sfdcTickets} board="SFDC" />
+          {/* TIE Critical */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-destructive" />
+                TIE High Priority Tickets ({tieCritical.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {tieCritical.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">
+                  No high priority tickets
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {tieCritical.map((ticket) => (
+                    <Collapsible
+                      key={ticket.id}
+                      open={expandedTickets.has(ticket.id)}
+                      onOpenChange={() => toggleTicket(ticket.id)}
+                    >
+                      <div className="p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3">
+                        <a
+                          href={getAsanaUrl(ticket.id, "TIE")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <h4 className="text-sm font-semibold text-foreground flex-1">
+                              {ticket.name}
+                            </h4>
+                            <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                          </div>
+                        </a>
+                        
+                        <div className="space-y-2 text-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="text-muted-foreground font-medium">Assignee:</span>
+                            <div className="flex items-center gap-1">
+                              <Avatar className="w-5 h-5">
+                                <AvatarFallback className="text-xs">
+                                  {getInitials(ticket.assignee)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span>{ticket.assignee}</span>
+                            </div>
+                          </div>
+                          
+                          {ticket.modifiedAt && (
+                            <div className="flex items-center gap-2">
+                              <Clock className="w-3 h-3 text-muted-foreground" />
+                              <span className="text-muted-foreground font-medium">Last Updated:</span>
+                              <span>{new Date(ticket.modifiedAt).toLocaleString()}</span>
+                            </div>
+                          )}
+                          
+                          {ticket.customFields?.Department && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground font-medium">Department:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {ticket.customFields.Department}
+                              </Badge>
+                            </div>
+                          )}
+                          
+                          <div className="pt-2 border-t">
+                            <CollapsibleTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full justify-between"
+                              >
+                                <span>View Task Summary</span>
+                                {expandedTickets.has(ticket.id) ? (
+                                  <ChevronUp className="w-4 h-4" />
+                                ) : (
+                                  <ChevronDown className="w-4 h-4" />
+                                )}
+                              </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="mt-2">
+                              <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
+                                {ticket.summary || "No task summary available"}
+                              </p>
+                            </CollapsibleContent>
+                          </div>
+                        </div>
+                      </div>
+                    </Collapsible>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* SFDC Critical */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-destructive" />
+                SFDC High Priority Tickets ({sfdcCritical.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {sfdcCritical.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">
+                  No high priority tickets
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {sfdcCritical.map((ticket) => (
+                    <Collapsible
+                      key={ticket.id}
+                      open={expandedTickets.has(ticket.id)}
+                      onOpenChange={() => toggleTicket(ticket.id)}
+                    >
+                      <div className="p-4 border rounded-lg hover:bg-accent/50 transition-colors space-y-3">
+                        <a
+                          href={getAsanaUrl(ticket.id, "SFDC")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <h4 className="text-sm font-semibold text-foreground flex-1">
+                              {ticket.name}
+                            </h4>
+                            <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                          </div>
+                        </a>
+                        
+                        <div className="space-y-2 text-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="text-muted-foreground font-medium">Assignee:</span>
+                            <div className="flex items-center gap-1">
+                              <Avatar className="w-5 h-5">
+                                <AvatarFallback className="text-xs">
+                                  {getInitials(ticket.assignee)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span>{ticket.assignee}</span>
+                            </div>
+                          </div>
+                          
+                          {ticket.modifiedAt && (
+                            <div className="flex items-center gap-2">
+                              <Clock className="w-3 h-3 text-muted-foreground" />
+                              <span className="text-muted-foreground font-medium">Last Updated:</span>
+                              <span>{new Date(ticket.modifiedAt).toLocaleString()}</span>
+                            </div>
+                          )}
+                          
+                          {ticket.customFields?.Department && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground font-medium">Department:</span>
+                              <Badge variant="outline" className="text-xs">
+                                {ticket.customFields.Department}
+                              </Badge>
+                            </div>
+                          )}
+                          
+                          <div className="pt-2 border-t">
+                            <CollapsibleTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full justify-between"
+                              >
+                                <span>View Task Summary</span>
+                                {expandedTickets.has(ticket.id) ? (
+                                  <ChevronUp className="w-4 h-4" />
+                                ) : (
+                                  <ChevronDown className="w-4 h-4" />
+                                )}
+                              </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="mt-2">
+                              <p className="text-muted-foreground text-sm p-2 bg-muted/50 rounded">
+                                {ticket.summary || "No task summary available"}
+                              </p>
+                            </CollapsibleContent>
+                          </div>
+                        </div>
+                      </div>
+                    </Collapsible>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* 10 Newest Open Tickets */}

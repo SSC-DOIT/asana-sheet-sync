@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { EnhancedParsedTicket } from "@/utils/enhancedDataLoader";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -68,95 +68,62 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
     <>
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">{board} Board - Open Tickets by Status</CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
-            {totalTickets} open {totalTickets === 1 ? 'ticket' : 'tickets'}
-          </p>
+          <CardTitle>Open Tickets by Status</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-8 items-start">
-            {/* Chart */}
-            <div className="h-[380px] flex items-center justify-center px-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
-                    dataKey="value"
-                    onClick={(data) => handleStatusClick(data.name)}
-                    cursor="pointer"
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={getColor(entry.name)}
-                        opacity={selectedStatus === null || selectedStatus === entry.name ? 1 : 0.3}
-                        className="transition-opacity duration-200"
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        const data = payload[0];
-                        const percent = ((data.value as number / totalTickets) * 100).toFixed(1);
-                        return (
-                          <div className="bg-popover border border-border rounded-lg shadow-lg p-3 max-w-[200px]">
-                            <p className="font-medium text-foreground text-sm">{data.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {data.value} tickets ({percent}%)
-                            </p>
-                            <p className="text-xs text-muted-foreground mt-1">Click to view</p>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Custom Legend */}
-            <div className="space-y-2 min-w-0">
-              {chartData.map((entry) => {
-                const percent = ((entry.value / totalTickets) * 100).toFixed(0);
-                const isSelected = selectedStatus === entry.name;
-                const isOtherSelected = selectedStatus !== null && !isSelected;
-                
-                return (
-                  <button
-                    key={entry.name}
-                    onClick={() => handleStatusClick(entry.name)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all hover:bg-accent/50 ${
-                      isSelected ? 'bg-accent' : ''
-                    } ${isOtherSelected ? 'opacity-40' : ''}`}
-                  >
-                    <div
-                      className="w-4 h-4 rounded-sm flex-shrink-0"
-                      style={{ backgroundColor: getColor(entry.name) }}
+          <div className="h-[400px] flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={80}
+                  outerRadius={140}
+                  paddingAngle={2}
+                  dataKey="value"
+                  label={({ name, value, percent }) => 
+                    `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
+                  }
+                  onClick={(data) => handleStatusClick(data.name)}
+                  cursor="pointer"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={getColor(entry.name)}
+                      opacity={selectedStatus === null || selectedStatus === entry.name ? 1 : 0.3}
+                      className="transition-opacity duration-200"
                     />
-                    <div className="flex-1 text-left min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        {entry.name}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className="text-sm font-semibold text-foreground min-w-[2ch] text-right">
-                        {entry.value}
-                      </span>
-                      <span className="text-xs text-muted-foreground min-w-[3.5rem] text-right">
-                        ({percent}%)
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                  ))}
+                </Pie>
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0];
+                      const percent = ((data.value as number / totalTickets) * 100).toFixed(1);
+                      return (
+                        <div className="bg-popover border border-border rounded-lg shadow-lg p-3">
+                          <p className="font-medium text-foreground">{data.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {data.value} tickets ({percent}%)
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">Click to view tickets</p>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Legend 
+                  verticalAlign="bottom" 
+                  height={36}
+                  formatter={(value, entry: any) => `${value} (${entry.payload.value})`}
+                  onClick={(data) => handleStatusClick(data.value)}
+                  wrapperStyle={{ cursor: "pointer" }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
@@ -178,46 +145,46 @@ export const StatusDistributionChart = ({ tickets, board }: StatusDistributionCh
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredTickets.map((ticket) => (
                 <Card key={ticket.id} className="hover:shadow-lg transition-shadow">
                   <CardContent className="p-4 space-y-3">
-                    <div>
+                    <div className="space-y-2">
                       <a
                         href={getAsanaUrl(ticket.id)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-sm hover:underline flex items-start gap-2 text-foreground group"
+                        className="font-medium text-sm hover:underline flex items-start gap-2 text-foreground"
                       >
-                        <span className="flex-1 line-clamp-2 min-w-0">{ticket.name}</span>
-                        <ExternalLink className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                        <span className="flex-1 line-clamp-2">{ticket.name}</span>
+                        <ExternalLink className="w-3 h-3 flex-shrink-0 mt-0.5 text-muted-foreground" />
                       </a>
                     </div>
                     
-                    <div className="space-y-2 text-xs">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-muted-foreground flex-shrink-0">Assignee:</span>
-                        <span className="font-medium text-foreground truncate text-right">{ticket.assignee}</span>
+                    <div className="space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Assignee:</span>
+                        <span className="font-medium text-foreground">{ticket.assignee}</span>
                       </div>
                       
                       {ticket.customFields?.Department && (
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-muted-foreground flex-shrink-0">Department:</span>
-                          <Badge variant="outline" className="text-xs truncate max-w-[60%]" title={ticket.customFields.Department}>
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Department:</span>
+                          <Badge variant="outline" className="text-xs">
                             {ticket.customFields.Department}
                           </Badge>
                         </div>
                       )}
                       
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-muted-foreground flex-shrink-0">Age:</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Age:</span>
                         <span className="font-medium text-foreground">
                           {Math.round(ticket.ticketAge)} days
                         </span>
                       </div>
                       
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-muted-foreground flex-shrink-0">Created:</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Created:</span>
                         <span className="text-muted-foreground">
                           {new Date(ticket.createdAt).toLocaleDateString()}
                         </span>
